@@ -1,5 +1,9 @@
 #!/bin/sh -eu
 
+if [ -z ${CABAL_CONFIG_ARGS+1} ]; then
+    CABAL_CONFIG_ARGS=
+fi
+
 usage () {
     status=${1:-0}
     cat <<EOF
@@ -10,6 +14,7 @@ Commands:
     test            Test this project, by default this runs all test suites.
     testci          Test this project, but process control characters (\b, \r) which
                     reposition the cursor, prior to emitting each line of output.
+    bench           Build and run benchmarks.
     repl            Start the repl, by default on the the main library source.
     quick           Start the repl directly skipping cabal, this is useful developing
                     across multiple source trees at once.
@@ -20,11 +25,16 @@ Commands:
     exec            If this project has an executable, this builds and runs it.
     tags            Generate tags for this project.
     lint            Lint the project.
-    init            Start a new project.
+    init            Start a new project by cloning an existing haskell repository on Github
     update          Cabal update, but limited to retrieving at most once per day.
     clean           Remove compiled artifacts.
     depend          Dependency organisation tooling check|deep-check|sync.
     upgrade         Upgrade this cabal extras script.
+
+
+Environment variables:
+    CABAL_CONFIG_ARGS    Extra arguments to pass to 'cabal configure'.
+
 EOF
     exit ${status}
 }
@@ -43,12 +53,48 @@ project_name () {
     find . -maxdepth 1 -name  \*.cabal -type f | xargs basename | sed -e 's/.cabal//'
 }
 
+
+mafia_exec () {
+    [ $# -eq 1 ] || fail "'mafia_exec' requires a single argument, specifying the package you wish to build."
+    EXECUTABLE=$1
+    EXECUTABLE_LOCATION=$HOME/.ambiata/mafia/bin/$EXECUTABLE
+    EXECUTABLE_DIR=$(dirname $EXECUTABLE_LOCATION)
+    [ -f "$EXECUTABLE_LOCATION" ] || {
+
+        # Create a temporary directory which will be deleted when the script
+        # terminates. Unfortunately `mktemp` doesn't behave the same on
+        # Linux and OS/X so we need to try two different approaches.
+        MAFIA_EXEC_TEMP=$(mktemp -d 2>/dev/null || mktemp -d -t 'mafia-exec')
+        trap "rm -rf $MAFIA_EXEC_TEMP" EXIT
+        mkdir -p $MAFIA_EXEC_TEMP
+
+        [ -d "$EXECUTABLE_DIR" ] || {
+           mkdir -p $EXECUTABLE_DIR
+        }
+
+        (
+            cd "$MAFIA_EXEC_TEMP"
+            cabal sandbox init || exit $?
+            cabal install $EXECUTABLE || exit $?
+        ) || exit $?
+
+        cp "$MAFIA_EXEC_TEMP/.cabal-sandbox/bin/$EXECUTABLE" "$EXECUTABLE_LOCATION" || exit $?
+    }
+    export PATH="$EXECUTABLE_DIR:$PATH"
+}
+
+
 #
 # Initialize things for a build. This can be made faster by being
 # a lot smarter about doing things conditionally, but for now,
 # brute force wins.
 #
 initialize () {
+
+    # check if happy and alex exist in mafia
+    mafia_exec "happy"
+    mafia_exec "alex"
+
     # sandbox has all sources
     project=$(project_name)
     SANDBOX_DIR=.cabal-sandbox
@@ -88,10 +134,11 @@ initialize () {
     # Remove any cabal sources that are no longer available
 
     for source in $(cabal sandbox list-sources | tail -n +4 | sed '$d' | sed '$d'); do
-      source_path=$(echo $source | sed s#$(pwd)/##)
+      source_path=$(echo $source | sed s#${PROJECT_ROOT}/##)
       if ! $(echo "${CABAL_SOURCES}" | grep -q "${source_path}"); then
         echo "${source_path} no longer exists - removing from the sandbox"
-        cabal sandbox delete-source "$source" 1> /dev/null
+        # This will fail if there are any remaining non-existent sources
+        cabal sandbox delete-source "$source" 1> /dev/null || true
       fi
     done
 
@@ -106,8 +153,8 @@ initialize () {
     done
 
     # all dependencies installed, and configure been run?
-    cabal install -j --only-dependencies --force-reinstalls --enable-tests
-    cabal configure --enable-tests
+    cabal install -j --only-dependencies --force-reinstalls --enable-tests --enable-benchmarks
+    cabal configure --enable-tests --enable-benchmarks $CABAL_CONFIG_ARGS
 }
 
 #
@@ -115,7 +162,7 @@ initialize () {
 #
 run_build () {
     initialize
-    cabal build --ghc-option="-Werror"
+    cabal build --ghc-option="-Werror" "$@"
 }
 
 #
@@ -124,6 +171,14 @@ run_build () {
 run_test () {
     initialize
     cabal test --show-details=streaming "$@"
+}
+
+#
+# Cabal bench.
+#
+run_bench () {
+    initialize
+    cabal bench "$@"
 }
 
 #
@@ -214,7 +269,7 @@ run_quick () {
     [ ! -d test ] || SRC_DIRS="${SRC_DIRS:-} -itest"
     [ ! -d gen ] || SRC_DIRS="${SRC_DIRS:-} -igen"
     [ ! -d dist/build/autogen ] || SRC_DIRS="${SRC_DIRS:-} -idist/build/autogen"
-    ghci -package-db=$(find .cabal-sandbox -name '*-packages.conf.d') ${SRC_DIRS:-} "$1"
+    ghci -no-user-package-db -package-db=$(find .cabal-sandbox -name '*-packages.conf.d') ${SRC_DIRS:-} "$1"
 }
 
 #
@@ -231,7 +286,7 @@ run_watch () {
     [ ! -d dist/build/autogen ] || SRC_DIRS="${SRC_DIRS:-} -idist/build/autogen"
     ENTRY=$1
     shift
-    ghcid -c "ghci -package-db=$(find .cabal-sandbox -name '*-packages.conf.d') ${SRC_DIRS:-} \"$ENTRY\"" "$@"
+    ghcid -c "ghci -no-user-package-db -package-db=$(find .cabal-sandbox -name '*-packages.conf.d') ${SRC_DIRS:-} \"$ENTRY\"" "$@"
 }
 
 #
@@ -382,6 +437,19 @@ run_update () {
     fi
 }
 
+#
+# Download one of the haskell templates
+#
+run_init () {
+    [ $# -eq 1 ] || fail "'init' requires a single argument, specifying the template repository."
+
+    mkdir tmp
+    git clone http://github.com/$1 tmp
+    rm -rf tmp/.git
+    shopt -s dotglob
+    cp -r tmp/* .
+    rm -rf tmp
+}
 
 #
 # The actual start of the script.....
@@ -396,7 +464,7 @@ esac
 
 MODE="$1"; shift
 case "$MODE" in
-build|test|testci|repl|quick|tags|lint|update|clean|depend|watch|upgrade) run_$MODE "$@" ;;
+build|test|testci|bench|repl|quick|tags|lint|init|update|clean|depend|watch|upgrade) run_$MODE "$@" ;;
 *) fail "Unknown mode: $MODE"
 esac
-# Version: fb83ed7a2f70e6b1b0547118c1dc515021ff024d
+# Version: f96baeae1710acf2c6d53dd4538cb21c550d8a73
