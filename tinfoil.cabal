@@ -13,9 +13,11 @@ description:           ambiata-tinfoil
 library
   build-depends:
                        base                            >= 3          && < 5
-                     , transformers                    >= 0.3        && < 0.5
-                     , either                          >= 4.3        && < 4.5
                      , ambiata-p
+                     , bytestring                      == 0.10.4.0
+                     , either                          >= 4.3        && < 4.5
+                     , text                            == 1.2.*
+                     , transformers                    >= 0.3        && < 0.5
 
   ghc-options:
                        -Wall
@@ -26,6 +28,7 @@ library
   exposed-modules:
                        Paths_ambiata_tinfoil
                        Tinfoil
+                       Tinfoil.Data
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -43,5 +46,6 @@ test-suite test
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
+                     , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
