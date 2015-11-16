@@ -1,21 +1,23 @@
-name:                  ambiata-project
+name:                  ambiata-tinfoil
 version:               0.0.1
 license:               AllRightsReserved
 author:                Ambiata <info@ambiata.com>
 maintainer:            Ambiata <info@ambiata.com>
 copyright:             (c) 2015 Ambiata.
-synopsis:              ambiata-project
+synopsis:              ambiata-tinfoil
 category:              System
 cabal-version:         >= 1.8
 build-type:            Simple
-description:           ambiata-project
+description:           ambiata-tinfoil
 
 library
   build-depends:
                        base                            >= 3          && < 5
-                     , transformers                    >= 0.3        && < 0.5
-                     , either                          >= 4.3        && < 4.5
                      , ambiata-p
+                     , bytestring                      == 0.10.4.0
+                     , either                          >= 4.3        && < 4.5
+                     , text                            == 1.2.*
+                     , transformers                    >= 0.3        && < 0.5
 
   ghc-options:
                        -Wall
@@ -24,8 +26,9 @@ library
                        src
 
   exposed-modules:
-                       Paths_ambiata_project
-                       Project
+                       Paths_ambiata_tinfoil
+                       Tinfoil
+                       Tinfoil.Data
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -39,9 +42,10 @@ test-suite test
 
   build-depends:
                        base                            >= 3          && < 5
-                     , ambiata-project
+                     , ambiata-tinfoil
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
+                     , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
