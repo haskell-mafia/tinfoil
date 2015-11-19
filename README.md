@@ -31,3 +31,14 @@ belongs in `tinfoil`. This includes:
    timing characteristics regardless of the context in which they are
    called, and this should be verified with benchmarks.
  - Paranoid - performance is a distant second to correctness.
+
+## Random numbers
+
+ - This package should *never* use `System.Random`, even if you're
+   sure it doesn't matter in that particular case. Modules suitable for
+   obtaining cryptographically-secure random numbers include:
+
+    - `Crypto.Random` from
+      [crypto-api](https://hackage.haskell.org/package/crypto-api).
+    - `System.Entropy` from
+      [entropy](https://hackage.haskell.org/package/entropy).

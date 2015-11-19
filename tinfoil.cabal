@@ -16,6 +16,8 @@ library
                      , ambiata-p
                      , bytestring                      == 0.10.4.0
                      , either                          >= 4.3        && < 4.5
+                     , entropy                         == 0.3.7
+                     , semigroups                      == 0.16.*
                      , text                            == 1.2.*
                      , transformers                    >= 0.3        && < 0.5
 
@@ -29,6 +31,7 @@ library
                        Paths_ambiata_tinfoil
                        Tinfoil
                        Tinfoil.Data
+                       Tinfoil.Random
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -49,3 +52,48 @@ test-suite test
                      , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+
+test-suite test-io
+  type:                exitcode-stdio-1.0
+
+  main-is:             test-io.hs
+
+  ghc-options:         -Wall -threaded -O2
+
+  hs-source-dirs:
+                       test
+
+  build-depends:
+                       base                            >= 3          && < 5
+                     , ambiata-tinfoil
+                     , ambiata-disorder-core
+                     , ambiata-disorder-corpus
+                     , ambiata-p
+                     , bytestring                      == 0.10.4.0
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+                     , semigroups
+                     , text
+
+test-suite test-random
+  type:                exitcode-stdio-1.0
+
+  main-is:             test-random.hs
+
+  ghc-options:         -Wall -threaded -O2
+
+  hs-source-dirs:
+                       test
+
+  build-depends:
+                       base                            >= 3          && < 5
+                     , ambiata-tinfoil
+                     , ambiata-p
+                     , bytestring                      == 0.10.4.0
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+                     , semigroups
+                     , statistics                      == 0.13.2.*
+                     , text
+                     , vector                          == 0.11.*
+
