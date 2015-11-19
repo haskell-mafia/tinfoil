@@ -75,3 +75,25 @@ test-suite test-io
                      , semigroups
                      , text
 
+test-suite test-random
+  type:                exitcode-stdio-1.0
+
+  main-is:             test-random.hs
+
+  ghc-options:         -Wall -threaded -O2
+
+  hs-source-dirs:
+                       test
+
+  build-depends:
+                       base                            >= 3          && < 5
+                     , ambiata-tinfoil
+                     , ambiata-p
+                     , bytestring                      == 0.10.4.0
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+                     , semigroups
+                     , statistics                      == 0.13.2.*
+                     , text
+                     , vector                          == 0.11.*
+
