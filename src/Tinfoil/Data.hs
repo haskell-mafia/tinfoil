@@ -51,6 +51,6 @@ newtype Credential =
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash    :: (Entropy -> Credential -> IO (Maybe CredentialHash))
+  { genHash    :: (Credential -> IO CredentialHash)
   , mcfPrefix  :: Text
   }
