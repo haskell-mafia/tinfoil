@@ -13,6 +13,8 @@ import           Data.Text       (Text)
 
 import           P
 
+import           System.IO
+
 -- | Sufficiently-random data. In almost all cases[0], use
 -- <https://hackage.haskell.org/package/entropy-0.3.7/docs/System-Entropy.html System.Entropy.getEntropy>.
 -- 
@@ -49,6 +51,6 @@ newtype Credential =
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash    :: (Entropy -> Credential -> Maybe CredentialHash)
+  { genHash    :: (Entropy -> Credential -> IO (Maybe CredentialHash))
   , mcfPrefix  :: Text
   }
