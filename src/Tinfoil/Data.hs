@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data(
     Entropy(..)
   , Credential(..)
@@ -8,8 +9,12 @@ module Tinfoil.Data(
   , KDF(..)
 ) where
 
+import           Control.DeepSeq (NFData)
+
 import           Data.ByteString (ByteString)
 import           Data.Text       (Text)
+
+import           GHC.Generics (Generic)
 
 import           P
 
@@ -36,7 +41,9 @@ newtype CredentialHash =
 newtype Credential =
   Credential {
     unCredential :: Text
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance NFData Credential
 
 -- | Key derivation function - put in a secret and get out a token
 -- from which it is computationally infeasible to derive the secret, which
