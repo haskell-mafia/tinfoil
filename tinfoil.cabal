@@ -33,6 +33,7 @@ library
                        Tinfoil
                        Tinfoil.Data
                        Tinfoil.Random
+                       Tinfoil.Random.Internal
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -53,6 +54,7 @@ test-suite test
                      , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+                     , semigroups
 
 test-suite test-io
   type:                exitcode-stdio-1.0
