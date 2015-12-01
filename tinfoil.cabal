@@ -115,4 +115,8 @@ benchmark bench
                        base                            >= 3          && < 5
                      , ambiata-tinfoil
                      , ambiata-p
+                     , bytestring                      == 0.10.4.0
                      , criterion                       == 1.1.*
+                     , QuickCheck                      == 2.7.*
+                     , quickcheck-instances            == 0.3.*
+
