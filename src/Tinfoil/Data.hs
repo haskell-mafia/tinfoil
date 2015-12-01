@@ -6,6 +6,9 @@ module Tinfoil.Data(
     Entropy(..)
   , Credential(..)
   , CredentialHash(..)
+  , Verified(..)
+  , NeedsRehash(..)
+  , Verification(..)
   , KDF(..)
 ) where
 
@@ -45,6 +48,19 @@ newtype Credential =
 
 instance NFData Credential
 
+data Verified =
+    Verified
+  | NotVerified
+  deriving (Eq, Show)
+
+data NeedsRehash =
+    NeedsRehash
+  | UpToDate
+  deriving (Eq, Show)
+
+data Verification = Verification Verified NeedsRehash
+  deriving (Eq, Show)
+
 -- | Key derivation function - put in a secret and get out a token
 -- from which it is computationally infeasible to derive the secret, which
 -- is suitable either for use as a cryptographic key or as a credential hash.
@@ -58,6 +74,8 @@ instance NFData Credential
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash    :: (Credential -> IO CredentialHash)
-  , mcfPrefix  :: Text
+  { genHash      :: (Credential -> IO CredentialHash)
+  , verifyHash   :: (CredentialHash -> ByteString -> IO Verification)
+  , verifyNoHash :: IO Verification
+  , mcfPrefix    :: Text
   }
