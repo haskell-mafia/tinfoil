@@ -14,6 +14,7 @@ library
   build-depends:
                        base                            >= 3          && < 5
                      , ambiata-p
+                     , base64-bytestring               == 1.0.0.*
                      , bytestring                      == 0.10.4.0
                      , deepseq                         == 1.3.*
                      , either                          >= 4.3        && < 4.5
@@ -33,8 +34,16 @@ library
                        Tinfoil
                        Tinfoil.Data
                        Tinfoil.KDF
+                       Tinfoil.KDF.Scrypt
+                       Tinfoil.KDF.Scrypt.Internal
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+
+  c-sources:           cbits/crypto_scrypt-sse.c, cbits/sha256.c
+  cc-options:          -msse2
+  include-dirs:        cbits
+  includes:            crypto_scrypt.h
+  install-includes:    crypto_scrypt.h
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -55,7 +64,9 @@ test-suite test
                      , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+                     , quickcheck-text                 == 0.1.*
                      , semigroups
+                     , text                            == 1.2.*
 
 test-suite test-io
   type:                exitcode-stdio-1.0
@@ -76,8 +87,9 @@ test-suite test-io
                      , bytestring                      == 0.10.4.0
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+                     , quickcheck-text                 == 0.1.*
                      , semigroups
-                     , text
+                     , text                            == 1.2.*
 
 test-suite test-random
   type:                exitcode-stdio-1.0
@@ -119,4 +131,5 @@ benchmark bench
                      , criterion                       == 1.1.*
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+
 

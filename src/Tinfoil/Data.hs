@@ -74,8 +74,8 @@ data Verification = Verification Verified NeedsRehash
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash      :: (Credential -> IO CredentialHash)
-  , verifyHash   :: (CredentialHash -> ByteString -> IO Verification)
-  , verifyNoHash :: IO Verification
-  , mcfPrefix    :: Text
+  { genHash        :: (Credential -> IO CredentialHash)
+  , hashCredential :: (Credential -> CredentialHash -> IO Verified)
+  , verifyNoHash   :: IO Verified
+  , mcfPrefix      :: Text
   }
