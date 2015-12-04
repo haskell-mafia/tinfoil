@@ -39,7 +39,9 @@ newtype Entropy =
 newtype CredentialHash =
   CredentialHash {
     unCredentialHash :: ByteString
-  } deriving (Show)
+  } deriving (Show, Generic)
+
+instance NFData CredentialHash
 
 newtype Credential =
   Credential {
@@ -51,7 +53,9 @@ instance NFData Credential
 data Verified =
     Verified
   | NotVerified
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
+
+instance NFData Verified
 
 data NeedsRehash =
     NeedsRehash

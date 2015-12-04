@@ -125,11 +125,17 @@ benchmark bench
 
   build-depends:
                        base                            >= 3          && < 5
-                     , ambiata-tinfoil
+                     , QuickCheck                      == 2.7.*
+                     , ambiata-disorder-core
+                     , ambiata-disorder-corpus
                      , ambiata-p
+                     , ambiata-tinfoil
                      , bytestring                      == 0.10.4.0
                      , criterion                       == 1.1.*
-                     , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
+                     , quickcheck-text                 == 0.1.*
+                     , semigroups
+                     , text                            == 1.2.*
+
 
 

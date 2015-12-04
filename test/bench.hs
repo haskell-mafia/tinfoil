@@ -13,11 +13,13 @@ import           Prelude (($!))
 
 import           System.IO
 
+import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 import           Tinfoil.Random
 import           Tinfoil.KDF
+import qualified Tinfoil.KDF.Scrypt as Scrypt
 
 bsTriple :: Int -> Int -> Gen (ByteString, ByteString, ByteString)
 bsTriple small big = do
@@ -44,4 +46,20 @@ main = defaultMain [
                            , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
                            , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
                            ]
+  , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
+      bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)
+                           , bench "safe/different" $ nfIO (safeEq h1 h2_1)
+                           , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
+                           , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
+                           ]
+  , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
+      bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)
+                           , bench "safe/different" $ nfIO (safeEq h1 h2_1)
+                           , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
+                           , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
+                           ]
+  , env (generate arbitrary) $ \ ~cred ->
+      bgroup "kdf/scrypt" $ [ bench "hashCredential/defaultParams" $ nfIO (Scrypt.hashCredential Scrypt.defaultParams cred)
+                            , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams)
+                            ]
   ]
