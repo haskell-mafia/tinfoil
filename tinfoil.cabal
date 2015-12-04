@@ -132,13 +132,11 @@ benchmark bench
                      , ambiata-tinfoil
                      , bytestring                      == 0.10.4.0
                      , criterion                       == 1.1.*
-                     , old-locale                      == 1.0.0.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
                      , random                          == 1.1.*
                      , semigroups
                      , text                            == 1.2.*
-                     , time                            == 1.4.2.*
 
 
 

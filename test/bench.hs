@@ -9,14 +9,11 @@ import           Criterion.Types
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
-import           Data.Time.Clock (getCurrentTime)
-import           Data.Time.Format (formatTime)
 
 import           P
 import           Prelude (($!))
 
 import           System.IO
-import           System.Locale (defaultTimeLocale)
 import qualified System.Random as R
 
 import           Test.Tinfoil.Arbitrary ()
@@ -48,17 +45,15 @@ stdRandom n = BS.pack <$> R.getStdRandom (genBytes n [])
 unsafeEq :: ByteString -> ByteString -> IO Bool
 unsafeEq a b = pure $! a == b
 
-tinfoilBench :: IO ([Benchmark] -> IO ())
-tinfoilBench = do
-  t <- getCurrentTime
-  let cfg = defaultConfig {
-              reportFile = Just $
-                "dist/bench-" <> formatTime defaultTimeLocale "%Y-%m-%dT%H-%M-%S%z" t <> ".html"
-            }
-  pure (defaultMainWith cfg)
+tinfoilBench :: [Benchmark] -> IO ()
+tinfoilBench = defaultMainWith cfg
+  where
+    cfg = defaultConfig {
+            reportFile = Just "dist/bench.html"
+          }
 
 main :: IO ()
-main = tinfoilBench >>= (\bench' -> bench' [
+main = tinfoilBench [
     bgroup "randomCredential" $
       [ bench "1" $ nfIO (randomCredential [] 1)
       , bench "1000" $ nfIO (randomCredential [] 1000)
@@ -94,4 +89,4 @@ main = tinfoilBench >>= (\bench' -> bench' [
       bgroup "kdf/scrypt" $ [ bench "hashCredential/defaultParams" $ nfIO (Scrypt.hashCredential Scrypt.defaultParams cred)
                             , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams)
                             ]
-  ])
+  ]
