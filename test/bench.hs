@@ -1,6 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE NoImplicitPrelude   #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Main where
 
 import           Criterion.Main
@@ -16,6 +17,7 @@ import           Prelude (($!))
 
 import           System.IO
 import           System.Locale (defaultTimeLocale)
+import qualified System.Random as R
 
 import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
@@ -33,6 +35,15 @@ bsTriple small big = do
   let big1 = BS.pack $ short2 <> long
   let big2 = BS.copy big1
   pure (BS.pack $ short1 <> long, big1, big2)
+
+-- non-CSPRNG, just a performance baseline.
+stdRandom :: Int -> IO ByteString
+stdRandom n = BS.pack <$> R.getStdRandom (genBytes n [])
+  where
+    genBytes 0 l g = (l, g)
+    genBytes n' l g =
+      let (value, nextG) = R.random g
+      in genBytes (n' - 1) (value : l) nextG
 
 unsafeEq :: ByteString -> ByteString -> IO Bool
 unsafeEq a b = pure $! a == b
@@ -52,6 +63,14 @@ main = tinfoilBench >>= (\bench' -> bench' [
       [ bench "1" $ nfIO (randomCredential [] 1)
       , bench "1000" $ nfIO (randomCredential [] 1000)
       , bench "100000" $ nfIO (randomCredential [] 100000)
+      ]
+  , bgroup "entropy" $
+      [ bench "Tinfoil.Random.entropy/1" $ nfIO (entropy 1)
+      , bench "Tinfoil.Random.entropy/1000" $ nfIO (entropy 1000)
+      , bench "Tinfoil.Random.entropy/100000" $ nfIO (entropy 100000)
+      , bench "System.Random.StdRandom/1" $ nfIO (stdRandom 1)
+      , bench "System.Random.StdRandom/1000" $ nfIO (stdRandom 1000)
+      , bench "System.Random.StdRandom/100000" $ nfIO (stdRandom 100000)
       ]
   , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
       bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)

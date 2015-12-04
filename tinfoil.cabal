@@ -135,6 +135,7 @@ benchmark bench
                      , old-locale                      == 1.0.0.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
+                     , random                          == 1.1.*
                      , semigroups
                      , text                            == 1.2.*
                      , time                            == 1.4.2.*

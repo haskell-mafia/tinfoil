@@ -32,7 +32,9 @@ import           System.IO
 newtype Entropy =
   Entropy {
     unEntropy :: ByteString
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance NFData Entropy
 
 -- | Output of a 'KDF'. Do not ever implement an 'Eq' instance for
 -- this type.
