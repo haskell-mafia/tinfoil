@@ -11,14 +11,15 @@ import           P
 
 import           System.IO
 
+import           Test.QuickCheck
+import           Test.QuickCheck.Instances ()
+import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.KDF.Scrypt.TestVectors
+
 import           Tinfoil.Data (Credential(..), Verified(..))
 import           Tinfoil.KDF.Scrypt
 import           Tinfoil.KDF.Scrypt.Internal
 import           Tinfoil.Random (entropy)
-
-import           Test.QuickCheck
-import           Test.QuickCheck.Instances ()
-import           Test.Tinfoil.Arbitrary
 
 -- 1.5 seconds in picoseconds
 minHashTime :: Integer
@@ -59,6 +60,11 @@ prop_scrypt p c = testIO $ do
   h1 <- scrypt p e c
   h2 <- scrypt p e c
   pure $ h1 === h2
+
+prop_testVector :: TestVector -> Property
+prop_testVector (TestVector c s p h) = testIO $ do
+  h' <- scrypt p s c
+  pure $ h' === h
 
 return []
 tests :: IO Bool
