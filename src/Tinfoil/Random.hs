@@ -7,8 +7,6 @@ module Tinfoil.Random(
   , drawOnce
 ) where
 
-import           Data.Bits
-import qualified Data.ByteString as BS
 import           Data.List ((\\))
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
@@ -20,6 +18,7 @@ import           System.Entropy
 import           System.IO
 
 import           Tinfoil.Data
+import           Tinfoil.Random.Internal
 
 -- | Generate a password of a given length using the printable ASCII 
 -- characters (excluding tabs and newlines). This implementation is pretty 
@@ -41,11 +40,15 @@ credentialCharSet = NE.fromList [' '..'~']
 -- | Draw one element from the input list uniformly at random.
 drawOnce :: NonEmpty a -> IO a
 drawOnce as = do
-    r <- readLE <$> getEntropy entropyBytes
+    r <- (readBitsLE . discard . explodeBS) <$> getEntropy entropyBytes
     if r < n
       then pure (as NE.!! r)
       else drawOnce as
   where
+    -- Don't need these, so drop them to reduce the number of times we need to
+    -- draw.
+    extraBits = (entropyBytes * 8) - entropyBits
+
     -- Required entropy, rounded up to nearest byte.
     entropyBytes :: Int
     entropyBytes = ceiling ((fromIntegral entropyBits) / (8.0 :: Double))
@@ -56,6 +59,4 @@ drawOnce as = do
 
     n = NE.length as
 
-    readLE = BS.foldr' pack 0
-
-    pack byte acc = (acc `shiftL` 8) .|. fromIntegral byte
+    discard = dropMS extraBits

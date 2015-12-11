@@ -51,8 +51,8 @@ pValue nValues x2 =
 
 main :: IO ()
 main =
-  let nVal = 10
-      expectedCount = 1000
+  let nVal = 100
+      expectedCount = 10000
   in do
   counts <- sample nVal expectedCount
   let x2 = pearson expectedCount counts

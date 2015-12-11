@@ -1,17 +1,24 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data(
     Entropy(..)
   , Credential(..)
   , CredentialHash(..)
-  , CHF(..)
+  , KDF(..)
 ) where
+
+import           Control.DeepSeq (NFData)
 
 import           Data.ByteString (ByteString)
 import           Data.Text       (Text)
 
+import           GHC.Generics (Generic)
+
 import           P
+
+import           System.IO
 
 -- | Sufficiently-random data. In almost all cases[0], use
 -- <https://hackage.haskell.org/package/entropy-0.3.7/docs/System-Entropy.html System.Entropy.getEntropy>.
@@ -24,7 +31,7 @@ newtype Entropy =
     unEntropy :: ByteString
   } deriving (Eq, Show)
 
--- | Output of a 'CHF'. Do not ever implement an 'Eq' instance for
+-- | Output of a 'KDF'. Do not ever implement an 'Eq' instance for
 -- this type.
 newtype CredentialHash =
   CredentialHash {
@@ -34,22 +41,23 @@ newtype CredentialHash =
 newtype Credential =
   Credential {
     unCredential :: Text
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
 
--- | Credential hashing function - put in a secret and get out a token
--- from which it is computationally infeasible to derive the secret.
---
--- Good KDFs usually make good CHFs.
+instance NFData Credential
+
+-- | Key derivation function - put in a secret and get out a token
+-- from which it is computationally infeasible to derive the secret, which
+-- is suitable either for use as a cryptographic key or as a credential hash.
 --
 -- Properties:
---  * Uses an underlying cryptographic hash function
---  (collision-resistant). 
+--  * Uses an underlying cryptographic hash function or other pseudo-random
+--  function with good collision resistance and diffusion.
 --  * Salted with high-quality entropy (to make rainbow tables
 --  infeasible).
 --  * Slow, for naive brute-force.
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
-data CHF = CHF
-  { genHash    :: (Entropy -> Credential -> Maybe CredentialHash)
+data KDF = KDF
+  { genHash    :: (Credential -> IO CredentialHash)
   , mcfPrefix  :: Text
   }
