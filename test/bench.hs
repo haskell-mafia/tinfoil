@@ -49,7 +49,8 @@ tinfoilBench :: [Benchmark] -> IO ()
 tinfoilBench = defaultMainWith cfg
   where
     cfg = defaultConfig {
-            reportFile = Just "dist/bench.html"
+            reportFile = Just "dist/build/tinfoil-bench.html"
+          , csvFile = Just "dist/build/tinfoil-bench.csv"
           }
 
 main :: IO ()
