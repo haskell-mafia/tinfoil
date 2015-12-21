@@ -39,9 +39,16 @@ library
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
-  c-sources:           cbits/crypto_scrypt-sse.c, cbits/sha256.c
+  c-sources:           cbits/scrypt/crypto_scrypt.c
+                     , cbits/scrypt/sha256.c
+                     , cbits/scrypt/insecure_memzero.c
+                     , cbits/scrypt/warnp.c
+                     , cbits/scrypt/cpusupport_x86_aesni.c
+                     , cbits/scrypt/cpusupport_x86_sse2.c
+                     , cbits/scrypt/crypto_scrypt_smix.c
+                     , cbits/scrypt/crypto_scrypt_smix_sse2.c
   cc-options:          -msse2
-  include-dirs:        cbits
+  include-dirs:        cbits/scrypt
   includes:            crypto_scrypt.h
   install-includes:    crypto_scrypt.h
 
