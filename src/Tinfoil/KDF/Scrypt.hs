@@ -22,7 +22,7 @@ import           Tinfoil.Random (entropy)
 -- least 2sec. Memory usage should be 128Nr = 64MiB/hash per
 -- <https://tarsnap.com/scrypt/scrypt.pdf the paper>.
 defaultParams :: ScryptParams
-defaultParams = scryptParams 16 8 16 -- N = 2^16, r = 8, p = 16
+defaultParams = scryptParams 16 8 12 -- N = 2^16, r = 8, p = 12
 
 salt :: IO Entropy
 salt = entropy 32
