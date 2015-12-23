@@ -6,6 +6,9 @@ module Tinfoil.Data(
     Entropy(..)
   , Credential(..)
   , CredentialHash(..)
+  , Verified(..)
+  , NeedsRehash(..)
+  , Verification(..)
   , KDF(..)
 ) where
 
@@ -29,14 +32,18 @@ import           System.IO
 newtype Entropy =
   Entropy {
     unEntropy :: ByteString
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Generic)
+
+instance NFData Entropy
 
 -- | Output of a 'KDF'. Do not ever implement an 'Eq' instance for
 -- this type.
 newtype CredentialHash =
   CredentialHash {
     unCredentialHash :: ByteString
-  } deriving (Show)
+  } deriving (Show, Generic)
+
+instance NFData CredentialHash
 
 newtype Credential =
   Credential {
@@ -44,6 +51,21 @@ newtype Credential =
   } deriving (Eq, Show, Generic)
 
 instance NFData Credential
+
+data Verified =
+    Verified
+  | NotVerified
+  deriving (Eq, Show, Generic)
+
+instance NFData Verified
+
+data NeedsRehash =
+    NeedsRehash
+  | UpToDate
+  deriving (Eq, Show)
+
+data Verification = Verification Verified NeedsRehash
+  deriving (Eq, Show)
 
 -- | Key derivation function - put in a secret and get out a token
 -- from which it is computationally infeasible to derive the secret, which
@@ -58,6 +80,8 @@ instance NFData Credential
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash    :: (Credential -> IO CredentialHash)
-  , mcfPrefix  :: Text
+  { genHash        :: (Credential -> IO CredentialHash)
+  , hashCredential :: (Credential -> CredentialHash -> IO Verified)
+  , verifyNoHash   :: IO Verified
+  , mcfPrefix      :: Text
   }

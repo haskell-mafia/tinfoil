@@ -5,6 +5,7 @@ module Tinfoil.Random(
     randomCredential
   , credentialCharSet
   , drawOnce
+  , entropy
 ) where
 
 import           Data.List ((\\))
@@ -14,11 +15,15 @@ import qualified Data.Text as T
 
 import           P
 
-import           System.Entropy
+import qualified System.Entropy as E
 import           System.IO
 
 import           Tinfoil.Data
 import           Tinfoil.Random.Internal
+
+-- | Reads the specified number of bytes from from /dev/urandom.
+entropy :: Int -> IO Entropy
+entropy = fmap Entropy . E.getEntropy
 
 -- | Generate a password of a given length using the printable ASCII 
 -- characters (excluding tabs and newlines). This implementation is pretty 
@@ -40,7 +45,7 @@ credentialCharSet = NE.fromList [' '..'~']
 -- | Draw one element from the input list uniformly at random.
 drawOnce :: NonEmpty a -> IO a
 drawOnce as = do
-    r <- (readBitsLE . discard . explodeBS) <$> getEntropy entropyBytes
+    r <- (readBitsLE . discard . explodeBS) <$> E.getEntropy entropyBytes
     if r < n
       then pure (as NE.!! r)
       else drawOnce as

@@ -19,6 +19,7 @@ belongs in `tinfoil`. This includes:
 
  - Credential hashing and verification.
  - Key derivation functions.
+ - Key and credential generation.
  - HMACs and signed requests.
  - Bindings and wrappers around low-level libraries (`scrypt`,
    `libsodium`, et cetera).
