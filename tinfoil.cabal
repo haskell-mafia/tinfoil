@@ -1,14 +1,16 @@
 name:                  ambiata-tinfoil
 version:               0.0.1
-license:               AllRightsReserved
+license:               Apache-2.0
 author:                Ambiata <info@ambiata.com>
 maintainer:            Ambiata <info@ambiata.com>
 copyright:             (c) 2015 Ambiata.
-synopsis:              ambiata-tinfoil
+synopsis:              Paranoid crypto primitives
 category:              System
 cabal-version:         >= 1.8
 build-type:            Simple
-description:           ambiata-tinfoil
+description:           Primitives for cryptographic random number generation,
+                       key deriviation, credential storage and verification,
+                       et cetera.
 
 library
   build-depends:
