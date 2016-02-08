@@ -100,7 +100,7 @@ scrypt (ScryptParams logN r p) (Entropy salt) (Credential pass) =
       bufPtr (fromIntegral bufLen)
     BS.packCStringLen (castPtr bufPtr, fromIntegral bufLen)
 
-foreign import ccall unsafe crypto_scrypt
+foreign import ccall safe crypto_scrypt
     :: Ptr Word8 -> CSize         -- password
     -> Ptr Word8 -> CSize         -- salt
     -> Word64 -> Word32 -> Word32 -- N, r, p
