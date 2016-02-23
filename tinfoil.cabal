@@ -17,8 +17,7 @@ library
                        base                            >= 3          && < 5
                      , ambiata-p
                      , base64-bytestring               == 1.0.0.*
-                     , bytestring                      == 0.10.4.0
-                     , deepseq                         == 1.3.*
+                     , bytestring                      >= 0.10.4     && < 0.10.7
                      , either                          >= 4.3        && < 4.5
                      , entropy                         == 0.3.7
                      , semigroups                      == 0.16.*
@@ -70,7 +69,7 @@ test-suite test
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
-                     , bytestring                      == 0.10.4.0
+                     , bytestring                      >= 0.10.4     && < 0.10.7
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
@@ -93,7 +92,7 @@ test-suite test-io
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
-                     , bytestring                      == 0.10.4.0
+                     , bytestring                      >= 0.10.4     && < 0.10.7
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
@@ -114,7 +113,7 @@ test-suite test-random
                        base                            >= 3          && < 5
                      , ambiata-tinfoil
                      , ambiata-p
-                     , bytestring                      == 0.10.4.0
+                     , bytestring                      >= 0.10.4     && < 0.10.7
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , semigroups
@@ -139,7 +138,7 @@ benchmark bench
                      , ambiata-disorder-corpus
                      , ambiata-p
                      , ambiata-tinfoil
-                     , bytestring                      == 0.10.4.0
+                     , bytestring                      >= 0.10.4     && < 0.10.7
                      , criterion                       == 1.1.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*

@@ -11,7 +11,6 @@ import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 
 import           P
-import           Prelude (($!))
 
 import           System.IO
 import qualified System.Random as R
