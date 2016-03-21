@@ -12,8 +12,6 @@ module Tinfoil.Data(
   , KDF(..)
 ) where
 
-import           Control.DeepSeq (NFData)
-
 import           Data.ByteString (ByteString)
 import           Data.Text       (Text)
 
