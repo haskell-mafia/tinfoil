@@ -1,7 +1,8 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.KDF.Scrypt(
-    defaultParams
+    ScryptParams
+  , defaultParams
   , hashCredential
   , scryptMCFPrefix
   , verifyCredential
