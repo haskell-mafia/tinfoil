@@ -9,6 +9,8 @@ module Tinfoil.KDF.Scrypt(
   , verifyNoCredential
 ) where
 
+import qualified Data.ByteString as BS
+
 import           P
 
 import           System.IO
@@ -34,15 +36,15 @@ salt = entropy 32
 
 verifyNoCredential :: ScryptParams -> Credential -> IO Verified
 verifyNoCredential p c = do
-  e <- salt
   h <- scrypt p e c
   void $ h `safeEq` ""
   pure NotVerified
+  where
+    e = Entropy $ BS.replicate 32 0x00
 
 verifyCredential :: CredentialHash -> Credential -> IO Verified
 verifyCredential ch c = case separate ch of
   Just (p, e, h) -> do
-    void salt -- timing consistency
     h' <- scrypt p e c
     r <- h' `safeEq` h
     if r
