@@ -88,10 +88,9 @@ separate = go . BS.split (fromIntegral $ ord '|') . unCredentialHash
 -- run in IO.
 scrypt :: ScryptParams -> Entropy -> Credential -> IO ByteString
 scrypt (ScryptParams logN r p) (Entropy salt) (Credential pass) =
-  let pass'  = T.encodeUtf8 pass 
-      bufLen = 64 :: Int in
+  let bufLen = 64 :: Int in
   BS.useAsCStringLen salt $ \(saltPtr, saltLen) ->
-  BS.useAsCStringLen pass' $ \(passPtr, passLen) ->
+  BS.useAsCStringLen pass $ \(passPtr, passLen) ->
   allocaBytes (fromIntegral bufLen) $ \bufPtr -> do
     throwErrnoIfMinus1_ "crypto_scrypt" $ crypto_scrypt
       (castPtr passPtr) (fromIntegral passLen)

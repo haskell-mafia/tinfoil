@@ -30,7 +30,7 @@ instance NFData CredentialHash
 
 newtype Credential =
   Credential {
-    unCredential :: Text
+    unCredential :: ByteString
   } deriving (Eq, Show, Generic)
 
 instance NFData Credential
