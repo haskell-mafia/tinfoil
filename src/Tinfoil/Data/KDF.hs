@@ -12,7 +12,6 @@ module Tinfoil.Data.KDF(
 ) where
 
 import           Data.ByteString (ByteString)
-import           Data.Text       (Text)
 
 import           GHC.Generics (Generic)
 

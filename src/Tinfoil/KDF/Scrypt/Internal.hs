@@ -20,7 +20,6 @@ import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Base64 as Base64
 import           Data.Char (ord)
-import           Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified Data.Text.Read as TR
