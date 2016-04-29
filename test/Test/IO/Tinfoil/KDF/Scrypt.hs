@@ -68,4 +68,4 @@ prop_testVector (TestVector c s p h) = testIO $ do
 
 return []
 tests :: IO Bool
-tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 5 } )
+tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 10 } )
