@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE BangPatterns #-}
 
 -- This module is based on the implementation from Falko Peters' 
 -- 'scrypt' package and used under the terms of the BSD3 license.
@@ -37,9 +38,9 @@ import           Tinfoil.Data
 
 data ScryptParams =
   ScryptParams {
-      scryptLogN :: Int
-    , scryptR    :: Int
-    , scryptP    :: Int
+      scryptLogN :: !Int
+    , scryptR    :: !Int
+    , scryptP    :: !Int
   } deriving (Eq, Show)
 
 encodeScryptParams :: ScryptParams -> ByteString

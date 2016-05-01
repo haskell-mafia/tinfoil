@@ -62,7 +62,7 @@ data NeedsRehash =
   | UpToDate
   deriving (Eq, Show)
 
-data Verification = Verification Verified NeedsRehash
+data Verification = Verification !Verified !NeedsRehash
   deriving (Eq, Show)
 
 -- | Key derivation function - put in a secret and get out a token
