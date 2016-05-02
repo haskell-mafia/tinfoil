@@ -36,8 +36,9 @@ newtype Credential =
 instance NFData Credential
 
 data Verified =
-    Verified
-  | NotVerified
+    Verified -- ^ Credential hash is well-formed and credential is correct.
+  | NotVerified -- ^ Credential hash is well-formed but credential is not correct.
+  | VerificationError -- ^ Credential hash is not well-formed.
   deriving (Eq, Show, Generic)
 
 instance NFData Verified
@@ -64,7 +65,7 @@ data Verification = Verification !Verified !NeedsRehash
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
   { genHash        :: (Credential -> IO CredentialHash)
-  , hashCredential :: (CredentialHash -> Credential -> IO (Maybe Verified))
-  , verifyNoHash   :: (Credential -> IO (Maybe Verified))
+  , hashCredential :: (CredentialHash -> Credential -> IO Verified)
+  , verifyNoHash   :: (Credential -> IO Verified)
   , mcfPrefix      :: Text
   }

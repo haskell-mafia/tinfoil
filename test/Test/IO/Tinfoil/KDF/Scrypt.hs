@@ -30,20 +30,20 @@ prop_verifyCredential_valid p (UniquePair good bad) = testIO $ do
   ch <- hashCredential p good
   r1 <- verifyCredential ch good
   r2 <- verifyCredential ch bad
-  pure $ (r1, r2) === (Just Verified, Just NotVerified)
+  pure $ (r1, r2) === (Verified, NotVerified)
 
 prop_verifyCredential_timing :: UniquePair Credential -> Property
 prop_verifyCredential_timing (UniquePair good bad) = testIO $ do
   ch <- hashCredential defaultParams good
   (t1, r1) <- withCPUTime $ verifyCredential ch good
   (t2, r2) <- withCPUTime $ verifyCredential ch bad
-  pure $ (r1, r2, t1 >= minHashTime, t2 >= minHashTime) === (Just Verified, Just NotVerified, True, True)
+  pure $ (r1, r2, t1 >= minHashTime, t2 >= minHashTime) === (Verified, NotVerified, True, True)
 
 
 prop_verifyCredential_invalid :: Credential -> InvalidCredentialHash -> Property
 prop_verifyCredential_invalid c (InvalidCredentialHash ch) = testIO $ do
   r <- verifyCredential ch c
-  pure $ r === Nothing
+  pure $ r === VerificationError
 
 -- Run twice and check the times to make sure we're not memoizing the result.
 prop_verifyNoCredential :: Credential -> Property
@@ -51,7 +51,7 @@ prop_verifyNoCredential c = testIO $ do
   let a = verifyNoCredential defaultParams c
   (t1, r1) <- withCPUTime a
   (t2, r2) <- withCPUTime a
-  pure $ (r1, r2, t1 > minHashTime, t2 > minHashTime) === (Just NotVerified, Just NotVerified, True, True)
+  pure $ (r1, r2, t1 > minHashTime, t2 > minHashTime) === (NotVerified, NotVerified, True, True)
   
 
 prop_scrypt :: ScryptParams -> Credential -> Property
