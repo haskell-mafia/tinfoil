@@ -87,6 +87,6 @@ main = tinfoilBench [
                            ]
   , env (generate arbitrary) $ \ ~cred ->
       bgroup "kdf/scrypt" $ [ bench "hashCredential/defaultParams" $ nfIO (Scrypt.hashCredential Scrypt.defaultParams cred)
-                            , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams)
+                            , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams cred)
                             ]
   ]

@@ -27,10 +27,10 @@ defaultParams = scryptParams 16 8 12 -- N = 2^16, r = 8, p = 12
 salt :: IO Entropy
 salt = entropy 32
 
-verifyNoCredential :: ScryptParams -> IO (Maybe Verified)
-verifyNoCredential p = do
+verifyNoCredential :: ScryptParams -> Credential -> IO (Maybe Verified)
+verifyNoCredential p c = do
   e <- salt
-  h <- scrypt p e (Credential "")
+  h <- scrypt p e c
   void $ h `safeEq` ""
   pure $ Just NotVerified
 
