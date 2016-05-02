@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Test.IO.Tinfoil.KDF where
+module Test.IO.Tinfoil.KDF.Common where
 
 import           Data.ByteString (ByteString)
 
@@ -14,7 +14,7 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.KDF
+import           Tinfoil.KDF.Common
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()

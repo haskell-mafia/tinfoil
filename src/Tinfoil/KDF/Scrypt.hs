@@ -3,6 +3,7 @@
 module Tinfoil.KDF.Scrypt(
     defaultParams
   , hashCredential
+  , scryptMCFPrefix
   , verifyCredential
   , verifyNoCredential
 ) where
@@ -14,8 +15,11 @@ import           System.IO
 import           Tinfoil.Data (Credential(..), CredentialHash(..), Entropy(..))
 import           Tinfoil.Data (Verified(..))
 import           Tinfoil.KDF.Scrypt.Internal
-import           Tinfoil.KDF
+import           Tinfoil.KDF.Common
 import           Tinfoil.Random (entropy)
+
+scryptMCFPrefix :: Text
+scryptMCFPrefix = "$scrypt0"
 
 -- |
 -- Nontrivial but reasonable memory usage, and a runtime of at
@@ -27,23 +31,23 @@ defaultParams = scryptParams 16 8 12 -- N = 2^16, r = 8, p = 12
 salt :: IO Entropy
 salt = entropy 32
 
-verifyNoCredential :: ScryptParams -> Credential -> IO (Maybe Verified)
+verifyNoCredential :: ScryptParams -> Credential -> IO Verified
 verifyNoCredential p c = do
   e <- salt
   h <- scrypt p e c
   void $ h `safeEq` ""
-  pure $ Just NotVerified
+  pure NotVerified
 
-verifyCredential :: CredentialHash -> Credential -> IO (Maybe Verified)
+verifyCredential :: CredentialHash -> Credential -> IO Verified
 verifyCredential ch c = case separate ch of
   Just (p, e, h) -> do
     void salt -- timing consistency
     h' <- scrypt p e c
     r <- h' `safeEq` h
     if r
-      then pure $ Just Verified
-      else pure $ Just NotVerified
-  Nothing        -> pure Nothing
+      then pure Verified
+      else pure NotVerified
+  Nothing        -> pure VerificationError
 
 hashCredential :: ScryptParams -> Credential -> IO CredentialHash
 hashCredential params cred = do

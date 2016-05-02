@@ -38,6 +38,7 @@ library
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
                        Tinfoil.KDF
+                       Tinfoil.KDF.Common
                        Tinfoil.KDF.Scrypt
                        Tinfoil.KDF.Scrypt.Internal
                        Tinfoil.Random

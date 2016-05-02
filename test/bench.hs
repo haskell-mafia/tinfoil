@@ -20,7 +20,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 import           Tinfoil.Random
-import           Tinfoil.KDF
+import           Tinfoil.KDF.Common
 import qualified Tinfoil.KDF.Scrypt as Scrypt
 
 bsTriple :: Int -> Int -> Gen (ByteString, ByteString, ByteString)
