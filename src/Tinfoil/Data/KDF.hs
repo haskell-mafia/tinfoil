@@ -64,7 +64,7 @@ data Verification = Verification !Verified !NeedsRehash
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
   { genHash        :: (Credential -> IO CredentialHash)
-  , hashCredential :: (Credential -> CredentialHash -> IO Verified)
-  , verifyNoHash   :: IO Verified
+  , hashCredential :: (CredentialHash -> Credential -> IO (Maybe Verified))
+  , verifyNoHash   :: (Credential -> IO (Maybe Verified))
   , mcfPrefix      :: Text
   }

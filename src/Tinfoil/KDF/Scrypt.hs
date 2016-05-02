@@ -3,6 +3,7 @@
 module Tinfoil.KDF.Scrypt(
     defaultParams
   , hashCredential
+  , scryptMCFPrefix
   , verifyCredential
   , verifyNoCredential
 ) where
@@ -14,8 +15,11 @@ import           System.IO
 import           Tinfoil.Data (Credential(..), CredentialHash(..), Entropy(..))
 import           Tinfoil.Data (Verified(..))
 import           Tinfoil.KDF.Scrypt.Internal
-import           Tinfoil.KDF
+import           Tinfoil.KDF.Common
 import           Tinfoil.Random (entropy)
+
+scryptMCFPrefix :: Text
+scryptMCFPrefix = "$scrypt0"
 
 -- |
 -- Nontrivial but reasonable memory usage, and a runtime of at
