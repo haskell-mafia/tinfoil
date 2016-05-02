@@ -46,9 +46,9 @@ prop_verifyCredential_invalid c (InvalidCredentialHash ch) = testIO $ do
   pure $ r === Nothing
 
 -- Run twice and check the times to make sure we're not memoizing the result.
-prop_verifyNoCredential :: Property
-prop_verifyNoCredential = testIO $ do
-  let a = verifyNoCredential defaultParams
+prop_verifyNoCredential :: Credential -> Property
+prop_verifyNoCredential c = testIO $ do
+  let a = verifyNoCredential defaultParams c
   (t1, r1) <- withCPUTime a
   (t2, r2) <- withCPUTime a
   pure $ (r1, r2, t1 > minHashTime, t2 > minHashTime) === (Just NotVerified, Just NotVerified, True, True)
