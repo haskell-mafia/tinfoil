@@ -84,3 +84,10 @@ instance Arbitrary ScryptParams where
 -- Unsafe, test code only.
 instance Eq CredentialHash where
   (CredentialHash a) == (CredentialHash b) = a == b
+
+instance Arbitrary KeyedHashFunction where
+  arbitrary = elements [minBound..maxBound]
+
+instance Arbitrary SignatureVersion where
+  arbitrary = elements [minBound..maxBound]
+
