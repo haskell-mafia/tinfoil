@@ -4,6 +4,7 @@
 
 module Test.Tinfoil.Arbitrary where
 
+import qualified Data.ByteString as BS
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Text.Encoding as T
@@ -14,7 +15,6 @@ import           P
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
-import           Test.QuickCheck.Utf8 (genValidUtf8)
 
 import           Tinfoil.Data
 import           Tinfoil.Random
@@ -32,7 +32,10 @@ excludedChars :: Gen [Char]
 excludedChars = arbitrary `suchThat` (/= (NE.toList credentialCharSet))
 
 instance Arbitrary Credential where
-  arbitrary = Credential <$> genValidUtf8
+  arbitrary = do
+    n <- credentialLength
+    bs <- fmap BS.pack . vectorOf n $ choose (0, 255)
+    pure $ Credential bs
 
 -- Fake entropy.
 instance Arbitrary Entropy where

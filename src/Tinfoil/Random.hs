@@ -12,6 +12,7 @@ import           Data.List ((\\))
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as T
 
 import           P
 
@@ -34,7 +35,7 @@ entropy = fmap Entropy . E.getEntropy
 randomCredential :: [Char] -> Int -> IO (Maybe Credential)
 randomCredential excluded n = case charset of
   [] -> pure Nothing
-  cs -> (Just . Credential . T.pack) <$> replicateM n (drawOnce $ NE.fromList cs)
+  cs -> (Just . Credential . T.encodeUtf8 . T.pack) <$> replicateM n (drawOnce $ NE.fromList cs)
   where
     charset = (NE.toList credentialCharSet) \\ excluded 
 
