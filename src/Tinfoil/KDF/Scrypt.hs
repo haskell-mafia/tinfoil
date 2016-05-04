@@ -22,7 +22,7 @@ import           Tinfoil.KDF.Common
 import           Tinfoil.Random (entropy)
 
 scryptMCFPrefix :: Text
-scryptMCFPrefix = "$scrypt0"
+scryptMCFPrefix = "$scrypt0$"
 
 -- |
 -- Nontrivial but reasonable memory usage, and a runtime of at
