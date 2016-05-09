@@ -54,7 +54,6 @@ prop_verifyNoCredential c = testIO $ do
   (t2, r2) <- withCPUTime a
   pure $ (r1, r2, t1 > minHashTime, t2 > minHashTime) === (NotVerified, NotVerified, True, True)
   
-
 prop_scrypt :: ScryptParams -> Credential -> Property
 prop_scrypt p c = testIO $ do
   e <- entropy 32
@@ -62,6 +61,7 @@ prop_scrypt p c = testIO $ do
   h2 <- scrypt p e c
   pure $ h1 === h2
 
+-- Verify that the test vectors from the scrypt paper pass.
 prop_testVector :: TestVector -> Property
 prop_testVector (TestVector c s p h) = testIO $ do
   h' <- scrypt p s c

@@ -58,6 +58,8 @@ hashCredential params cred = do
   s <- salt
   (combine params s) <$> scrypt params s cred
 
+-- | Check that the parameters in the hash match the provided set of parameters.
+-- Nothing' if the hash is invalid.
 paramsUpToDate :: ScryptParams -> CredentialHash -> Maybe' NeedsRehash
 paramsUpToDate p h = do
   (ps, _, _) <- separate h
