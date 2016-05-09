@@ -64,4 +64,3 @@ paramsUpToDate h = do
   if ps == defaultParams
     then pure UpToDate
     else pure NeedsRehash
-    

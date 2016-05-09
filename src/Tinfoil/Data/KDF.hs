@@ -46,10 +46,14 @@ instance NFData Verified
 data NeedsRehash =
     NeedsRehash
   | UpToDate
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
+
+instance NFData NeedsRehash
 
 data Verification = Verification !Verified !NeedsRehash
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
+
+instance NFData Verification
 
 -- | Key derivation function - put in a secret and get out a token
 -- from which it is computationally infeasible to derive the secret, which
