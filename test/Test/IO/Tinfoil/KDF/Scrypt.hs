@@ -17,6 +17,7 @@ import           Test.Tinfoil.Arbitrary
 import           Test.Tinfoil.KDF.Scrypt.TestVectors
 
 import           Tinfoil.Data (Credential(..), Verified(..))
+import           Tinfoil.Data (NeedsRehash(..))
 import           Tinfoil.KDF.Scrypt
 import           Tinfoil.KDF.Scrypt.Internal
 import           Tinfoil.Random (entropy)
@@ -65,6 +66,14 @@ prop_testVector :: TestVector -> Property
 prop_testVector (TestVector c s p h) = testIO $ do
   h' <- scrypt p s c
   pure $ h' === h
+
+prop_paramsUpToDate :: UniquePair ScryptParams -> Credential -> Property
+prop_paramsUpToDate (UniquePair p1 p2) c = testIO $ do
+  h1 <- hashCredential p1 c
+  h2 <- hashCredential p2 c
+  let r1 = paramsUpToDate p1 h1
+  let r2 = paramsUpToDate p1 h2
+  pure $ (r1, r2) === (Just' UpToDate, Just' NeedsRehash)
 
 return []
 tests :: IO Bool

@@ -58,9 +58,9 @@ hashCredential params cred = do
   s <- salt
   (combine params s) <$> scrypt params s cred
 
-paramsUpToDate :: CredentialHash -> Maybe' NeedsRehash
-paramsUpToDate h = do
+paramsUpToDate :: ScryptParams -> CredentialHash -> Maybe' NeedsRehash
+paramsUpToDate p h = do
   (ps, _, _) <- separate h
-  if ps == defaultParams
+  if ps == p
     then pure UpToDate
     else pure NeedsRehash
