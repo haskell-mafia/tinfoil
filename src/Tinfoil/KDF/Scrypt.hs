@@ -4,6 +4,7 @@ module Tinfoil.KDF.Scrypt(
     ScryptParams
   , defaultParams
   , hashCredential
+  , paramsUpToDate
   , scryptMCFPrefix
   , verifyCredential
   , verifyNoCredential
@@ -16,7 +17,7 @@ import           P
 import           System.IO
 
 import           Tinfoil.Data (Credential(..), CredentialHash(..), Entropy(..))
-import           Tinfoil.Data (Verified(..))
+import           Tinfoil.Data (Verified(..), NeedsRehash(..))
 import           Tinfoil.KDF.Scrypt.Internal
 import           Tinfoil.KDF.Common
 import           Tinfoil.Random (entropy)
@@ -44,15 +45,24 @@ verifyNoCredential p c = do
 
 verifyCredential :: CredentialHash -> Credential -> IO Verified
 verifyCredential ch c = case separate ch of
-  Just (p, e, h) -> do
+  Just' (p, e, h) -> do
     h' <- scrypt p e c
     r <- h' `safeEq` h
     if r
       then pure Verified
       else pure NotVerified
-  Nothing        -> pure VerificationError
+  Nothing'        -> pure VerificationError
 
 hashCredential :: ScryptParams -> Credential -> IO CredentialHash
 hashCredential params cred = do
   s <- salt
   (combine params s) <$> scrypt params s cred
+
+-- | Check that the parameters in the hash match the provided set of parameters.
+-- Nothing' if the hash is invalid.
+paramsUpToDate :: ScryptParams -> CredentialHash -> Maybe' NeedsRehash
+paramsUpToDate p h = do
+  (ps, _, _) <- separate h
+  if ps == p
+    then pure UpToDate
+    else pure NeedsRehash
