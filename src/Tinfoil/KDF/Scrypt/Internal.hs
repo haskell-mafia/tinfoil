@@ -49,19 +49,19 @@ encodeScryptParams (ScryptParams logN r p) = T.encodeUtf8 $ T.intercalate "|" [
   , T.pack $ show p
   ]
 
-decodeScryptParams :: ByteString -> Maybe ScryptParams
+decodeScryptParams :: ByteString -> Maybe' ScryptParams
 decodeScryptParams bs = case BS.split (fromIntegral $ ord '|') bs of
   [logN', r', p'] -> do
     logN <- maybeRead . TR.decimal $ T.decodeUtf8 logN'
     r <- maybeRead . TR.decimal $ T.decodeUtf8 r'
     p <- maybeRead . TR.decimal $ T.decodeUtf8 p'
     pure $ ScryptParams logN r p
-  _               -> Nothing
+  _               -> Nothing'
   where
-    maybeRead :: Either String (Int, Text) -> Maybe Int
-    maybeRead (Left _)        = Nothing
-    maybeRead (Right (x, "")) = Just x
-    maybeRead (Right (_, _))  = Nothing
+    maybeRead :: Either String (Int, Text) -> Maybe' Int
+    maybeRead (Left _)        = Nothing'
+    maybeRead (Right (x, "")) = Just' x
+    maybeRead (Right (_, _))  = Nothing'
 
 scryptParams :: Int -> Int -> Int -> ScryptParams
 scryptParams logN r p =
@@ -73,7 +73,7 @@ combine params (Entropy salt) passHash =
           encodeScryptParams params
         : [Base64.encode salt, Base64.encode passHash]
 
-separate :: CredentialHash -> Maybe (ScryptParams, Entropy, ByteString)
+separate :: CredentialHash -> Maybe' (ScryptParams, Entropy, ByteString)
 separate = go . BS.split (fromIntegral $ ord '|') . unCredentialHash
   where
     go [logN', r', p', salt', hash'] = do
@@ -81,8 +81,8 @@ separate = go . BS.split (fromIntegral $ ord '|') . unCredentialHash
 
         params <- decodeScryptParams $ BS.intercalate "|" [logN', r', p']
         pure (params, Entropy salt, hash)
-    go _         = Nothing
-    decodeBase64 = either (const Nothing) Just . Base64.decode
+    go _         = Nothing'
+    decodeBase64 = either (const Nothing') Just' . Base64.decode
 
 -- This implementation originally from the `scrypt` package; modified to 
 -- run in IO.

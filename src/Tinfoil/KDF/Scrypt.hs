@@ -45,20 +45,20 @@ verifyNoCredential p c = do
 
 verifyCredential :: CredentialHash -> Credential -> IO Verified
 verifyCredential ch c = case separate ch of
-  Just (p, e, h) -> do
+  Just' (p, e, h) -> do
     h' <- scrypt p e c
     r <- h' `safeEq` h
     if r
       then pure Verified
       else pure NotVerified
-  Nothing        -> pure VerificationError
+  Nothing'        -> pure VerificationError
 
 hashCredential :: ScryptParams -> Credential -> IO CredentialHash
 hashCredential params cred = do
   s <- salt
   (combine params s) <$> scrypt params s cred
 
-paramsUpToDate :: CredentialHash -> Maybe NeedsRehash
+paramsUpToDate :: CredentialHash -> Maybe' NeedsRehash
 paramsUpToDate h = do
   (ps, _, _) <- separate h
   if ps == defaultParams
