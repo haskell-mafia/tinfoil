@@ -7,9 +7,10 @@ module Test.Tinfoil.Arbitrary where
 import qualified Data.ByteString as BS
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
+import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 
-import           Disorder.Corpus (muppets)
+import           Disorder.Corpus (muppets, viruses)
 
 import           P
 
@@ -44,6 +45,29 @@ instance Arbitrary Entropy where
 genInvalidCredentialHash :: Gen CredentialHash
 genInvalidCredentialHash =
   ((CredentialHash . T.encodeUtf8) <$> elements muppets)
+
+-- valid MCF prefix, invalid hash part
+genWellFormedMCFHash :: Gen MCFHash
+genWellFormedMCFHash = do
+  p <- arbitrary
+  h <- genInvalidCredentialHash
+  pure $ packMCFHash p h
+
+genInvalidMCFHash :: Gen MCFHash
+genInvalidMCFHash = oneof [
+    (MCFHash . T.encodeUtf8) <$> elements muppets
+  , invalidPrefix
+  ]
+  where
+    invalidPrefix = do
+      p <- elements muppets
+      h <- elements viruses
+      pure . MCFHash . T.encodeUtf8 $ T.concat [
+          "$"
+        , p
+        , "$"
+        , h
+        ]
 
 newtype DrawBits =
   DrawBits {

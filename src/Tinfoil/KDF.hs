@@ -34,7 +34,7 @@ hash mp c = do
 
 verify :: MCFHash -> Credential -> IO Verified
 verify mh c =
-  maybe (pure VerificationError) (uncurry verify') $ unpackMCFHash mh
+  maybe' (pure VerificationError) (uncurry verify') $ unpackMCFHash mh
   where
     verify' mcf ch =
       let kdf = kdfFor mcf in

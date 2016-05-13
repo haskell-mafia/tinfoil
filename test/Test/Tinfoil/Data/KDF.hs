@@ -23,7 +23,7 @@ prop_tripping_MCFHash :: Property
 prop_tripping_MCFHash = forAll ((,) <$> arbitrary <*> genInvalidCredentialHash) $ \mcfPair ->
   let mcfh = uncurry packMCFHash mcfPair
       mcfPair' = unpackMCFHash mcfh in
-  mcfPair' === Just mcfPair
+  mcfPair' === Just' mcfPair
 
 return []
 tests :: IO Bool

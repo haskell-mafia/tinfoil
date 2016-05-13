@@ -105,11 +105,11 @@ instance NFData MCFPrefix
 renderMCFPrefix :: MCFPrefix -> ByteString
 renderMCFPrefix Scrypt0 = "scrypt0"
 
-parseMCFPrefix :: ByteString -> Maybe MCFPrefix
+parseMCFPrefix :: ByteString -> Maybe' MCFPrefix
 parseMCFPrefix "scrypt0" = pure Scrypt0
-parseMCFPrefix _ = Nothing
+parseMCFPrefix _ = Nothing'
 
-unpackMCFHash :: MCFHash -> Maybe (MCFPrefix, CredentialHash)
+unpackMCFHash :: MCFHash -> Maybe' (MCFPrefix, CredentialHash)
 unpackMCFHash (MCFHash bs) = do
   (p, h) <- splitMCF
   p' <- parseMCFPrefix p
@@ -117,7 +117,7 @@ unpackMCFHash (MCFHash bs) = do
   where
     splitMCF = case BS.split mcfDelimiter bs of
       ("":x:ys) -> pure (x, BS.intercalate (BS.singleton mcfDelimiter) ys)
-      _ -> Nothing
+      _ -> Nothing'
 
 packMCFHash :: MCFPrefix -> CredentialHash -> MCFHash
 packMCFHash p h = MCFHash $ BS.concat [
