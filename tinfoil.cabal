@@ -16,10 +16,13 @@ library
   build-depends:
                        base                            >= 3          && < 5
                      , ambiata-p
+                     , base16-bytestring               == 0.1.1.*
                      , base64-bytestring               == 1.0.0.*
                      , bytestring                      >= 0.10.4     && < 0.10.7
+                     , cryptonite                      == 0.15
                      , either                          >= 4.3        && < 4.5
                      , entropy                         == 0.3.7
+                     , memory                          == 0.11
                      , semigroups                      == 0.16.*
                      , text                            == 1.2.*
                      , transformers                    >= 0.3        && < 0.5
@@ -34,6 +37,7 @@ library
                        Paths_ambiata_tinfoil
                        Tinfoil
                        Tinfoil.Data
+                       Tinfoil.Data.Hash
                        Tinfoil.Data.KDF
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
@@ -41,6 +45,7 @@ library
                        Tinfoil.KDF.Common
                        Tinfoil.KDF.Scrypt
                        Tinfoil.KDF.Scrypt.Internal
+                       Tinfoil.Hash
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
