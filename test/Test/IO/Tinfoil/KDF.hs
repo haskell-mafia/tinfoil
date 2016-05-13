@@ -15,7 +15,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.Tinfoil.Arbitrary
 
-import           Tinfoil.Data (Credential(..), Verified(..), MCFPrefix(..))
+import           Tinfoil.Data
 import           Tinfoil.KDF
 
 -- 1.5 seconds in picoseconds
@@ -50,6 +50,11 @@ prop_verifyNoCredential mp c = testIO $ do
   (t1, r1) <- withCPUTime a
   (t2, r2) <- withCPUTime a
   pure $ (r1, r2, t1 > minHashTime, t2 > minHashTime) === (NotVerified, NotVerified, True, True)
+
+prop_needsRehash :: MCFPrefix -> Credential -> Property
+prop_needsRehash mp c = testIO $ do
+  h <- hash mp c
+  pure $ (needsRehash h) === (Just' UpToDate)
 
 return []
 tests :: IO Bool

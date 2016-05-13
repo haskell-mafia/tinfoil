@@ -92,6 +92,7 @@ data KDF = KDF
   , kdfVerifyCredential :: (CredentialHash -> Credential -> IO Verified)
   , kdfVerifyNoCredential :: (Credential -> IO Verified)
   , kdfMcfPrefix :: MCFPrefix
+  , kdfUpToDate :: CredentialHash -> Maybe' NeedsRehash
   }
 
 -- | Non-standardized modular crypt format string. Uniquely identifies (from

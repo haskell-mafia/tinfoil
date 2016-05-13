@@ -4,6 +4,7 @@ module Tinfoil.KDF(
     defaultScrypt
   , hash
   , kdfFor
+  , needsRehash
   , verify
   , verifyNoCredential
 ) where
@@ -22,6 +23,7 @@ defaultScrypt =
     Scrypt.verifyCredential
     (Scrypt.verifyNoCredential Scrypt.defaultParams)
     Scrypt0
+    (Scrypt.paramsUpToDate Scrypt.defaultParams)
 
 kdfFor :: MCFPrefix -> KDF
 kdfFor Scrypt0 = defaultScrypt
@@ -45,3 +47,8 @@ verifyNoCredential mp c =
   (kdfVerifyNoCredential kdf) $ c
   where
     kdf = kdfFor mp
+
+needsRehash :: MCFHash -> Maybe' NeedsRehash
+needsRehash mh = do
+  (p, h) <- unpackMCFHash mh
+  (kdfUpToDate (kdfFor p)) h
