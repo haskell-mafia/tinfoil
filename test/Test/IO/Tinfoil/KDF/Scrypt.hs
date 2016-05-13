@@ -41,10 +41,11 @@ prop_verifyCredential_timing (UniquePair good bad) = testIO $ do
   pure $ (r1, r2, t1 >= minHashTime, t2 >= minHashTime) === (Verified, NotVerified, True, True)
 
 
-prop_verifyCredential_invalid :: Credential -> InvalidCredentialHash -> Property
-prop_verifyCredential_invalid c (InvalidCredentialHash ch) = testIO $ do
-  r <- verifyCredential ch c
-  pure $ r === VerificationError
+prop_verifyCredential_invalid :: Credential -> Property
+prop_verifyCredential_invalid c =
+  forAll genInvalidCredentialHash $ \ch -> testIO $ do
+    r <- verifyCredential ch c
+    pure $ r === VerificationError
 
 -- Run twice and check the times to make sure we're not memoizing the result.
 prop_verifyNoCredential :: Credential -> Property

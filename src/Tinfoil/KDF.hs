@@ -2,7 +2,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.KDF(
     defaultScrypt
+  , hash
+  , kdfFor
+  , verify
+  , verifyNoCredential
 ) where
+
+import           P
+
+import           System.IO (IO)
 
 import           Tinfoil.Data
 import qualified Tinfoil.KDF.Scrypt as Scrypt
@@ -13,4 +21,27 @@ defaultScrypt =
     (Scrypt.hashCredential Scrypt.defaultParams)
     Scrypt.verifyCredential
     (Scrypt.verifyNoCredential Scrypt.defaultParams)
-    Scrypt.scryptMCFPrefix
+    Scrypt0
+
+kdfFor :: MCFPrefix -> KDF
+kdfFor Scrypt0 = defaultScrypt
+
+hash :: MCFPrefix -> Credential -> IO MCFHash
+hash mp c = do
+  fmap (packMCFHash mp) $ (kdfGenHash kdf) c
+  where
+    kdf = kdfFor mp
+
+verify :: MCFHash -> Credential -> IO Verified
+verify mh c =
+  maybe (pure VerificationError) (uncurry verify') $ unpackMCFHash mh
+  where
+    verify' mcf ch =
+      let kdf = kdfFor mcf in
+      (kdfVerifyCredential kdf) ch c
+
+verifyNoCredential :: MCFPrefix -> Credential -> IO Verified
+verifyNoCredential mp c =
+  (kdfVerifyNoCredential kdf) $ c
+  where
+    kdf = kdfFor mp

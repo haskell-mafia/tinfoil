@@ -5,13 +5,22 @@
 module Tinfoil.Data.KDF(
     Credential(..)
   , CredentialHash(..)
-  , Verified(..)
+  , KDF(..)
+  , MCFHash(..)
+  , MCFPrefix(..)
   , NeedsRehash(..)
   , Verification(..)
-  , KDF(..)
+  , Verified(..)
+  , packMCFHash
+  , parseMCFPrefix
+  , renderMCFPrefix
+  , renderMCFHash
+  , unpackMCFHash
 ) where
 
 import           Data.ByteString (ByteString)
+import qualified Data.ByteString as BS
+import           Data.Word (Word8)
 
 import           GHC.Generics (Generic)
 
@@ -27,6 +36,17 @@ newtype CredentialHash =
   } deriving (Show, Generic)
 
 instance NFData CredentialHash
+
+-- | Credential hash wrapped up with an MCF prefix.
+newtype MCFHash =
+  MCFHash {
+    unMCFHash :: ByteString
+  } deriving (Show, Generic)
+
+instance NFData MCFHash
+
+renderMCFHash :: MCFHash -> ByteString
+renderMCFHash = unMCFHash
 
 newtype Credential =
   Credential {
@@ -68,8 +88,44 @@ instance NFData Verification
 --  * High memory requirements, for highly-parallel low-memory
 --  processors (GPUs, mining ASICs, et cetera).
 data KDF = KDF
-  { genHash        :: (Credential -> IO CredentialHash)
-  , hashCredential :: (CredentialHash -> Credential -> IO Verified)
-  , verifyNoHash   :: (Credential -> IO Verified)
-  , mcfPrefix      :: Text
+  { kdfGenHash :: (Credential -> IO CredentialHash)
+  , kdfVerifyCredential :: (CredentialHash -> Credential -> IO Verified)
+  , kdfVerifyNoCredential :: (Credential -> IO Verified)
+  , kdfMcfPrefix :: MCFPrefix
   }
+
+-- | Non-standardized modular crypt format string. Uniquely identifies (from
+-- tinfoil's perspective) a KDF algorithm.
+data MCFPrefix =
+    Scrypt0
+  deriving (Eq, Show, Generic, Enum, Bounded)
+
+instance NFData MCFPrefix
+
+renderMCFPrefix :: MCFPrefix -> ByteString
+renderMCFPrefix Scrypt0 = "scrypt0"
+
+parseMCFPrefix :: ByteString -> Maybe MCFPrefix
+parseMCFPrefix "scrypt0" = pure Scrypt0
+parseMCFPrefix _ = Nothing
+
+unpackMCFHash :: MCFHash -> Maybe (MCFPrefix, CredentialHash)
+unpackMCFHash (MCFHash bs) = do
+  (p, h) <- splitMCF
+  p' <- parseMCFPrefix p
+  pure (p', CredentialHash h)
+  where
+    splitMCF = case BS.split mcfDelimiter bs of
+      ("":x:ys) -> pure (x, BS.intercalate (BS.singleton mcfDelimiter) ys)
+      _ -> Nothing
+
+packMCFHash :: MCFPrefix -> CredentialHash -> MCFHash
+packMCFHash p h = MCFHash $ BS.concat [
+    BS.singleton mcfDelimiter
+  , renderMCFPrefix p
+  , BS.singleton mcfDelimiter
+  , unCredentialHash h
+  ]
+
+mcfDelimiter :: Word8
+mcfDelimiter = 0x24

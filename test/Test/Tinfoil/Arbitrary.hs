@@ -41,14 +41,9 @@ instance Arbitrary Credential where
 instance Arbitrary Entropy where
   arbitrary = Entropy <$> arbitrary
 
-newtype InvalidCredentialHash =
-  InvalidCredentialHash {
-    unInvalidCredentialHash :: CredentialHash
-  } deriving (Eq, Show)
-
-instance Arbitrary InvalidCredentialHash where
-  arbitrary = InvalidCredentialHash <$> 
-    ((CredentialHash . T.encodeUtf8) <$> elements muppets)
+genInvalidCredentialHash :: Gen CredentialHash
+genInvalidCredentialHash =
+  ((CredentialHash . T.encodeUtf8) <$> elements muppets)
 
 newtype DrawBits =
   DrawBits {
@@ -88,9 +83,15 @@ instance Arbitrary ScryptParams where
 instance Eq CredentialHash where
   (CredentialHash a) == (CredentialHash b) = a == b
 
+-- Unsafe, test code only.
+instance Eq MCFHash where
+  (MCFHash a) == (MCFHash b) = a == b
+
 instance Arbitrary KeyedHashFunction where
   arbitrary = elements [minBound..maxBound]
 
 instance Arbitrary SignatureVersion where
   arbitrary = elements [minBound..maxBound]
 
+instance Arbitrary MCFPrefix where
+  arbitrary = elements [minBound..maxBound]
