@@ -17,7 +17,6 @@ import           Tinfoil.Data (Entropy(..))
 import           Tinfoil.KDF.Scrypt
 import           Tinfoil.KDF.Scrypt.Internal
 
-
 import           Test.Tinfoil.Arbitrary
 import           Test.QuickCheck
 
@@ -30,8 +29,8 @@ prop_combine_separate = tripping (uncurry3 combine) separate
     uncurry3 :: (a -> b -> c -> d) -> ((a, b, c) -> d)
     uncurry3 f = \(x, y, z) -> f x y z
 
-prop_paramsUpToDate_bad :: InvalidCredentialHash -> Property
-prop_paramsUpToDate_bad (InvalidCredentialHash h) =
+prop_paramsUpToDate_bad :: Property
+prop_paramsUpToDate_bad = forAll genInvalidCredentialHash $ \h ->
   let r = paramsUpToDate defaultParams h in
   r === Nothing'
 

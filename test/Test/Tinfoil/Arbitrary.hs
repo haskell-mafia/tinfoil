@@ -7,9 +7,10 @@ module Test.Tinfoil.Arbitrary where
 import qualified Data.ByteString as BS
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
+import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 
-import           Disorder.Corpus (muppets)
+import           Disorder.Corpus (muppets, viruses)
 
 import           P
 
@@ -41,14 +42,32 @@ instance Arbitrary Credential where
 instance Arbitrary Entropy where
   arbitrary = Entropy <$> arbitrary
 
-newtype InvalidCredentialHash =
-  InvalidCredentialHash {
-    unInvalidCredentialHash :: CredentialHash
-  } deriving (Eq, Show)
+genInvalidCredentialHash :: Gen CredentialHash
+genInvalidCredentialHash =
+  ((CredentialHash . T.encodeUtf8) <$> elements muppets)
 
-instance Arbitrary InvalidCredentialHash where
-  arbitrary = InvalidCredentialHash <$> 
-    ((CredentialHash . T.encodeUtf8) <$> elements muppets)
+-- valid MCF prefix, invalid hash part
+genWellFormedMCFHash :: Gen MCFHash
+genWellFormedMCFHash = do
+  p <- arbitrary
+  h <- genInvalidCredentialHash
+  pure $ packMCFHash p h
+
+genInvalidMCFHash :: Gen MCFHash
+genInvalidMCFHash = oneof [
+    (MCFHash . T.encodeUtf8) <$> elements muppets
+  , invalidPrefix
+  ]
+  where
+    invalidPrefix = do
+      p <- elements muppets
+      h <- elements viruses
+      pure . MCFHash . T.encodeUtf8 $ T.concat [
+          "$"
+        , p
+        , "$"
+        , h
+        ]
 
 newtype DrawBits =
   DrawBits {
@@ -88,9 +107,15 @@ instance Arbitrary ScryptParams where
 instance Eq CredentialHash where
   (CredentialHash a) == (CredentialHash b) = a == b
 
+-- Unsafe, test code only.
+instance Eq MCFHash where
+  (MCFHash a) == (MCFHash b) = a == b
+
 instance Arbitrary KeyedHashFunction where
   arbitrary = elements [minBound..maxBound]
 
 instance Arbitrary SignatureVersion where
   arbitrary = elements [minBound..maxBound]
 
+instance Arbitrary MCFPrefix where
+  arbitrary = elements [minBound..maxBound]
