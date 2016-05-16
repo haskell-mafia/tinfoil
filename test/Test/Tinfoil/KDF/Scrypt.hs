@@ -17,7 +17,6 @@ import           Tinfoil.Data (Entropy(..))
 import           Tinfoil.KDF.Scrypt
 import           Tinfoil.KDF.Scrypt.Internal
 
-
 import           Test.Tinfoil.Arbitrary
 import           Test.QuickCheck
 
