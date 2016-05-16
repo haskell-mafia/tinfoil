@@ -43,6 +43,7 @@ library
                        Tinfoil.Data.MAC
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
+                       Tinfoil.Digest
                        Tinfoil.Hash
                        Tinfoil.KDF
                        Tinfoil.KDF.Common

@@ -3,14 +3,11 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data.Hash(
     Hash(..)
-  , hexDigest
 ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
 
 import           Data.ByteString (ByteString)
-import qualified Data.ByteString.Base16 as Base16
-import qualified Data.Text.Encoding as T
 
 import           GHC.Generics (Generic)
 
@@ -23,6 +20,3 @@ newtype Hash =
   } deriving (Eq, Show, Generic)
 
 instance NFData Hash where rnf = genericRnf
-
-hexDigest :: Hash -> Text
-hexDigest = T.decodeUtf8 . Base16.encode . unHash
