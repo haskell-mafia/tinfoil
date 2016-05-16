@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data.Signing(
     KeyedHashFunction(..)
+  , KeyId(..)
   , RequestScope(..)
   , SignatureVersion(..)
   , parseKeyedHashFunction
@@ -43,6 +44,13 @@ renderKeyedHashFunction HMAC_SHA256 = "HMAC-SHA256"
 parseKeyedHashFunction :: Text -> Maybe KeyedHashFunction
 parseKeyedHashFunction "HMAC-SHA256" = pure HMAC_SHA256
 parseKeyedHashFunction _ = Nothing
+
+newtype KeyId =
+  KeyId {
+    unKeyId :: ByteString
+  } deriving (Eq, Show, Generic)
+
+instance NFData KeyId
 
 newtype RequestScope =
   RequestScope {
