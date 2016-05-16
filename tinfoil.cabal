@@ -42,11 +42,12 @@ library
                        Tinfoil.Data.MAC
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
+                       Tinfoil.Hash
                        Tinfoil.KDF
                        Tinfoil.KDF.Common
                        Tinfoil.KDF.Scrypt
                        Tinfoil.KDF.Scrypt.Internal
-                       Tinfoil.Hash
+                       Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
