@@ -6,6 +6,7 @@
 module Test.IO.Tinfoil.KDF.Common where
 
 import           Data.ByteString (ByteString)
+import qualified Data.ByteString as BS
 
 import           Disorder.Core.IO (testIO)
 import           Disorder.Core.UniquePair (UniquePair(..))
@@ -20,9 +21,11 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 prop_safeEq_positive :: ByteString -> Property
-prop_safeEq_positive bs = testIO $ do
-  r <- safeEq bs bs
-  pure $ r === True
+prop_safeEq_positive bs1 = testIO $
+  let bs2 = BS.copy bs1 in do
+  r1 <- safeEq bs1 bs1
+  r2 <- safeEq bs1 bs2
+  pure $ (r1, r2) === (True, True)
 
 prop_safeEq_negative :: UniquePair ByteString -> Property
 prop_safeEq_negative (UniquePair a b) = testIO $ do
