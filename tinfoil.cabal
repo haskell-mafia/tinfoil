@@ -111,7 +111,9 @@ test-suite test-io
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
+                     , process                         == 1.2.*
                      , semigroups
+                     , temporary                       == 1.2.0.*
                      , text                            == 1.2.*
 
 test-suite test-random
