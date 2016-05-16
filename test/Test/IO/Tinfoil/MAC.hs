@@ -5,7 +5,7 @@
 
 module Test.IO.Tinfoil.MAC where
 
-import qualified Data.ByteString.Char8 as BSC
+import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 
 import           P
@@ -15,13 +15,16 @@ import           System.IO
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.IO.Tinfoil
+import           Test.Tinfoil.Arbitrary
 
 import           Tinfoil.Data.MAC
 import           Tinfoil.Digest
 import           Tinfoil.MAC
 
-prop_openssl_hmacSHA256 key =
-  verifyOpenSSL ["-sha256", "-hmac", BSC.unpack key] (hmacSHA256 (SigningKey key)) (T.encodeUtf8 . hexDigest . unMAC)
+prop_openssl_hmacSHA256 = forAll genOpenSSLSigningKey $ \key ->
+  verifyOpenSSL ["-sha256", "-macopt", "hexkey:" <> (hexKey key), "-mac", "hmac"] (hmacSHA256 key) (T.encodeUtf8 . hexDigest . unMAC)
+  where
+    hexKey key = T.unpack . hexDigest $ unSigningKey key
 
 return []
 tests :: IO Bool
