@@ -2,8 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
-
-module Test.IO.Tinfoil.KDF.Common where
+module Test.IO.Tinfoil.Comparison where
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
@@ -15,7 +14,7 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.KDF.Common
+import           Tinfoil.Comparison
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()

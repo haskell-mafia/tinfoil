@@ -19,9 +19,9 @@ import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
-import           Tinfoil.Random
-import           Tinfoil.KDF.Common
+import           Tinfoil.Comparison
 import qualified Tinfoil.KDF.Scrypt as Scrypt
+import           Tinfoil.Random
 
 bsTriple :: Int -> Int -> Gen (ByteString, ByteString, ByteString)
 bsTriple small big = do

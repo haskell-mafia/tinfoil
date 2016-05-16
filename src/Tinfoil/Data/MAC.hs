@@ -22,11 +22,10 @@ newtype SigningKey =
 instance NFData SigningKey where rnf = genericRnf
 
 -- | Output of a message authentication code algorithm.
---
 -- Do not implement an 'Eq' instance for this type.
 newtype MAC =
   MAC {
     unMAC :: ByteString
-  } deriving (Generic)
+  } deriving (Show, Generic)
 
 instance NFData MAC where rnf = genericRnf

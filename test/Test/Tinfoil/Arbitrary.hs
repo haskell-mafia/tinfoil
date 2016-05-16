@@ -119,3 +119,14 @@ instance Arbitrary SignatureVersion where
 
 instance Arbitrary MCFPrefix where
   arbitrary = elements [minBound..maxBound]
+
+instance Arbitrary SigningKey where
+  arbitrary = SigningKey <$> arbitrary
+
+-- Unsafe, test code only.
+instance Show SigningKey where
+  show (SigningKey x) = "SigningKey " <> show x
+
+-- Unsafe, test code only.
+instance Eq MAC where
+  (MAC a) == (MAC b) = a == b

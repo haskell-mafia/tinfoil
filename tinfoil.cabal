@@ -37,6 +37,7 @@ library
   exposed-modules:
                        Paths_ambiata_tinfoil
                        Tinfoil
+                       Tinfoil.Comparison
                        Tinfoil.Data
                        Tinfoil.Data.Hash
                        Tinfoil.Data.KDF
