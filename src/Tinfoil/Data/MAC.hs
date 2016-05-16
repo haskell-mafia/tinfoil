@@ -6,6 +6,8 @@ module Tinfoil.Data.MAC(
   , MAC(..)
   ) where
 
+import           Control.DeepSeq.Generics (genericRnf)
+
 import           Data.ByteString (ByteString)
 
 import           GHC.Generics (Generic)
@@ -17,7 +19,7 @@ newtype SigningKey =
     unSigningKey :: ByteString
   } deriving (Eq, Generic)
 
-instance NFData SigningKey
+instance NFData SigningKey where rnf = genericRnf
 
 -- | Output of a message authentication code algorithm.
 --
@@ -27,4 +29,4 @@ newtype MAC =
     unMAC :: ByteString
   } deriving (Generic)
 
-instance NFData MAC
+instance NFData MAC where rnf = genericRnf

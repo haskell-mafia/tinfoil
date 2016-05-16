@@ -6,6 +6,8 @@ module Tinfoil.Data.Random(
     Entropy(..)
 ) where
 
+import           Control.DeepSeq.Generics (genericRnf)
+
 import           Data.ByteString (ByteString)
 
 import           GHC.Generics (Generic)
@@ -23,4 +25,4 @@ newtype Entropy =
     unEntropy :: ByteString
   } deriving (Eq, Show, Generic)
 
-instance NFData Entropy
+instance NFData Entropy where rnf = genericRnf

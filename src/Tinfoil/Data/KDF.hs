@@ -18,6 +18,8 @@ module Tinfoil.Data.KDF(
   , unpackMCFHash
 ) where
 
+import           Control.DeepSeq.Generics (genericRnf)
+
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 import           Data.Word (Word8)
@@ -35,7 +37,7 @@ newtype CredentialHash =
     unCredentialHash :: ByteString
   } deriving (Show, Generic)
 
-instance NFData CredentialHash
+instance NFData CredentialHash where rnf = genericRnf
 
 -- | Credential hash wrapped up with an MCF prefix.
 newtype MCFHash =
@@ -43,7 +45,7 @@ newtype MCFHash =
     unMCFHash :: ByteString
   } deriving (Show, Generic)
 
-instance NFData MCFHash
+instance NFData MCFHash where rnf = genericRnf
 
 renderMCFHash :: MCFHash -> ByteString
 renderMCFHash = unMCFHash
@@ -53,7 +55,7 @@ newtype Credential =
     unCredential :: ByteString
   } deriving (Eq, Show, Generic)
 
-instance NFData Credential
+instance NFData Credential where rnf = genericRnf
 
 data Verified =
     Verified -- ^ Credential hash is well-formed and credential is correct.
@@ -61,19 +63,19 @@ data Verified =
   | VerificationError -- ^ Credential hash is not well-formed.
   deriving (Eq, Show, Generic)
 
-instance NFData Verified
+instance NFData Verified where rnf = genericRnf
 
 data NeedsRehash =
     NeedsRehash
   | UpToDate
   deriving (Eq, Show, Generic)
 
-instance NFData NeedsRehash
+instance NFData NeedsRehash where rnf = genericRnf
 
 data Verification = Verification !Verified !NeedsRehash
   deriving (Eq, Show, Generic)
 
-instance NFData Verification
+instance NFData Verification where rnf = genericRnf
 
 -- | Key derivation function - put in a secret and get out a token
 -- from which it is computationally infeasible to derive the secret, which
@@ -101,7 +103,7 @@ data MCFPrefix =
     Scrypt0
   deriving (Eq, Show, Generic, Enum, Bounded)
 
-instance NFData MCFPrefix
+instance NFData MCFPrefix where rnf = genericRnf
 
 renderMCFPrefix :: MCFPrefix -> ByteString
 renderMCFPrefix Scrypt0 = "scrypt0"

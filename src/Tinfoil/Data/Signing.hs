@@ -12,6 +12,8 @@ module Tinfoil.Data.Signing(
   , renderSignatureVersion
   ) where
 
+import           Control.DeepSeq.Generics (genericRnf)
+
 import           Data.ByteString (ByteString)
 
 import           GHC.Generics (Generic)
@@ -22,7 +24,7 @@ data SignatureVersion =
     SignatureV1
   deriving (Eq, Show, Enum, Bounded, Generic)
 
-instance NFData SignatureVersion
+instance NFData SignatureVersion where rnf = genericRnf
 
 renderSignatureVersion :: SignatureVersion -> Text
 renderSignatureVersion SignatureV1 = "v1"
@@ -36,7 +38,7 @@ data KeyedHashFunction =
     HMAC_SHA256
   deriving (Eq, Show, Enum, Bounded, Generic)
 
-instance NFData KeyedHashFunction
+instance NFData KeyedHashFunction where rnf = genericRnf
 
 renderKeyedHashFunction :: KeyedHashFunction -> Text
 renderKeyedHashFunction HMAC_SHA256 = "HMAC-SHA256"
@@ -50,11 +52,11 @@ newtype KeyId =
     unKeyId :: ByteString
   } deriving (Eq, Show, Generic)
 
-instance NFData KeyId
+instance NFData KeyId where rnf = genericRnf
 
 newtype RequestScope =
   RequestScope {
     unRequestScope :: ByteString
   } deriving (Eq, Show, Generic)
 
-instance NFData RequestScope
+instance NFData RequestScope where rnf = genericRnf

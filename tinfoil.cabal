@@ -20,6 +20,7 @@ library
                      , base64-bytestring               == 1.0.0.*
                      , bytestring                      >= 0.10.4     && < 0.10.7
                      , cryptonite                      == 0.15
+                     , deepseq-generics                == 0.2.0.*
                      , either                          >= 4.3        && < 4.5
                      , entropy                         == 0.3.7
                      , memory                          == 0.11
