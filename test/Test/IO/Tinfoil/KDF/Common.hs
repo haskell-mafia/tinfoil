@@ -31,4 +31,4 @@ prop_safeEq_negative (UniquePair a b) = testIO $ do
 
 return []
 tests :: IO Bool
-tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 10 } )
+tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )
