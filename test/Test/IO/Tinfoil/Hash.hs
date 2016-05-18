@@ -23,4 +23,4 @@ prop_openssl_hashSHA256 = verifyOpenSSL ["-sha256"] hashSHA256 (T.encodeUtf8 . h
 
 return []
 tests :: IO Bool
-tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 100 } )
+tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )

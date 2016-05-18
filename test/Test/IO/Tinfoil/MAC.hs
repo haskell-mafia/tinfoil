@@ -28,4 +28,4 @@ prop_openssl_hmacSHA256 = forAll genOpenSSLSigningKey $ \key ->
 
 return []
 tests :: IO Bool
-tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 100 } )
+tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )
