@@ -15,10 +15,10 @@ import           P
 
 import           System.IO
 
+import           Tinfoil.Comparison
 import           Tinfoil.Data (Credential(..), CredentialHash(..), Entropy(..))
 import           Tinfoil.Data (Verified(..), NeedsRehash(..))
 import           Tinfoil.KDF.Scrypt.Internal
-import           Tinfoil.KDF.Common
 import           Tinfoil.Random (entropy)
 
 -- |

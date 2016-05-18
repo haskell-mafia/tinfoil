@@ -119,3 +119,24 @@ instance Arbitrary SignatureVersion where
 
 instance Arbitrary MCFPrefix where
   arbitrary = elements [minBound..maxBound]
+
+instance Arbitrary SigningKey where
+  arbitrary = do
+    n <- choose (0, 100)
+    xs <- vectorOf n $ choose (0, 255)
+    pure . SigningKey $ BS.pack xs
+
+-- Able to be passed to `openssl dgst [...] -macopt hexkey:`
+genOpenSSLSigningKey :: Gen SigningKey
+genOpenSSLSigningKey = do
+  n <- choose (1, 100)
+  xs <- vectorOf n $ choose (0, 255)
+  pure . SigningKey $ BS.pack xs
+
+-- Unsafe, test code only.
+instance Show SigningKey where
+  show (SigningKey x) = "SigningKey " <> show x
+
+-- Unsafe, test code only.
+instance Eq MAC where
+  (MAC a) == (MAC b) = a == b
