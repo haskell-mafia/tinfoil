@@ -5,6 +5,7 @@ module Tinfoil.Data.Signing(
     KeyedHashFunction(..)
   , KeyId(..)
   , RequestScope(..)
+  , Signature(..)
   , SignatureVersion(..)
   , parseKeyedHashFunction
   , parseSignatureVersion
@@ -19,6 +20,8 @@ import           Data.ByteString (ByteString)
 import           GHC.Generics (Generic)
 
 import           P
+
+import           Tinfoil.Data.MAC
 
 data SignatureVersion =
     SignatureV1
@@ -60,3 +63,10 @@ newtype RequestScope =
   } deriving (Eq, Show, Generic)
 
 instance NFData RequestScope where rnf = genericRnf
+
+newtype Signature =
+  Signature {
+    unSignature :: MAC
+  } deriving (Show, Generic)
+
+instance NFData Signature where rnf = genericRnf

@@ -52,6 +52,7 @@ library
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+                       Tinfoil.Signing
 
   c-sources:           cbits/tinfoil/memory.c
 
