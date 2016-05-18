@@ -7,6 +7,7 @@ import qualified Test.IO.Tinfoil.KDF.Scrypt
 import qualified Test.IO.Tinfoil.KDF.Scrypt.Compat
 import qualified Test.IO.Tinfoil.MAC
 import qualified Test.IO.Tinfoil.Random
+import qualified Test.IO.Tinfoil.Signing
 
 main :: IO ()
 main =
@@ -18,4 +19,5 @@ main =
   , Test.IO.Tinfoil.KDF.Scrypt.Compat.tests
   , Test.IO.Tinfoil.MAC.tests
   , Test.IO.Tinfoil.Random.tests
+  , Test.IO.Tinfoil.Signing.tests
   ]

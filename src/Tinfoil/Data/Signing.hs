@@ -11,6 +11,7 @@ module Tinfoil.Data.Signing(
   , parseSignatureVersion
   , renderKeyedHashFunction
   , renderSignatureVersion
+  , signatureBytes
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -70,3 +71,6 @@ newtype Signature =
   } deriving (Show, Generic)
 
 instance NFData Signature where rnf = genericRnf
+
+signatureBytes :: Signature -> ByteString
+signatureBytes = unMAC . unSignature
