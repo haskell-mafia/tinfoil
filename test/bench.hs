@@ -19,6 +19,7 @@ import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
+import           Tinfoil.Hash
 import           Tinfoil.Comparison
 import qualified Tinfoil.KDF.Scrypt as Scrypt
 import           Tinfoil.Random
@@ -89,4 +90,7 @@ main = tinfoilBench [
       bgroup "kdf/scrypt" $ [ bench "hashCredential/defaultParams" $ nfIO (Scrypt.hashCredential Scrypt.defaultParams cred)
                             , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams cred)
                             ]
+  , env (generate arbitrary) $ \ ~bs ->
+      bgroup "hash/SHA256" $ [ bench "hashSHA256" $ nf hashSHA256 bs
+                             ]
   ]
