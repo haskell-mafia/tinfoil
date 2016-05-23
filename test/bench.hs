@@ -19,9 +19,10 @@ import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
-import           Tinfoil.Hash
 import           Tinfoil.Comparison
+import           Tinfoil.Hash
 import qualified Tinfoil.KDF.Scrypt as Scrypt
+import           Tinfoil.MAC
 import           Tinfoil.Random
 
 bsTriple :: Int -> Int -> Gen (ByteString, ByteString, ByteString)
@@ -92,5 +93,8 @@ main = tinfoilBench [
                             ]
   , env (generate arbitrary) $ \ ~bs ->
       bgroup "hash/SHA256" $ [ bench "hashSHA256" $ nf hashSHA256 bs
+                             ]
+  , env ((,) <$> generate arbitrary <*> generate arbitrary) $ \ ~(sk, bs) ->
+      bgroup "mac/hmacSHA256" $ [ bench "hmacSHA256" $ nf (hmacSHA256 sk) bs
                              ]
   ]
