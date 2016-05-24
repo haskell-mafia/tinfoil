@@ -6,5 +6,6 @@ module Tinfoil(
   ) where
 
 import           Tinfoil.Data as X
+import           Tinfoil.Encode as X
 import           Tinfoil.KDF as X
 import           Tinfoil.Random as X

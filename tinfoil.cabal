@@ -20,6 +20,7 @@ library
                      , base64-bytestring               == 1.0.0.*
                      , bytestring                      >= 0.10.4     && < 0.10.7
                      , cryptonite                      == 0.15
+                     , deepseq-generics                == 0.2.0.*
                      , either                          >= 4.3        && < 4.5
                      , entropy                         == 0.3.7
                      , memory                          == 0.11
@@ -36,20 +37,26 @@ library
   exposed-modules:
                        Paths_ambiata_tinfoil
                        Tinfoil
+                       Tinfoil.Comparison
                        Tinfoil.Data
                        Tinfoil.Data.Hash
                        Tinfoil.Data.KDF
+                       Tinfoil.Data.Key
+                       Tinfoil.Data.MAC
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
+                       Tinfoil.Encode
+                       Tinfoil.Hash
                        Tinfoil.KDF
-                       Tinfoil.KDF.Common
                        Tinfoil.KDF.Scrypt
                        Tinfoil.KDF.Scrypt.Internal
-                       Tinfoil.Hash
+                       Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
-  c-sources:           cbits/scrypt/crypto_scrypt.c
+  c-sources:           cbits/tinfoil/memory.c
+
+                     , cbits/scrypt/crypto_scrypt.c
                      , cbits/scrypt/sha256.c
                      , cbits/scrypt/insecure_memzero.c
                      , cbits/scrypt/warnp.c
@@ -59,8 +66,9 @@ library
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
   cc-options:          -msse2
   include-dirs:        cbits/scrypt
-  includes:            crypto_scrypt.h
-  install-includes:    crypto_scrypt.h
+                     , cbits/tinfoil
+  includes:            crypto_scrypt.h memory.h
+  install-includes:    crypto_scrypt.h memory.h
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -105,7 +113,9 @@ test-suite test-io
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
+                     , process                         == 1.2.*
                      , semigroups
+                     , temporary                       == 1.2.0.*
                      , text                            == 1.2.*
 
 test-suite test-random

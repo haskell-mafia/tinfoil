@@ -1,9 +1,9 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
-module Tinfoil.Data.Hash(
-    Hash(..)
-) where
+module Tinfoil.Data.Key(
+    SymmetricKey(..)
+  ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
 
@@ -13,10 +13,9 @@ import           GHC.Generics (Generic)
 
 import           P
 
--- | Binary representation of a hash.
-newtype Hash =
-  Hash {
-    unHash :: ByteString
-  } deriving (Eq, Show, Generic)
+newtype SymmetricKey =
+  SymmetricKey {
+    unSymmetricKey :: ByteString
+  } deriving (Eq, Generic)
 
-instance NFData Hash where rnf = genericRnf
+instance NFData SymmetricKey where rnf = genericRnf

@@ -5,8 +5,5 @@
 
 [build.dist]
   HADDOCK = "true"
-  BENCH = "true"
-  PUBLISH_BENCH = "tinfoil"
 
 [build.branches]
-  BENCH = "true"

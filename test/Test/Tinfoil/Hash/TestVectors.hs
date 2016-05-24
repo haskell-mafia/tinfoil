@@ -13,13 +13,14 @@ import           P
 import           System.IO
 
 import           Tinfoil.Data.Hash
+import           Tinfoil.Encode
 import           Tinfoil.Hash
 
 import           Test.QuickCheck
 
 testTestVector :: (ByteString -> Hash) -> ByteString -> Text -> Property
 testTestVector f inVec outVec =
-  let r = hexDigest $ f inVec in
+  let r = hexEncode . unHash $ f inVec in
   once $ r === outVec
 
 -- SHA2 test vectors from the
