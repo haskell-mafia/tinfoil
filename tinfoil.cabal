@@ -41,6 +41,7 @@ library
                        Tinfoil.Data
                        Tinfoil.Data.Hash
                        Tinfoil.Data.KDF
+                       Tinfoil.Data.Key
                        Tinfoil.Data.MAC
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing

@@ -21,17 +21,18 @@ import           Test.QuickCheck.Instances ()
 import           Test.IO.Tinfoil
 import           Test.Tinfoil.Arbitrary
 
+import           Tinfoil.Data.Key
 import           Tinfoil.Data.KDF
 import           Tinfoil.Data.MAC
 import           Tinfoil.Encode
 import           Tinfoil.MAC
 
-prop_openssl_hmacSHA256 = forAll genOpenSSLSigningKey $ \key ->
+prop_openssl_hmacSHA256 = forAll genOpenSSLSymmetricKey $ \key ->
   verifyOpenSSL ["-sha256", "-macopt", "hexkey:" <> (hexKey key), "-mac", "hmac"] (hmacSHA256 key) (T.encodeUtf8 . hexEncode . unMAC)
   where
-    hexKey key = T.unpack . hexEncode $ unSigningKey key
+    hexKey key = T.unpack . hexEncode $ unSymmetricKey key
 
-prop_verifyMAC :: KeyedHashFunction -> UniquePair SigningKey -> UniquePair ByteString -> Property
+prop_verifyMAC :: KeyedHashFunction -> UniquePair SymmetricKey -> UniquePair ByteString -> Property
 prop_verifyMAC khf (UniquePair sk1 sk2) (UniquePair bs1 bs2) =
   let sig = macBytes khf sk1 bs1 in testIO $ do
   r1 <- verifyMAC khf sk1 bs1 sig -- good

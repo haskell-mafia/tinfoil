@@ -20,7 +20,7 @@ import           Test.Tinfoil.Arbitrary ()
 import           Tinfoil.Data
 import           Tinfoil.Signing
 
-prop_verifyBytes :: KeyedHashFunction -> UniquePair SigningKey -> UniquePair ByteString -> Property
+prop_verifyBytes :: KeyedHashFunction -> UniquePair SymmetricKey -> UniquePair ByteString -> Property
 prop_verifyBytes khf (UniquePair sk1 sk2) (UniquePair bs1 bs2) =
   let sig = signBytes khf sk1 bs1 in testIO $ do
   r1 <- verifyBytes khf sk1 bs1 sig -- good
