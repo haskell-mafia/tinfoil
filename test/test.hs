@@ -1,6 +1,7 @@
 import           Disorder.Core.Main
 
 import qualified Test.Tinfoil.Data.KDF
+import qualified Test.Tinfoil.Data.MAC
 import qualified Test.Tinfoil.Data.Signing
 import qualified Test.Tinfoil.Hash
 import qualified Test.Tinfoil.Hash.TestVectors
@@ -12,6 +13,7 @@ main :: IO ()
 main =
   disorderMain [
     Test.Tinfoil.Data.KDF.tests
+  , Test.Tinfoil.Data.MAC.tests
   , Test.Tinfoil.Data.Signing.tests
   , Test.Tinfoil.Hash.tests
   , Test.Tinfoil.Hash.TestVectors.tests
