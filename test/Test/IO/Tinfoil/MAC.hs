@@ -23,13 +23,13 @@ import           Test.Tinfoil.Arbitrary
 
 import           Tinfoil.Data.KDF
 import           Tinfoil.Data.MAC
-import           Tinfoil.Digest
+import           Tinfoil.Encode
 import           Tinfoil.MAC
 
 prop_openssl_hmacSHA256 = forAll genOpenSSLSigningKey $ \key ->
-  verifyOpenSSL ["-sha256", "-macopt", "hexkey:" <> (hexKey key), "-mac", "hmac"] (hmacSHA256 key) (T.encodeUtf8 . hexDigest . unMAC)
+  verifyOpenSSL ["-sha256", "-macopt", "hexkey:" <> (hexKey key), "-mac", "hmac"] (hmacSHA256 key) (T.encodeUtf8 . hexEncode . unMAC)
   where
-    hexKey key = T.unpack . hexDigest $ unSigningKey key
+    hexKey key = T.unpack . hexEncode $ unSigningKey key
 
 prop_verifyMAC :: KeyedHashFunction -> UniquePair SigningKey -> UniquePair ByteString -> Property
 prop_verifyMAC khf (UniquePair sk1 sk2) (UniquePair bs1 bs2) =

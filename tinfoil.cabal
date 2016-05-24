@@ -44,7 +44,7 @@ library
                        Tinfoil.Data.MAC
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
-                       Tinfoil.Digest
+                       Tinfoil.Encode
                        Tinfoil.Hash
                        Tinfoil.KDF
                        Tinfoil.KDF.Scrypt

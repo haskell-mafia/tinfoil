@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Tinfoil.Digest(
-    hexDigest
+module Tinfoil.Encode(
+    hexEncode
 ) where
 
 import           Data.ByteString (ByteString)
@@ -10,5 +10,5 @@ import qualified Data.Text.Encoding as T
 
 import           P
 
-hexDigest :: ByteString -> Text
-hexDigest = T.decodeUtf8 . Base16.encode
+hexEncode :: ByteString -> Text
+hexEncode = T.decodeUtf8 . Base16.encode

@@ -16,10 +16,10 @@ import           Test.QuickCheck.Instances ()
 import           Test.IO.Tinfoil
 
 import           Tinfoil.Data.Hash
-import           Tinfoil.Digest
+import           Tinfoil.Encode
 import           Tinfoil.Hash
 
-prop_openssl_hashSHA256 = verifyOpenSSL ["-sha256"] hashSHA256 (T.encodeUtf8 . hexDigest . unHash)
+prop_openssl_hashSHA256 = verifyOpenSSL ["-sha256"] hashSHA256 (T.encodeUtf8 . hexEncode . unHash)
 
 return []
 tests :: IO Bool
