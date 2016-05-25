@@ -54,16 +54,19 @@ library
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
-  c-sources:           cbits/tinfoil/memory.c
+  c-sources:           
+                       -- tinfoil's own c bits 
+                       cbits/tinfoil/memory.c
 
-                     , cbits/scrypt/crypto_scrypt.c
-                     , cbits/scrypt/sha256.c
+                       -- scrypt (https://github.com/Tarsnap/scrypt)
                      , cbits/scrypt/insecure_memzero.c
+                     , cbits/scrypt/sha256.c
                      , cbits/scrypt/warnp.c
                      , cbits/scrypt/cpusupport_x86_aesni.c
                      , cbits/scrypt/cpusupport_x86_sse2.c
                      , cbits/scrypt/crypto_scrypt_smix.c
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
+                     , cbits/scrypt/crypto_scrypt.c
   cc-options:          -msse2
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
