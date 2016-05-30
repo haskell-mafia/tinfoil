@@ -57,6 +57,8 @@ library
 
   extra-libraries:     sodium
 
+  pkgconfig-depends:   libsodium >= 0.4.5
+
   c-sources:           
                        -- tinfoil's own c bits 
                        cbits/tinfoil/memory.c
