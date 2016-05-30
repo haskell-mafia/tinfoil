@@ -16,8 +16,8 @@ import           Tinfoil.Data.Signing
 import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 
-prop_tripping_SignatureVersion :: SignatureVersion -> Property
-prop_tripping_SignatureVersion = tripping renderSignatureVersion parseSignatureVersion
+prop_tripping_SignatureAlgorithm :: SignatureAlgorithm -> Property
+prop_tripping_SignatureAlgorithm = tripping renderSignatureAlgorithm parseSignatureAlgorithm
 
 return []
 tests :: IO Bool

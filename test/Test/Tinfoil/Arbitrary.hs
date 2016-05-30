@@ -140,3 +140,6 @@ instance Show SymmetricKey where
 -- Unsafe, test code only.
 instance Eq MAC where
   (MAC a) == (MAC b) = a == b
+
+instance Arbitrary SignatureAlgorithm where
+  arbitrary = elements [minBound..maxBound]
