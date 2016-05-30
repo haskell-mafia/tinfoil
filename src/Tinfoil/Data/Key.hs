@@ -1,8 +1,12 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE EmptyDataDecls #-}
 module Tinfoil.Data.Key(
-    KeyId(..)
+    AsymmetricKey(..)
+  , Ed25519
+  , KeyId(..)
   , SymmetricKey(..)
   ) where
 
@@ -30,3 +34,7 @@ newtype KeyId =
 
 instance NFData KeyId where rnf = genericRnf
 
+data Ed25519
+
+data AsymmetricKey a where
+  Key_Ed25519 :: ByteString -> AsymmetricKey Ed25519
