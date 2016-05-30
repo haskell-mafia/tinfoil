@@ -26,4 +26,3 @@ renderSignatureAlgorithm Sign_Ed25519 = "Sign-Ed25519"
 parseSignatureAlgorithm :: Text -> Maybe' SignatureAlgorithm
 parseSignatureAlgorithm "Sign-Ed25519" = pure Sign_Ed25519
 parseSignatureAlgorithm _ = Nothing'
-
