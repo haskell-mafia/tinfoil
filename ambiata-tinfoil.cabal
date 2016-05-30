@@ -53,6 +53,7 @@ library
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+                       Tinfoil.Signing.Ed25519.Internal
 
   extra-libraries:     sodium
 
@@ -72,8 +73,10 @@ library
   cc-options:          -msse2
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
-  includes:            crypto_scrypt.h memory.h
-  install-includes:    crypto_scrypt.h memory.h
+  includes:            crypto_scrypt.h
+                     , tinfoil.h
+  install-includes:    crypto_scrypt.h
+                     , tinfoil.h
 
 test-suite test
   type:                exitcode-stdio-1.0
