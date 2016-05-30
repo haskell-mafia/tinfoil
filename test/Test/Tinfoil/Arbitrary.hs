@@ -114,9 +114,6 @@ instance Eq MCFHash where
 instance Arbitrary KeyedHashFunction where
   arbitrary = elements [minBound..maxBound]
 
-instance Arbitrary SignatureVersion where
-  arbitrary = elements [minBound..maxBound]
-
 instance Arbitrary MCFPrefix where
   arbitrary = elements [minBound..maxBound]
 
