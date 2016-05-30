@@ -5,8 +5,10 @@
 
 #include <sodium.h>
 
-size_t tinfoil_sodium_pubkey_len = crypto_sign_PUBLICKEYBYTES;
+size_t tinfoil_sodium_pubkey_len();
 
-size_t tinfoil_sodium_seckey_len = crypto_sign_SECRETKEYBYTES;
+size_t tinfoil_sodium_seckey_len();
+
+size_t tinfoil_sodium_sig_len();
 
 #endif

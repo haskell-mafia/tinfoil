@@ -4,9 +4,10 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE EmptyDataDecls #-}
 module Tinfoil.Data.Key(
-    AsymmetricKey(..)
-  , Ed25519
+    Ed25519
   , KeyId(..)
+  , PublicKey(..)
+  , SecretKey(..)
   , SymmetricKey(..)
   ) where
 
@@ -36,5 +37,8 @@ instance NFData KeyId where rnf = genericRnf
 
 data Ed25519
 
-data AsymmetricKey a where
-  Key_Ed25519 :: ByteString -> AsymmetricKey Ed25519
+data PublicKey a where
+  PKey_Ed25519 :: ByteString -> PublicKey Ed25519
+
+data SecretKey a where
+  SKey_Ed25519 :: ByteString -> SecretKey Ed25519
