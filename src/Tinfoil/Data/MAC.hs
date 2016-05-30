@@ -35,6 +35,6 @@ instance NFData KeyedHashFunction where rnf = genericRnf
 renderKeyedHashFunction :: KeyedHashFunction -> Text
 renderKeyedHashFunction HMAC_SHA256 = "HMAC-SHA256"
 
-parseKeyedHashFunction :: Text -> Maybe KeyedHashFunction
+parseKeyedHashFunction :: Text -> Maybe' KeyedHashFunction
 parseKeyedHashFunction "HMAC-SHA256" = pure HMAC_SHA256
-parseKeyedHashFunction _ = Nothing
+parseKeyedHashFunction _ = Nothing'

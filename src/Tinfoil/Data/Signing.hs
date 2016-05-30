@@ -2,16 +2,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data.Signing(
-    KeyId(..)
-  , RequestScope(..)
+    SignatureAlgorithm(..)
   , SignatureVersion(..)
+  , parseSignatureAlgorithm
   , parseSignatureVersion
+  , renderSignatureAlgorithm
   , renderSignatureVersion
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
-
-import           Data.ByteString (ByteString)
 
 import           GHC.Generics (Generic)
 
@@ -30,16 +29,17 @@ parseSignatureVersion :: Text -> Maybe SignatureVersion
 parseSignatureVersion "v1" = pure SignatureV1
 parseSignatureVersion _ = Nothing
 
-newtype KeyId =
-  KeyId {
-    unKeyId :: ByteString
-  } deriving (Eq, Show, Generic)
+-- | Supported digital signature algorithms.
+data SignatureAlgorithm =
+    Sign_Ed25519
+  deriving (Eq, Show, Enum, Bounded, Generic)
 
-instance NFData KeyId where rnf = genericRnf
+instance NFData SignatureAlgorithm where rnf = genericRnf
 
-newtype RequestScope =
-  RequestScope {
-    unRequestScope :: ByteString
-  } deriving (Eq, Show, Generic)
+renderSignatureAlgorithm :: SignatureAlgorithm -> Text
+renderSignatureAlgorithm Sign_Ed25519 = "Sign-Ed25519"
 
-instance NFData RequestScope where rnf = genericRnf
+parseSignatureAlgorithm :: Text -> Maybe' SignatureAlgorithm
+parseSignatureAlgorithm "Sign-Ed25519" = pure Sign_Ed25519
+parseSignatureAlgorithm _ = Nothing'
+

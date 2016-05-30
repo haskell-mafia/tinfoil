@@ -2,7 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data.Key(
-    SymmetricKey(..)
+    KeyId(..)
+  , SymmetricKey(..)
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -19,3 +20,13 @@ newtype SymmetricKey =
   } deriving (Eq, Generic)
 
 instance NFData SymmetricKey where rnf = genericRnf
+
+-- | Identifier for either a symmetric or asymmetric key. Should be
+-- globally unique.
+newtype KeyId =
+  KeyId {
+    unKeyId :: ByteString
+  } deriving (Eq, Show, Generic)
+
+instance NFData KeyId where rnf = genericRnf
+
