@@ -54,6 +54,8 @@ library
                        Tinfoil.Random
                        Tinfoil.Random.Internal
 
+  extra-libraries:     sodium
+
   c-sources:           
                        -- tinfoil's own c bits 
                        cbits/tinfoil/memory.c
