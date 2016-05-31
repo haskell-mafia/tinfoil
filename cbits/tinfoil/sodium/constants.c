@@ -13,3 +13,4 @@ size_t tinfoil_sodium_seckey_len() {
 size_t tinfoil_sodium_sig_len() {
 	return crypto_sign_BYTES;
 }
+

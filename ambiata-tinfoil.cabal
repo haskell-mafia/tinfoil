@@ -62,6 +62,7 @@ library
   c-sources:           
                        -- tinfoil's own c bits 
                        cbits/tinfoil/memory.c
+                       cbits/tinfoil/sodium/constants.c
 
                        -- scrypt (https://github.com/Tarsnap/scrypt)
                      , cbits/scrypt/insecure_memzero.c
