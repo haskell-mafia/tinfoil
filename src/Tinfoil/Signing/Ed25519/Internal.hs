@@ -10,6 +10,7 @@ module Tinfoil.Signing.Ed25519.Internal (
   , pubKeyLen
   , secKeyLen
   , signMessage'
+  , verifyMessage'
 ) where
 
 import           Data.ByteString (ByteString)
@@ -25,6 +26,7 @@ import           P
 import           System.IO (IO)
 import           System.IO.Unsafe (unsafePerformIO)
 
+import           Tinfoil.Data.KDF
 import           Tinfoil.Data.Key
 
 -- | Generate a new Ed25519 keypair.
@@ -68,10 +70,40 @@ signMessage' (SKey_Ed25519 sk) msg = unsafePerformIO $
 -- detached signatures.
 foreign import ccall safe "crypto_sign_ed25519" sodium_sign_ed25519
   :: Ptr Word8 -- signed message buffer
-  -> Ptr CULong -- signed message length buffer
+  -> Ptr CULong -- signed message length buffer or null
   -> Ptr Word8 -- message
   -> CSize -- message length
   -> Ptr Word8 -- secret key
+  -> IO CInt
+
+-- | Verify an Ed25519-signed message (signature prepended to message).
+verifyMessage' :: PublicKey Ed25519 -> ByteString -> Verified
+verifyMessage' (PKey_Ed25519 pk) sm = unsafePerformIO $ do
+  allocaBytes (BS.length sm) $ \msgPtr -> -- wasting a few bytes here but w/e
+      -- Key length bounded, so we don't need to pass it explicitly here.
+      BS.useAsCStringLen pk $ \(pkPtr, _pkLen) ->
+        BS.useAsCStringLen sm $ \(smPtr, smLen) -> do
+          r <- sodium_open_ed25519 (castPtr msgPtr)
+                                   -- Already know the message length.
+                                   (castPtr nullPtr)
+                                   (castPtr smPtr)
+                                   (fromIntegral smLen)
+                                   (castPtr pkPtr)
+          -- We ignore the values written to msgPtr and mlPtr, we know those
+          -- things already. We pass the length explicitly, so there's no risk
+          -- of verifying a smaller message than intended.
+          case r of
+            0 -> pure Verified
+            (-1) -> pure NotVerified
+            _ -> pure VerificationError -- impossible
+
+
+foreign import ccall safe "crypto_sign_ed25519_open" sodium_open_ed25519
+  :: Ptr Word8 -- message buffer
+  -> Ptr CULong -- message length buffer or null pointer
+  -> Ptr Word8 -- signed message
+  -> CSize -- signed message length
+  -> Ptr Word8 -- public key
   -> IO CInt
 
 -- | 32 with versions of libsodium up to 1.0.10-1.
