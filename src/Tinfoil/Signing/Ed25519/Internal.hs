@@ -30,18 +30,15 @@ import           Tinfoil.Data.Key
 -- | Generate a new Ed25519 keypair.
 --
 -- FIXME: init requirement for thread safety?
-genKeyPair :: IO (Maybe' (PublicKey Ed25519, SecretKey Ed25519))
+genKeyPair :: IO (PublicKey Ed25519, SecretKey Ed25519)
 genKeyPair = do
   allocaBytes pubKeyLen $ \pubKeyPtr ->
     allocaBytes secKeyLen $ \secKeyPtr -> do
-      sodium_ed25519_keypair (castPtr pubKeyPtr) (castPtr secKeyPtr) >>= \case
-        0 -> do
-          pk <- BS.packCStringLen (pubKeyPtr, pubKeyLen)
-          sk <- BS.packCStringLen (secKeyPtr, secKeyLen)
-          pure $ Just' (PKey_Ed25519 pk, SKey_Ed25519 sk)
-        _ ->
-          -- This can't happen afaict (sodium-0.4.5).
-          pure Nothing'
+      -- In spite of the type, this can't actually fail.
+      void $ sodium_ed25519_keypair (castPtr pubKeyPtr) (castPtr secKeyPtr)
+      pk <- BS.packCStringLen (pubKeyPtr, pubKeyLen)
+      sk <- BS.packCStringLen (secKeyPtr, secKeyLen)
+      pure (PKey_Ed25519 pk, SKey_Ed25519 sk)
 
 foreign import ccall safe "crypto_sign_ed25519_keypair" sodium_ed25519_keypair
   :: Ptr Word8 -- public key
