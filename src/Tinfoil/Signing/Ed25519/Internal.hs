@@ -23,6 +23,7 @@ import           Foreign.Ptr (nullPtr)
 import           P
 
 import           System.IO (IO)
+import           System.IO.Unsafe (unsafePerformIO)
 
 import           Tinfoil.Data.Key
 import           Tinfoil.Data.Signing
