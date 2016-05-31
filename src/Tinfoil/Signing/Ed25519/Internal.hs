@@ -25,6 +25,7 @@ import           P
 import           System.IO (IO)
 
 import           Tinfoil.Data.Key
+import           Tinfoil.Data.Signing
 
 -- | Generate a new Ed25519 keypair.
 --
