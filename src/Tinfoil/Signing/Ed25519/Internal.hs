@@ -19,7 +19,6 @@ import qualified Data.ByteString as BS
 import           Foreign (Ptr, Word8, castPtr)
 import           Foreign.C
 import           Foreign.Marshal.Alloc (allocaBytes)
-import           Foreign.Ptr (nullPtr)
 
 import           P
 
@@ -52,13 +51,15 @@ signMessage' :: SecretKey Ed25519 -> ByteString -> Maybe' ByteString
 signMessage' (SKey_Ed25519 sk) msg = unsafePerformIO $
   let smLen = maxSigLen + (BS.length msg) in do
   allocaBytes smLen $ \smPtr ->
+    allocaBytes 8 $ \smlPtr ->
       -- Key length bounded, so we don't need to pass it explicitly here.
       BS.useAsCStringLen sk $ \(skPtr, _skLen) ->
         BS.useAsCStringLen msg $ \(msgPtr, msgLen) -> do
           r <- sodium_sign_ed25519 (castPtr smPtr)
-                                   -- We already know the length, don't need
-                                   -- libsodium to tell us.
-                                   (castPtr nullPtr)
+                                   -- We already know the length, but older
+                                   -- versions of libsodium don't allow a
+                                   -- null pointer to be passed here.
+                                   (castPtr smlPtr)
                                    (castPtr msgPtr)
                                    (fromIntegral msgLen)
                                    (castPtr skPtr)
@@ -80,12 +81,14 @@ foreign import ccall safe "crypto_sign_ed25519" sodium_sign_ed25519
 verifyMessage' :: PublicKey Ed25519 -> ByteString -> Verified
 verifyMessage' (PKey_Ed25519 pk) sm = unsafePerformIO $ do
   allocaBytes (BS.length sm) $ \msgPtr -> -- wasting a few bytes here but w/e
+    allocaBytes 8 $ \mlPtr ->
       -- Key length bounded, so we don't need to pass it explicitly here.
       BS.useAsCStringLen pk $ \(pkPtr, _pkLen) ->
         BS.useAsCStringLen sm $ \(smPtr, smLen) -> do
           r <- sodium_open_ed25519 (castPtr msgPtr)
-                                   -- Already know the message length.
-                                   (castPtr nullPtr)
+                                   -- libsodium needs somewhere to write the
+                                   -- message length.
+                                   (castPtr mlPtr)
                                    (castPtr smPtr)
                                    (fromIntegral smLen)
                                    (castPtr pkPtr)
