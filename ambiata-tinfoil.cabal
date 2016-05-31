@@ -53,6 +53,7 @@ library
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+                       Tinfoil.Signing.Ed25519
                        Tinfoil.Signing.Ed25519.Internal
 
   extra-libraries:     sodium
