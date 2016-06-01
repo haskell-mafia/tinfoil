@@ -30,7 +30,12 @@ import           Tinfoil.Data.Key
 
 -- | Generate a new Ed25519 keypair.
 --
--- FIXME: init requirement for thread safety?
+-- This function is thread-safe.
+--
+-- Note: the above assumes libsodium's default CSPRNG implementation
+-- is used (/dev/urandom on older Linuxes, getrandom(2) on newer Linuxes),
+-- when calling `crypto_sign_ed25519_keypair`, which is true as used by
+-- tinfoil.
 genKeyPair :: IO (PublicKey Ed25519, SecretKey Ed25519)
 genKeyPair = do
   allocaBytes pubKeyLen $ \pubKeyPtr ->
