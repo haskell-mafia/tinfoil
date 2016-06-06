@@ -17,7 +17,8 @@ import           Tinfoil.Data (Entropy(..))
 import           Tinfoil.KDF.Scrypt
 import           Tinfoil.KDF.Scrypt.Internal
 
-import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Arbitrary ()
+import           Test.Tinfoil.Gen
 import           Test.QuickCheck
 
 prop_tripping_ScryptParams :: ScryptParams -> Property

@@ -13,7 +13,8 @@ import           System.IO
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
-import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Arbitrary ()
+import           Test.Tinfoil.Gen
 
 import           Tinfoil.Data
 import           Tinfoil.KDF

@@ -19,7 +19,8 @@ import           System.IO
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.IO.Tinfoil
-import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Gen
+import           Test.Tinfoil.Arbitrary ()
 
 import           Tinfoil.Data.Key
 import           Tinfoil.Data.KDF

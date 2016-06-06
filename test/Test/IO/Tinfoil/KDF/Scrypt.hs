@@ -13,7 +13,8 @@ import           System.IO
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
-import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Arbitrary ()
+import           Test.Tinfoil.Gen
 import           Test.Tinfoil.KDF.Scrypt.TestVectors
 
 import           Tinfoil.Data (Credential(..), Verified(..))
