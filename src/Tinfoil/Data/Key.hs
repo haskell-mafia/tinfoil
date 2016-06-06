@@ -5,7 +5,6 @@
 {-# LANGUAGE EmptyDataDecls #-}
 module Tinfoil.Data.Key(
     Ed25519
-  , KeyId(..)
   , PublicKey(..)
   , SecretKey(..)
   , SymmetricKey(..)
@@ -25,15 +24,6 @@ newtype SymmetricKey =
   } deriving (Eq, Generic)
 
 instance NFData SymmetricKey where rnf = genericRnf
-
--- | Identifier for either a symmetric or asymmetric key. Should be
--- globally unique.
-newtype KeyId =
-  KeyId {
-    unKeyId :: ByteString
-  } deriving (Eq, Show, Generic)
-
-instance NFData KeyId where rnf = genericRnf
 
 data Ed25519
 
