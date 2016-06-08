@@ -2,8 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
-
-module Test.Tinfoil.Data.Signing where
+module Test.Tinfoil.Data.Hash where
 
 import           Disorder.Core.Tripping (tripping)
 
@@ -11,13 +10,13 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.Data.Signing
+import           Tinfoil.Data.Hash
 
 import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
 
-prop_tripping_SignatureAlgorithm :: SignatureAlgorithm -> Property
-prop_tripping_SignatureAlgorithm = tripping renderSignatureAlgorithm parseSignatureAlgorithm
+prop_tripping_HashFunction :: HashFunction -> Property
+prop_tripping_HashFunction = tripping renderHashFunction parseHashFunction
 
 return []
 tests :: IO Bool

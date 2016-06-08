@@ -24,7 +24,8 @@ import           Tinfoil.Data
 import           Tinfoil.Random
 
 import           Test.QuickCheck
-import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Arbitrary ()
+import           Test.Tinfoil.Gen
 
 prop_randomCredential_length :: Property
 prop_randomCredential_length = forAll ((,) <$> credentialLength <*> excludedChars) $ \(l, ex) -> testIO $ do

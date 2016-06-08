@@ -1,12 +1,13 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE StandaloneDeriving #-}
 module Tinfoil.Data.Signing(
-    KeyId(..)
-  , RequestScope(..)
-  , SignatureVersion(..)
-  , parseSignatureVersion
-  , renderSignatureVersion
+    Signature(..)
+  , SignatureAlgorithm(..)
+  , parseSignatureAlgorithm
+  , renderSignatureAlgorithm
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -17,29 +18,28 @@ import           GHC.Generics (Generic)
 
 import           P
 
-data SignatureVersion =
-    SignatureV1
+import           Tinfoil.Data.Key
+
+-- | Supported digital signature algorithms.
+data SignatureAlgorithm =
+    Sign_Ed25519
   deriving (Eq, Show, Enum, Bounded, Generic)
 
-instance NFData SignatureVersion where rnf = genericRnf
+instance NFData SignatureAlgorithm where rnf = genericRnf
 
-renderSignatureVersion :: SignatureVersion -> Text
-renderSignatureVersion SignatureV1 = "v1"
+renderSignatureAlgorithm :: SignatureAlgorithm -> Text
+renderSignatureAlgorithm Sign_Ed25519 = "Sign-Ed25519"
 
-parseSignatureVersion :: Text -> Maybe SignatureVersion
-parseSignatureVersion "v1" = pure SignatureV1
-parseSignatureVersion _ = Nothing
+parseSignatureAlgorithm :: Text -> Maybe' SignatureAlgorithm
+parseSignatureAlgorithm "Sign-Ed25519" = pure Sign_Ed25519
+parseSignatureAlgorithm _ = Nothing'
 
-newtype KeyId =
-  KeyId {
-    unKeyId :: ByteString
-  } deriving (Eq, Show, Generic)
+data Signature a where
+    Sig_Ed25519 :: ByteString -> Signature Ed25519
 
-instance NFData KeyId where rnf = genericRnf
+instance Eq (Signature a) where
+  (Sig_Ed25519 x) == (Sig_Ed25519 y) = x == y
 
-newtype RequestScope =
-  RequestScope {
-    unRequestScope :: ByteString
-  } deriving (Eq, Show, Generic)
+instance NFData (Signature a) where
+  rnf (Sig_Ed25519 x) = rnf x
 
-instance NFData RequestScope where rnf = genericRnf

@@ -21,6 +21,7 @@ import           Tinfoil.Random.Internal
 
 
 import           Test.Tinfoil.Arbitrary
+import           Test.Tinfoil.Gen
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 

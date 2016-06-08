@@ -43,3 +43,8 @@ belongs in `tinfoil`. This includes:
       [crypto-api](https://hackage.haskell.org/package/crypto-api).
     - `System.Entropy` from
       [entropy](https://hackage.haskell.org/package/entropy).
+
+## Thread safety
+
+All functions in `tinfoil` are thread-safe unless explicitly noted
+otherwise in the function's documentation.

@@ -13,8 +13,9 @@ import           System.IO
 
 import           Tinfoil.Data.KDF
 
-import           Test.Tinfoil.Arbitrary
 import           Test.QuickCheck
+import           Test.Tinfoil.Arbitrary ()
+import           Test.Tinfoil.Gen
 
 prop_tripping_MCFPrefix :: MCFPrefix -> Property
 prop_tripping_MCFPrefix = tripping renderMCFPrefix parseMCFPrefix

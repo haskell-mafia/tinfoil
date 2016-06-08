@@ -1,8 +1,13 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE EmptyDataDecls #-}
 module Tinfoil.Data.Key(
-    SymmetricKey(..)
+    Ed25519
+  , PublicKey(..)
+  , SecretKey(..)
+  , SymmetricKey(..)
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -19,3 +24,23 @@ newtype SymmetricKey =
   } deriving (Eq, Generic)
 
 instance NFData SymmetricKey where rnf = genericRnf
+
+data Ed25519
+
+data PublicKey a where
+  PKey_Ed25519 :: ByteString -> PublicKey Ed25519
+
+instance Eq (PublicKey a) where
+  (PKey_Ed25519 x) == (PKey_Ed25519 y) = x == y
+
+instance NFData (PublicKey a) where
+  rnf (PKey_Ed25519 x) = rnf x
+
+data SecretKey a where
+  SKey_Ed25519 :: ByteString -> SecretKey Ed25519
+
+instance Eq (SecretKey a) where
+  (SKey_Ed25519 x) == (SKey_Ed25519 y) = x == y
+
+instance NFData (SecretKey a) where
+  rnf (SKey_Ed25519 x) = rnf x

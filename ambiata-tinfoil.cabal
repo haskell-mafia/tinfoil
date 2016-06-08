@@ -18,7 +18,7 @@ library
                      , ambiata-p
                      , base16-bytestring               == 0.1.1.*
                      , base64-bytestring               == 1.0.0.*
-                     , bytestring                      >= 0.10.4     && < 0.10.7
+                     , bytestring                      >= 0.10.4     && < 0.11
                      , cryptonite                      == 0.15
                      , deepseq-generics                == 0.2.0.*
                      , either                          >= 4.3        && < 4.5
@@ -26,7 +26,7 @@ library
                      , memory                          == 0.11
                      , semigroups                      >= 0.16       && < 0.19
                      , text                            == 1.2.*
-                     , transformers                    >= 0.3        && < 0.5
+                     , transformers                    >= 0.3        && < 0.6
 
   ghc-options:
                        -Wall
@@ -50,25 +50,38 @@ library
                        Tinfoil.KDF
                        Tinfoil.KDF.Scrypt
                        Tinfoil.KDF.Scrypt.Internal
+                       Tinfoil.Key
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+                       Tinfoil.Signing.Ed25519
+                       Tinfoil.Signing.Ed25519.Internal
 
-  c-sources:           cbits/tinfoil/memory.c
+  extra-libraries:     sodium
 
-                     , cbits/scrypt/crypto_scrypt.c
-                     , cbits/scrypt/sha256.c
+  pkgconfig-depends:   libsodium >= 0.4.5
+
+  c-sources:           
+                       -- tinfoil's own c bits 
+                       cbits/tinfoil/memory.c
+                       cbits/tinfoil/sodium/constants.c
+
+                       -- scrypt (https://github.com/Tarsnap/scrypt)
                      , cbits/scrypt/insecure_memzero.c
+                     , cbits/scrypt/sha256.c
                      , cbits/scrypt/warnp.c
                      , cbits/scrypt/cpusupport_x86_aesni.c
                      , cbits/scrypt/cpusupport_x86_sse2.c
                      , cbits/scrypt/crypto_scrypt_smix.c
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
+                     , cbits/scrypt/crypto_scrypt.c
   cc-options:          -msse2
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
-  includes:            crypto_scrypt.h memory.h
-  install-includes:    crypto_scrypt.h memory.h
+  includes:            crypto_scrypt.h
+                     , tinfoil.h
+  install-includes:    crypto_scrypt.h
+                     , tinfoil.h
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -86,7 +99,7 @@ test-suite test
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
-                     , bytestring                      >= 0.10.4     && < 0.10.7
+                     , bytestring                      >= 0.10.4     && < 0.11
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
@@ -109,11 +122,11 @@ test-suite test-io
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
-                     , bytestring                      >= 0.10.4     && < 0.10.7
+                     , bytestring                      >= 0.10.4     && < 0.11
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
-                     , process                         == 1.2.*
+                     , process                         >= 1.2        && < 1.5
                      , semigroups
                      , temporary                       == 1.2.0.*
                      , text                            == 1.2.*
@@ -132,7 +145,7 @@ test-suite test-random
                        base                            >= 3          && < 5
                      , ambiata-tinfoil
                      , ambiata-p
-                     , bytestring                      >= 0.10.4     && < 0.10.7
+                     , bytestring                      >= 0.10.4     && < 0.11
                      , QuickCheck                      == 2.7.*
                      , quickcheck-instances            == 0.3.*
                      , semigroups
@@ -157,7 +170,7 @@ benchmark bench
                      , ambiata-disorder-corpus
                      , ambiata-p
                      , ambiata-tinfoil
-                     , bytestring                      >= 0.10.4     && < 0.10.7
+                     , bytestring                      >= 0.10.4     && < 0.11
                      , criterion                       == 1.1.*
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
