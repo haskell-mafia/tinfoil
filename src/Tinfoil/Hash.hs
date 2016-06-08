@@ -1,7 +1,8 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.Hash(
-    hashSHA256
+    hashFunction
+  , hashSHA256
 ) where
 
 import           Crypto.Hash.Algorithms (SHA256)
@@ -14,6 +15,9 @@ import qualified Data.ByteString as BS
 import           P
 
 import           Tinfoil.Data.Hash
+
+hashFunction :: HashFunction -> ByteString -> Hash
+hashFunction SHA256 = hashSHA256
 
 hashSHA256 :: ByteString -> Hash
 hashSHA256 bs =

@@ -84,3 +84,6 @@ instance Eq MAC where
 
 instance Arbitrary SignatureAlgorithm where
   arbitrary = elements [minBound..maxBound]
+
+instance Arbitrary HashFunction where
+  arbitrary = elements [minBound..maxBound]
