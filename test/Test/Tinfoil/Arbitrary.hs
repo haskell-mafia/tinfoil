@@ -114,9 +114,6 @@ instance Eq MCFHash where
 instance Arbitrary KeyedHashFunction where
   arbitrary = elements [minBound..maxBound]
 
-instance Arbitrary SignatureVersion where
-  arbitrary = elements [minBound..maxBound]
-
 instance Arbitrary MCFPrefix where
   arbitrary = elements [minBound..maxBound]
 
@@ -140,3 +137,6 @@ instance Show SymmetricKey where
 -- Unsafe, test code only.
 instance Eq MAC where
   (MAC a) == (MAC b) = a == b
+
+instance Arbitrary SignatureAlgorithm where
+  arbitrary = elements [minBound..maxBound]

@@ -10,6 +10,8 @@ import           Criterion.Types
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 
+import           Disorder.Core.Gen (GenSeed(..), genDeterministic)
+
 import           P
 
 import           System.IO
@@ -24,6 +26,9 @@ import           Tinfoil.Hash
 import qualified Tinfoil.KDF.Scrypt as Scrypt
 import           Tinfoil.MAC
 import           Tinfoil.Random
+
+generate' :: Gen a -> IO a
+generate' = pure . genDeterministic (GenSeed 314159)
 
 bsTriple :: Int -> Int -> Gen (ByteString, ByteString, ByteString)
 bsTriple small big = do
@@ -69,32 +74,32 @@ main = tinfoilBench [
       , bench "System.Random.StdRandom/1000" $ nfIO (stdRandom 1000)
       , bench "System.Random.StdRandom/100000" $ nfIO (stdRandom 100000)
       ]
-  , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
+  , env (generate' $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
       bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)
                            , bench "safe/different" $ nfIO (safeEq h1 h2_1)
                            , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
                            , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
                          ]
-  , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
+  , env (generate' $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
       bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)
                            , bench "safe/different" $ nfIO (safeEq h1 h2_1)
                            , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
                            , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
                            ]
-  , env (generate $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
+  , env (generate' $ bsTriple 5 10000) $ \ ~(h1, h2_1, h2_2) ->
       bgroup "eqs/large" $ [ bench "safe/same" $ nfIO (safeEq h2_1 h2_1)
                            , bench "safe/different" $ nfIO (safeEq h1 h2_1)
                            , bench "unsafe/same" $ nfIO (unsafeEq h2_1 h2_2)
                            , bench "unsafe/different" $ nfIO (unsafeEq h1 h2_1)
                            ]
-  , env (generate arbitrary) $ \ ~cred ->
+  , env (generate' arbitrary) $ \ ~cred ->
       bgroup "kdf/scrypt" $ [ bench "hashCredential/defaultParams" $ nfIO (Scrypt.hashCredential Scrypt.defaultParams cred)
                             , bench "verifyNoCredential/defaultParams" $ nfIO (Scrypt.verifyNoCredential Scrypt.defaultParams cred)
                             ]
-  , env (generate arbitrary) $ \ ~bs ->
+  , env (generate' arbitrary) $ \ ~bs ->
       bgroup "hash/SHA256" $ [ bench "hashSHA256" $ nf hashSHA256 bs
                              ]
-  , env ((,) <$> generate arbitrary <*> generate arbitrary) $ \ ~(sk, bs) ->
+  , env ((,) <$> generate' arbitrary <*> generate' arbitrary) $ \ ~(sk, bs) ->
       bgroup "mac/hmacSHA256" $ [ bench "hmacSHA256" $ nf (hmacSHA256 sk) bs
                              ]
   ]
