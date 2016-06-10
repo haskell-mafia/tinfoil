@@ -17,10 +17,13 @@ import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 
 import           Foreign (Ptr, Word8, castPtr)
-import           Foreign.C
+import           Foreign.C (CSize(..), CULong(..), CInt(..))
 import           Foreign.Marshal.Alloc (allocaBytes)
+import           Foreign.Storable (sizeOf)
 
 import           P
+
+import qualified Prelude
 
 import           System.IO (IO)
 import           System.IO.Unsafe (unsafePerformIO)
@@ -51,12 +54,17 @@ foreign import ccall safe "crypto_sign_ed25519_keypair" sodium_ed25519_keypair
   -> Ptr Word8 -- secret key
   -> IO CInt
 
+-- sizeof(unsigned long *)
+ulong_ptr_size :: Int
+ulong_ptr_size =
+  sizeOf (Prelude.undefined :: CULong)
+
 -- | Generate an Ed25519-signed message (signature prepended to message text).
 signMessage' :: SecretKey Ed25519 -> ByteString -> Maybe' ByteString
 signMessage' (SKey_Ed25519 sk) msg = unsafePerformIO $
   let smLen = maxSigLen + (BS.length msg) in do
   allocaBytes smLen $ \smPtr ->
-    allocaBytes 8 $ \smlPtr ->
+    allocaBytes ulong_ptr_size $ \smlPtr ->
       -- Key length bounded, so we don't need to pass it explicitly here.
       BS.useAsCStringLen sk $ \(skPtr, _skLen) ->
         BS.useAsCStringLen msg $ \(msgPtr, msgLen) -> do
@@ -86,7 +94,7 @@ foreign import ccall safe "crypto_sign_ed25519" sodium_sign_ed25519
 verifyMessage' :: PublicKey Ed25519 -> ByteString -> Verified
 verifyMessage' (PKey_Ed25519 pk) sm = unsafePerformIO $ do
   allocaBytes (BS.length sm) $ \msgPtr -> -- wasting a few bytes here but w/e
-    allocaBytes 8 $ \mlPtr ->
+    allocaBytes ulong_ptr_size $ \mlPtr ->
       -- Key length bounded, so we don't need to pass it explicitly here.
       BS.useAsCStringLen pk $ \(pkPtr, _pkLen) ->
         BS.useAsCStringLen sm $ \(smPtr, smLen) -> do
