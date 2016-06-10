@@ -87,3 +87,6 @@ instance Arbitrary SignatureAlgorithm where
 
 instance Arbitrary HashFunction where
   arbitrary = elements [minBound..maxBound]
+
+instance Arbitrary MAC where
+  arbitrary = genUBytes MAC 32

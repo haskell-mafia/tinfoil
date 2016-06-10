@@ -1,6 +1,7 @@
 import           Disorder.Core.Main
 
 import qualified Test.IO.Tinfoil.Comparison
+import qualified Test.IO.Tinfoil.Data.MAC
 import qualified Test.IO.Tinfoil.Hash
 import qualified Test.IO.Tinfoil.KDF
 import qualified Test.IO.Tinfoil.KDF.Scrypt
@@ -14,6 +15,7 @@ main :: IO ()
 main =
   disorderMain [
     Test.IO.Tinfoil.Comparison.tests
+  , Test.IO.Tinfoil.Data.MAC.tests
   , Test.IO.Tinfoil.Hash.tests
   , Test.IO.Tinfoil.KDF.tests
   , Test.IO.Tinfoil.KDF.Scrypt.tests

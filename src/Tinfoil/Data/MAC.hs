@@ -18,6 +18,7 @@ import           GHC.Generics (Generic)
 
 import           P
 
+import           Tinfoil.Comparison
 import           Tinfoil.Data.Hash
 import           Tinfoil.Encode
 
@@ -29,6 +30,9 @@ newtype MAC =
   } deriving (Show, Generic)
 
 instance NFData MAC where rnf = genericRnf
+
+instance ConstEq MAC where
+  renderConstEq = unMAC
 
 -- | Hexadecimal encoding of a MAC.
 renderMAC :: MAC -> Text
