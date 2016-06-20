@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Test.Tinfoil.Gen where
 
+import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Text as T
@@ -72,3 +73,9 @@ genOpenSSLSymmetricKey = do
   n <- choose (1, 100)
   xs <- vectorOf n $ choose (0, 255)
   pure . SymmetricKey $ BS.pack xs
+
+-- Generate bytes uniformly.
+genUBytes :: (ByteString -> a) -> Int -> Gen a
+genUBytes f n =
+  fmap (f . BS.pack) . vectorOf n $ choose (0, 255)
+

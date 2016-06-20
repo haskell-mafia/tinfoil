@@ -2,11 +2,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 module Tinfoil.Data.MAC(
-    MAC(..)
-  , KeyedHashFunction(..)
+    KeyedHashFunction(..)
+  , MAC(..)
   , keyHashFunction
   , parseKeyedHashFunction
   , renderKeyedHashFunction
+  , renderMAC
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -17,7 +18,9 @@ import           GHC.Generics (Generic)
 
 import           P
 
+import           Tinfoil.Comparison
 import           Tinfoil.Data.Hash
+import           Tinfoil.Encode
 
 -- | Output of a message authentication code algorithm.
 -- Do not implement an 'Eq' instance for this type.
@@ -27,6 +30,13 @@ newtype MAC =
   } deriving (Show, Generic)
 
 instance NFData MAC where rnf = genericRnf
+
+instance ConstEq MAC where
+  renderConstEq = unMAC
+
+-- | Hexadecimal encoding of a MAC.
+renderMAC :: MAC -> Text
+renderMAC = hexEncode . unMAC
 
 -- | Keyed-hash algorithm designator, for inclusion as a request
 -- parameter.
