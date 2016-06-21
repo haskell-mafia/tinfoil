@@ -19,3 +19,4 @@ library
 
   exposed-modules:
                        Test.Tinfoil.Arbitrary
+                       Test.Tinfoil.Gen
