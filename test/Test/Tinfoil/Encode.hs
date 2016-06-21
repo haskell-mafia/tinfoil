@@ -3,7 +3,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Test.Tinfoil.Data.MAC where
+module Test.Tinfoil.Encode where
+
+import           Data.ByteString (ByteString)
+import qualified Data.ByteString as BS
 
 import           Disorder.Core.Tripping (tripping)
 
@@ -11,16 +14,15 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.Data.MAC
+import           Tinfoil.Encode
 
-import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
+import           Test.QuickCheck.Instances ()
 
-prop_tripping_KeyedHashFunction :: KeyedHashFunction -> Property
-prop_tripping_KeyedHashFunction = tripping renderKeyedHashFunction parseKeyedHashFunction
-
-prop_tripping_MAC :: MAC -> Property
-prop_tripping_MAC = tripping renderMAC parseMAC
+prop_tripping_hex :: ByteString -> Property
+prop_tripping_hex bs =
+  let bl = BS.length bs in
+  tripping hexEncode (hexDecode bl) bs
 
 return []
 tests :: IO Bool

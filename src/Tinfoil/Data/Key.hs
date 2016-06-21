@@ -8,6 +8,9 @@ module Tinfoil.Data.Key(
   , PublicKey(..)
   , SecretKey(..)
   , SymmetricKey(..)
+  , parseSymmetricKey
+  , renderSymmetricKey
+  , symmetricKeyLength
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -18,12 +21,26 @@ import           GHC.Generics (Generic)
 
 import           P
 
+import           Tinfoil.Encode
+
+-- | A cryptographically-random string of bits. A 'SymmetricKey' is 32
+-- bytes wide, which is for an intended 128-bit security level
+-- assuming the possibility of birthday attacks.
 newtype SymmetricKey =
   SymmetricKey {
     unSymmetricKey :: ByteString
   } deriving (Eq, Generic)
 
 instance NFData SymmetricKey where rnf = genericRnf
+
+symmetricKeyLength :: Int
+symmetricKeyLength = 32
+
+renderSymmetricKey :: SymmetricKey -> Text
+renderSymmetricKey = hexEncode . unSymmetricKey
+
+parseSymmetricKey :: Text -> Maybe' SymmetricKey
+parseSymmetricKey t = SymmetricKey <$> hexDecode symmetricKeyLength t
 
 data Ed25519
 

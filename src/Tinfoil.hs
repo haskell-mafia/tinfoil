@@ -2,10 +2,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil(
-    module X
+  -- * ubiquitous types
+    Verified(..)
+  -- * safe comparison
+  , ConstEq(..)
+  , safeEq
+
+  -- * utilities
+  , hexEncode
   ) where
 
-import           Tinfoil.Data as X
-import           Tinfoil.Encode as X
-import           Tinfoil.KDF as X
-import           Tinfoil.Random as X
+import           Tinfoil.Comparison
+import           Tinfoil.Data.KDF
+import           Tinfoil.Encode

@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Test.Tinfoil.Data.MAC where
+module Test.Tinfoil.Data.Key where
 
 import           Disorder.Core.Tripping (tripping)
 
@@ -11,16 +11,13 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.Data.MAC
+import           Tinfoil.Data.Key
 
-import           Test.Tinfoil.Arbitrary ()
 import           Test.QuickCheck
+import           Test.Tinfoil.Arbitrary ()
 
-prop_tripping_KeyedHashFunction :: KeyedHashFunction -> Property
-prop_tripping_KeyedHashFunction = tripping renderKeyedHashFunction parseKeyedHashFunction
-
-prop_tripping_MAC :: MAC -> Property
-prop_tripping_MAC = tripping renderMAC parseMAC
+prop_tripping_SymmetricKey :: SymmetricKey -> Property
+prop_tripping_SymmetricKey = tripping renderSymmetricKey parseSymmetricKey
 
 return []
 tests :: IO Bool

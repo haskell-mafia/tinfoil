@@ -100,7 +100,7 @@ test-suite test
                      , ambiata-disorder-corpus
                      , ambiata-p
                      , bytestring                      >= 0.10.4     && < 0.11
-                     , QuickCheck                      == 2.7.*
+                     , QuickCheck                      >= 2.7        && < 2.9
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
                      , semigroups
@@ -123,7 +123,7 @@ test-suite test-io
                      , ambiata-disorder-corpus
                      , ambiata-p
                      , bytestring                      >= 0.10.4     && < 0.11
-                     , QuickCheck                      == 2.7.*
+                     , QuickCheck                      >= 2.7 &&     < 2.9
                      , quickcheck-instances            == 0.3.*
                      , quickcheck-text                 == 0.1.*
                      , process                         >= 1.2        && < 1.5
@@ -146,7 +146,7 @@ test-suite test-random
                      , ambiata-tinfoil
                      , ambiata-p
                      , bytestring                      >= 0.10.4     && < 0.11
-                     , QuickCheck                      == 2.7.*
+                     , QuickCheck                      >= 2.7 &&     < 2.9
                      , quickcheck-instances            == 0.3.*
                      , semigroups
                      , statistics                      == 0.13.2.*
@@ -165,7 +165,7 @@ benchmark bench
 
   build-depends:
                        base                            >= 3          && < 5
-                     , QuickCheck                      == 2.7.*
+                     , QuickCheck                      >= 2.7 &&     < 2.9
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p

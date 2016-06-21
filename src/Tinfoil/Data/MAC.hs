@@ -6,6 +6,7 @@ module Tinfoil.Data.MAC(
   , MAC(..)
   , keyHashFunction
   , parseKeyedHashFunction
+  , parseMAC
   , renderKeyedHashFunction
   , renderMAC
   ) where
@@ -37,6 +38,10 @@ instance ConstEq MAC where
 -- | Hexadecimal encoding of a MAC.
 renderMAC :: MAC -> Text
 renderMAC = hexEncode . unMAC
+
+-- | Parse the hexadecimal encoding of a MAC.
+parseMAC :: Text -> Maybe' MAC
+parseMAC t = MAC <$> hexDecode 32 t
 
 -- | Keyed-hash algorithm designator, for inclusion as a request
 -- parameter.
