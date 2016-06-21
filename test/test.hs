@@ -2,6 +2,7 @@ import           Disorder.Core.Main
 
 import qualified Test.Tinfoil.Data.Hash
 import qualified Test.Tinfoil.Data.KDF
+import qualified Test.Tinfoil.Data.Key
 import qualified Test.Tinfoil.Data.MAC
 import qualified Test.Tinfoil.Data.Signing
 import qualified Test.Tinfoil.Encode
@@ -17,6 +18,7 @@ main =
   disorderMain [
     Test.Tinfoil.Data.Hash.tests
   , Test.Tinfoil.Data.KDF.tests
+  , Test.Tinfoil.Data.Key.tests
   , Test.Tinfoil.Data.MAC.tests
   , Test.Tinfoil.Data.Signing.tests
   , Test.Tinfoil.Encode.tests

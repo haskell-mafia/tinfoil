@@ -8,6 +8,9 @@ module Tinfoil.Data.Key(
   , PublicKey(..)
   , SecretKey(..)
   , SymmetricKey(..)
+  , parseSymmetricKey
+  , renderSymmetricKey
+  , symmetricKeyLength
   ) where
 
 import           Control.DeepSeq.Generics (genericRnf)
@@ -24,6 +27,15 @@ newtype SymmetricKey =
   } deriving (Eq, Generic)
 
 instance NFData SymmetricKey where rnf = genericRnf
+
+symmetricKeyLength :: Int
+symmetricKeyLength = 32
+
+renderSymmetricKey :: SymmetricKey -> Text
+renderSymmetricKey = hexEncode . unSymmetricKey
+
+parseSymmetricKey :: Text -> Maybe' SymmetricKey
+parseSymmetricKey t = SymmetricKey <$> hexDecode symmetricKeyLength t
 
 data Ed25519
 

@@ -13,6 +13,6 @@ import           Tinfoil.Data.Random
 import           Tinfoil.Random
 
 -- | Generate a 256-bit symmetric cryptographic key.
-genSymmetricKey256 :: IO SymmetricKey
-genSymmetricKey256 = fmap (SymmetricKey . unEntropy) $ entropy 32
+genSymmetricKey :: IO SymmetricKey
+genSymmetricKey = fmap (SymmetricKey . unEntropy) $ entropy symmetricKeyLength
 
