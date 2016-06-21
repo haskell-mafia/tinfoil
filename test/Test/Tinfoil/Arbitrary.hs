@@ -70,8 +70,7 @@ instance Arbitrary MCFPrefix where
 
 instance Arbitrary SymmetricKey where
   arbitrary = do
-    n <- choose (0, 100)
-    xs <- vectorOf n $ choose (0, 255)
+    xs <- vectorOf 32 $ choose (0, 255)
     pure . SymmetricKey $ BS.pack xs
 
 -- Unsafe, test code only.

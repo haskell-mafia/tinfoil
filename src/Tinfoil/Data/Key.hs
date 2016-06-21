@@ -21,6 +21,11 @@ import           GHC.Generics (Generic)
 
 import           P
 
+import           Tinfoil.Encode
+
+-- | A cryptographically-random string of bits. A 'SymmetricKey' is 32
+-- bytes wide, which is for an intended 128-bit security level
+-- assuming the possibility of birthday attacks.
 newtype SymmetricKey =
   SymmetricKey {
     unSymmetricKey :: ByteString

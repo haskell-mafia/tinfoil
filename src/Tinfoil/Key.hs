@@ -1,7 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.Key(
-    genSymmetricKey256
+    genSymmetricKey
 ) where
 
 import           P
