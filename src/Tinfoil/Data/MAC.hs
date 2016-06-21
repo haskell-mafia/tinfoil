@@ -13,10 +13,7 @@ module Tinfoil.Data.MAC(
 
 import           Control.DeepSeq.Generics (genericRnf)
 
-import qualified Data.ByteString as BS
-import qualified Data.ByteString.Base16 as B16
 import           Data.ByteString (ByteString)
-import qualified Data.Text.Encoding as T
 
 import           GHC.Generics (Generic)
 
@@ -44,11 +41,7 @@ renderMAC = hexEncode . unMAC
 
 -- | Parse the hexadecimal encoding of a MAC.
 parseMAC :: Text -> Maybe' MAC
-parseMAC t = case B16.decode (T.encodeUtf8 t) of
-  (x, "") -> if BS.length x == 32
-               then Just' $ MAC x
-               else Nothing'
-  _ -> Nothing'
+parseMAC t = MAC <$> hexDecode 32 t
 
 -- | Keyed-hash algorithm designator, for inclusion as a request
 -- parameter.

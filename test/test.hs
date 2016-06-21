@@ -4,6 +4,7 @@ import qualified Test.Tinfoil.Data.Hash
 import qualified Test.Tinfoil.Data.KDF
 import qualified Test.Tinfoil.Data.MAC
 import qualified Test.Tinfoil.Data.Signing
+import qualified Test.Tinfoil.Encode
 import qualified Test.Tinfoil.Hash
 import qualified Test.Tinfoil.Hash.TestVectors
 import qualified Test.Tinfoil.KDF.Scrypt
@@ -18,6 +19,7 @@ main =
   , Test.Tinfoil.Data.KDF.tests
   , Test.Tinfoil.Data.MAC.tests
   , Test.Tinfoil.Data.Signing.tests
+  , Test.Tinfoil.Encode.tests
   , Test.Tinfoil.Hash.tests
   , Test.Tinfoil.Hash.TestVectors.tests
   , Test.Tinfoil.MAC.tests
