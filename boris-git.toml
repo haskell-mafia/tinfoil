@@ -7,8 +7,20 @@
 [build.dist-7-10]
   git = "refs/heads/master"
 
+[build.dist-8-0]
+  git = "refs/heads/master"
+
+[build.dist-cabal-test]
+  git = "refs/heads/master"
+
 [build.branches-7-8]
   git = "refs/heads/topic/*"
 
 [build.branches-7-10]
+  git = "refs/heads/topic/*"
+
+[build.branches-8-0]
+  git = "refs/heads/topic/*"
+
+[build.branches-cabal-test]
   git = "refs/heads/topic/*"
