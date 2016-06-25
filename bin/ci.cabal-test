@@ -1,8 +1,0 @@
-#!/bin/sh -exu
-
-#
-# Build ambiata-tinfoil-test package.
-#
-
-cd test
-../mafia build

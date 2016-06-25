@@ -1,6 +1,9 @@
 [boris]
   version = 1
 
+[build.validate]
+  git = "refs/heads/master"
+
 [build.dist-7-8]
   git = "refs/heads/master"
 

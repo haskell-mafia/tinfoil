@@ -1,7 +1,7 @@
 [master]
-  runner = "s3://ambiata-dispensary-v2/dist/master/master-haskell/linux/x86_64/0.0.1-20160601065828-f9e9fb3/master-haskell-0.0.1-20160601065828-f9e9fb3"
   version = 1
-  sha1 = "c3e341a734f0938ab5352563db54d5db3137f766"
+  runner = "s3://ambiata-dispensary-v2/dist/master/master-haskell/linux/x86_64/20160623072912-ccea728/master-haskell-20160623072912-ccea728"
+  sha1 = "e150d58a710c500eb908db492b3dcd0e532b2725"
 
 [build.dist]
   GHC_VERSION="7.10.2"
@@ -16,16 +16,16 @@
   CABAL_VERSION = "1.22.4.0"
 
 [build.dist-7-10]
+  GHC_VERSION = "7.10.2"
+  CABAL_VERSION = "1.22.4.0"
   HADDOCK = "true"
   HADDOCK_S3 = "$AMBIATA_HADDOCK_MASTER"
-  GHC_VERSION = "7.10.2"
-  CABAL_VERSION = "1.22.4.0"
 
 [build.branches-7-10]
-  HADDOCK = "true"
-  HADDOCK_S3 = "$AMBIATA_HADDOCK_BRANCHES"
   GHC_VERSION = "7.10.2"
   CABAL_VERSION = "1.22.4.0"
+  HADDOCK = "true"
+  HADDOCK_S3 = "$AMBIATA_HADDOCK_BRANCHES"
 
 [build.branches-8-0]
   GHC_VERSION = "8.0.1"
@@ -34,3 +34,15 @@
 [build.dist-8-0]
   GHC_VERSION = "8.0.1"
   CABAL_VERSION = "1.24.0.0"
+
+[build.dist-cabal-test]
+  GHC_VERSION = "7.10.2"
+  CABAL_VERSION = "1.22.4.0"
+  TEST = "false"
+  CABAL_TEST = "true"
+
+[build.branches-cabal-test]
+  GHC_VERSION = "7.10.2"
+  CABAL_VERSION = "1.22.4.0"
+  TEST = "false"
+  CABAL_TEST = "true"
