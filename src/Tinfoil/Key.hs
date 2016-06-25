@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.Key(
     genSymmetricKey
-) where
+  ) where
 
 import           P
 
@@ -15,4 +15,3 @@ import           Tinfoil.Random
 -- | Generate a 256-bit symmetric cryptographic key.
 genSymmetricKey :: IO SymmetricKey
 genSymmetricKey = fmap (SymmetricKey . unEntropy) $ entropy symmetricKeyLength
-
