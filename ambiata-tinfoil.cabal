@@ -21,7 +21,6 @@ library
                      , bytestring                      >= 0.10.4     && < 0.11
                      , cryptonite                      == 0.15
                      , deepseq-generics                == 0.2.0.*
-                     , either                          >= 4.3        && < 4.5
                      , entropy                         == 0.3.7
                      , memory                          == 0.11
                      , semigroups                      >= 0.16       && < 0.19
@@ -61,8 +60,8 @@ library
 
   pkgconfig-depends:   libsodium >= 0.4.5
 
-  c-sources:           
-                       -- tinfoil's own c bits 
+  c-sources:
+                       -- tinfoil's own c bits
                        cbits/tinfoil/memory.c
                        cbits/tinfoil/sodium/constants.c
 
