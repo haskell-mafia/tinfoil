@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 module Tinfoil.Data.MAC(
     KeyedHashFunction(..)
   , MAC(..)

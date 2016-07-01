@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 module Tinfoil.Data.Hash(
     Hash(..)
   , HashFunction(..)
