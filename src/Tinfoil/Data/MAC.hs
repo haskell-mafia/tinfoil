@@ -1,6 +1,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Tinfoil.Data.MAC(
     KeyedHashFunction(..)
   , MAC(..)
@@ -13,6 +14,7 @@ module Tinfoil.Data.MAC(
 
 import           Control.DeepSeq.Generics (genericRnf)
 
+import           Data.Binary (Binary)
 import           Data.ByteString (ByteString)
 
 import           GHC.Generics (Generic)
@@ -28,12 +30,9 @@ import           Tinfoil.Encode
 newtype MAC =
   MAC {
     unMAC :: ByteString
-  } deriving (Show, Generic)
+  } deriving (Show, Generic, Binary, ConstEq)
 
 instance NFData MAC where rnf = genericRnf
-
-instance ConstEq MAC where
-  renderConstEq = unMAC
 
 -- | Hexadecimal encoding of a MAC.
 renderMAC :: MAC -> Text
