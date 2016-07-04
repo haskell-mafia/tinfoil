@@ -18,7 +18,7 @@ import           P
 newtype SecureToken =
   SecureToken {
       unSecureToken :: Text
-    } deriving (Eq, Show, Generic)
+    } deriving (Show, Generic)
 
 instance NFData SecureToken where rnf = genericRnf
 
