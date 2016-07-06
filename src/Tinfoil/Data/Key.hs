@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE EmptyDataDecls #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 module Tinfoil.Data.Key(
     Ed25519
   , PublicKey(..)

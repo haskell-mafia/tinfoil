@@ -1,12 +1,17 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DefaultSignatures #-}
 module Tinfoil.Comparison(
     ConstEq(..)
   , safeEq
   ) where
 
+import           Data.Binary (Binary)
+import qualified Data.Binary as B
+
 import           Data.ByteString (ByteString)
+import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Unsafe as BSU
 
 import           Foreign (Ptr, Word8, castPtr)
@@ -29,11 +34,13 @@ import           System.IO (IO)
 -- * @a ==# a@
 -- * @a ==# b && b ==# c ==> a ==# c@
 class ConstEq a where
-  renderConstEq :: a -> ByteString
-
   (==#) :: a -> a -> IO Bool
-  x ==# y = safeEq (renderConstEq x) (renderConstEq y)
+  default (==#) :: Binary a => a -> a -> IO Bool
+  (==#) x y = (BSL.toStrict $ B.encode x) `safeEq` (BSL.toStrict $ B.encode y)
+
 infix 4 ==#
+
+instance ConstEq ByteString
 
 -- | Constant-time comparison. Will reveal if the length of the inputs differ
 -- by exiting early, but will provide no other information.

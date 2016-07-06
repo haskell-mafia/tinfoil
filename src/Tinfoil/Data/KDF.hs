@@ -2,6 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 module Tinfoil.Data.KDF(
     Credential(..)
   , CredentialHash(..)

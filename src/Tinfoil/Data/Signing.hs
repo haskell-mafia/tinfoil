@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE StandaloneDeriving #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 module Tinfoil.Data.Signing(
     Signature(..)
   , SignatureAlgorithm(..)
