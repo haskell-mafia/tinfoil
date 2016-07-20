@@ -9,3 +9,4 @@ import           Tinfoil.Data.KDF as X
 import           Tinfoil.Data.MAC as X
 import           Tinfoil.Data.Random as X
 import           Tinfoil.Data.Signing as X
+import           Tinfoil.Data.Verify as X

@@ -46,6 +46,7 @@ library
                        Tinfoil.Data.Random
                        Tinfoil.Data.Signing
                        Tinfoil.Data.Token
+                       Tinfoil.Data.Verify
                        Tinfoil.Encode
                        Tinfoil.Hash
                        Tinfoil.KDF

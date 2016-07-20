@@ -14,9 +14,9 @@ import qualified Data.ByteString as BS
 
 import           P
 
-import           Tinfoil.Data.KDF
 import           Tinfoil.Data.Key
 import           Tinfoil.Data.Signing
+import           Tinfoil.Data.Verify
 import           Tinfoil.Signing.Ed25519.Internal
 
 -- | Generate a detached Ed25519 signature of a message.

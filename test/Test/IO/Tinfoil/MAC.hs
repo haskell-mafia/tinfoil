@@ -22,9 +22,7 @@ import           Test.IO.Tinfoil
 import           Test.Tinfoil.Gen
 import           Test.Tinfoil.Arbitrary ()
 
-import           Tinfoil.Data.Key
-import           Tinfoil.Data.KDF
-import           Tinfoil.Data.MAC
+import           Tinfoil.Data
 import           Tinfoil.Encode
 import           Tinfoil.MAC
 

@@ -28,8 +28,8 @@ import qualified Prelude
 import           System.IO (IO)
 import           System.IO.Unsafe (unsafePerformIO)
 
-import           Tinfoil.Data.KDF
 import           Tinfoil.Data.Key
+import           Tinfoil.Data.Verify
 
 -- | Generate a new Ed25519 keypair.
 --
