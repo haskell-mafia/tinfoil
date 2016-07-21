@@ -4,15 +4,11 @@
 [build.validate]
   command = [["validate-respect"]]
 
-[build.dist-7-8]
-
 [build.dist-7-10]
 
 [build.dist-8-0]
 
 [build.dist-cabal-test]
-
-[build.branches-7-8]
 
 [build.branches-7-10]
 
