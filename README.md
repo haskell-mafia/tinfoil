@@ -1,4 +1,5 @@
-# tinfoil
+tinfoil
+=======
 
 ```
 Feind hört mit!
@@ -8,11 +9,13 @@ Feind hört mit!
 to provide a unified interface to secure and vetted modules which
 reflect Ambiata best practices.
 
-# Merging
+Merging
+=======
 
 All changes must be signed off by Mark and Sharif before being merged.
 
-# Scope
+Scope
+=====
 
 All core cryptographic functionality required by an Ambiata project
 belongs in `tinfoil`. This includes:
@@ -25,7 +28,8 @@ belongs in `tinfoil`. This includes:
  - Bindings and wrappers around low-level libraries (`scrypt`,
    `libsodium`, et cetera).
 
-# Guidelines
+Guidelines
+==========
 
  - Simple and secure by default - the obvious solution to a problem
    should also be the correct one.
@@ -34,7 +38,8 @@ belongs in `tinfoil`. This includes:
    called, and this should be verified with benchmarks.
  - Paranoid - performance is a distant second to correctness.
 
-## Random numbers
+Random numbers
+--------------
 
  - This package should *never* use `System.Random`, even if you're
    sure it doesn't matter in that particular case. Modules suitable for
@@ -45,7 +50,8 @@ belongs in `tinfoil`. This includes:
     - `System.Entropy` from
       [entropy](https://hackage.haskell.org/package/entropy).
 
-## Thread safety
+Thread safety
+-------------
 
 All functions in `tinfoil` are thread-safe unless explicitly noted
 otherwise in the function's documentation.
