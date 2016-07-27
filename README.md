@@ -55,3 +55,9 @@ Thread safety
 
 All functions in `tinfoil` are thread-safe unless explicitly noted
 otherwise in the function's documentation.
+
+Conceptual warriors
+===================
+
+ - Sharif
+ - Mark
