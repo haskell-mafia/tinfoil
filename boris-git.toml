@@ -24,3 +24,12 @@
 
 [build.branches-cabal-test]
   git = "refs/heads/topic/*"
+
+[build.submodules]
+  git = "refs/heads/master"
+
+[build.submodules-branches]
+  git = "refs/heads/topic/*"
+
+[build.rebased]
+  git = "refs/heads/master"
