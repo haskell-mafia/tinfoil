@@ -13,5 +13,5 @@ module Tinfoil(
   ) where
 
 import           Tinfoil.Comparison
-import           Tinfoil.Data.KDF
+import           Tinfoil.Data.Verify
 import           Tinfoil.Encode

@@ -19,8 +19,8 @@ import           System.IO (IO)
 
 import           Tinfoil.Comparison
 import           Tinfoil.Data.Key
-import           Tinfoil.Data.KDF
 import           Tinfoil.Data.MAC
+import           Tinfoil.Data.Verify
 
 hmacSHA256 :: SymmetricKey -> ByteString -> MAC
 hmacSHA256 (SymmetricKey k) msg =

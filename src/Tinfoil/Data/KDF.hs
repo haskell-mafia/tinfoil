@@ -11,7 +11,6 @@ module Tinfoil.Data.KDF(
   , MCFPrefix(..)
   , NeedsRehash(..)
   , Verification(..)
-  , Verified(..)
   , packMCFHash
   , parseMCFPrefix
   , renderMCFPrefix
@@ -30,6 +29,8 @@ import           GHC.Generics (Generic)
 import           P
 
 import           System.IO
+
+import           Tinfoil.Data.Verify
 
 -- | Output of a 'KDF'. Do not ever implement an 'Eq' instance for
 -- this type.
@@ -57,14 +58,6 @@ newtype Credential =
   } deriving (Eq, Show, Generic)
 
 instance NFData Credential where rnf = genericRnf
-
-data Verified =
-    Verified -- ^ Credential hash is well-formed and credential is correct.
-  | NotVerified -- ^ Credential hash is well-formed but credential is not correct.
-  | VerificationError -- ^ Credential hash is not well-formed.
-  deriving (Eq, Show, Generic)
-
-instance NFData Verified where rnf = genericRnf
 
 data NeedsRehash =
     NeedsRehash

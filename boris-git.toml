@@ -4,9 +4,6 @@
 [build.validate]
   git = "refs/heads/master"
 
-[build.dist-7-8]
-  git = "refs/heads/master"
-
 [build.dist-7-10]
   git = "refs/heads/master"
 
@@ -27,3 +24,12 @@
 
 [build.branches-cabal-test]
   git = "refs/heads/topic/*"
+
+[build.submodules]
+  git = "refs/heads/master"
+
+[build.submodules-branches]
+  git = "refs/heads/topic/*"
+
+[build.rebased]
+  git = "refs/heads/master"
