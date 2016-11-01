@@ -74,10 +74,6 @@ instance Arbitrary SymmetricKey where
     pure . SymmetricKey $ BS.pack xs
 
 -- Unsafe, test code only.
-instance Show SymmetricKey where
-  show (SymmetricKey x) = "SymmetricKey " <> show x
-
--- Unsafe, test code only.
 instance Eq MAC where
   (MAC a) == (MAC b) = a == b
 

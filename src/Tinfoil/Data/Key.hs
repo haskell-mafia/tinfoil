@@ -22,6 +22,8 @@ import           GHC.Generics (Generic)
 
 import           P
 
+import           GHC.Show (appPrec, appPrec1)
+
 import           Tinfoil.Encode
 
 -- | A cryptographically-random string of bits. A 'SymmetricKey' is 32
@@ -32,7 +34,15 @@ newtype SymmetricKey =
     unSymmetricKey :: ByteString
   } deriving (Eq, Generic)
 
-instance NFData SymmetricKey where rnf = genericRnf
+instance NFData SymmetricKey where
+  rnf = genericRnf
+
+-- | We use fixed valid Haskell tokens here to help prevent accidents such as
+-- inadvertantly logging secret keys.
+instance Show SymmetricKey where
+  showsPrec p _ =
+    showParen (p > appPrec) $
+      showString "SymmetricKey " . showsPrec appPrec1 ("redacted" :: ByteString)
 
 symmetricKeyLength :: Int
 symmetricKeyLength = 32
@@ -62,3 +72,8 @@ instance Eq (SecretKey a) where
 
 instance NFData (SecretKey a) where
   rnf (SKey_Ed25519 x) = rnf x
+
+instance Show (SecretKey a) where
+  showsPrec p (SKey_Ed25519 _) =
+    showParen (p > appPrec) $
+      showString "SKey_Ed25519 " . showsPrec appPrec1 ("redacted" :: ByteString)
