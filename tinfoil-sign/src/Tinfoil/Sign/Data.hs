@@ -2,10 +2,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE EmptyDataDecls #-}
 {-# OPTIONS_GHC -funbox-strict-fields #-}
-module Tinfoil.Core.Data.Signing(
-    Signature(..)
+module Tinfoil.Sign.Data(
+    Ed25519
+  , PublicKey(..)
+  , SecretKey(..)
+  , Signature(..)
   , SignatureAlgorithm(..)
   , parseSignatureAlgorithm
   , renderSignatureAlgorithm
@@ -44,3 +47,27 @@ instance Eq (Signature a) where
 instance NFData (Signature a) where
   rnf (Sig_Ed25519 x) = rnf x
 
+data Ed25519
+
+data PublicKey a where
+  PKey_Ed25519 :: ByteString -> PublicKey Ed25519
+
+instance Eq (PublicKey a) where
+  (PKey_Ed25519 x) == (PKey_Ed25519 y) = x == y
+
+instance NFData (PublicKey a) where
+  rnf (PKey_Ed25519 x) = rnf x
+
+data SecretKey a where
+  SKey_Ed25519 :: ByteString -> SecretKey Ed25519
+
+instance Eq (SecretKey a) where
+  (SKey_Ed25519 x) == (SKey_Ed25519 y) = x == y
+
+instance NFData (SecretKey a) where
+  rnf (SKey_Ed25519 x) = rnf x
+
+instance Show (SecretKey a) where
+  showsPrec p (SKey_Ed25519 _) =
+    showParen (p > appPrec) $
+      showString "SKey_Ed25519 " . showsPrec appPrec1 ("redacted" :: ByteString)

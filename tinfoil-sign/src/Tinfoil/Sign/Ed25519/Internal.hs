@@ -4,7 +4,7 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE GADTs #-}
-module Tinfoil.Core.Signing.Ed25519.Internal (
+module Tinfoil.Sign.Ed25519.Internal (
     genKeyPair
   , maxSigLen
   , pubKeyLen

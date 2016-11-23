@@ -4,13 +4,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
-module Test.Tinfoil.Core.Signing.Ed25519.Internal where
+module Test.Tinfoil.Sign.Ed25519.Internal where
 
 import           P
 
 import           System.IO
 
-import           Tinfoil.Core.Signing.Ed25519.Internal
+import           Tinfoil.Sign.Ed25519.Internal
 
 import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()

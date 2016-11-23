@@ -3,7 +3,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE GADTs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Test.IO.Tinfoil.Core.Signing.Ed25519.Internal where
+module Test.IO.Tinfoil.Sign.Ed25519.Internal where
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
@@ -20,7 +20,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 import           Tinfoil.Core.Data
-import           Tinfoil.Core.Signing.Ed25519.Internal
+import           Tinfoil.Sign.Ed25519.Internal
 
 prop_genKeyPair_len :: Property
 prop_genKeyPair_len = testIO $ do

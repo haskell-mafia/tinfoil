@@ -1,7 +1,6 @@
-#ifndef H_TINFOIL
-#define H_TINFOIL
+#ifndef H_TINFOIL_CORE
+#define H_TINFOIL_CORE
 
 #include "memory.h"
-#include "sodium/constants.h"
 
 #endif

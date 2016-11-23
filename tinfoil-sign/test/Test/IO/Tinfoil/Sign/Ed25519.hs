@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Test.IO.Tinfoil.Core.Signing.Ed25519 where
+module Test.IO.Tinfoil.Sign.Ed25519 where
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
@@ -20,7 +20,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 import           Tinfoil.Core.Data
-import           Tinfoil.Core.Signing.Ed25519
+import           Tinfoil.Sign.Ed25519
 
 prop_signMessage :: UniquePair ByteString -> Property
 prop_signMessage (UniquePair msg1 msg2) =

@@ -1,29 +1,24 @@
-name:                  ambiata-tinfoil-core
+name:                  ambiata-tinfoil-sign
 version:               0.0.1
 license:               Apache-2.0
 author:                Ambiata <info@ambiata.com>
 maintainer:            Ambiata <info@ambiata.com>
 copyright:             (c) 2015 Ambiata.
-synopsis:              Paranoid crypto primitives
+synopsis:              ambiata-tinfoil-sign
 category:              System
 cabal-version:         >= 1.8
 build-type:            Simple
-description:           Primitives for cryptographic random number generation,
-                       key deriviation, credential storage and verification,
-                       et cetera.
 
 library
   build-depends:
                        base                            >= 3          && < 5
                      , ambiata-p
+                     , ambiata-tinfoil-core
                      , base16-bytestring               == 0.1.1.*
                      , base64-bytestring               == 1.0.0.*
                      , binary                          >= 0.5 &&     < 0.9
                      , bytestring                      >= 0.10.4     && < 0.11
-                     , cryptonite                      >= 0.15 &&    < 0.21
                      , deepseq-generics                == 0.2.0.*
-                     , entropy                         == 0.3.7
-                     , memory                          >= 0.11       && < 0.14
                      , semigroups                      >= 0.16       && < 0.19
                      , text                            == 1.2.*
                      , transformers                    >= 0.3        && < 0.6
@@ -35,52 +30,21 @@ library
                        src
 
   exposed-modules:
-                       Paths_ambiata_tinfoil_core
-                       Tinfoil
-                       Tinfoil.Core.Comparison
-                       Tinfoil.Core.Data
-                       Tinfoil.Core.Data.Hash
-                       Tinfoil.Core.Data.KDF
-                       Tinfoil.Core.Data.Key
-                       Tinfoil.Core.Data.MAC
-                       Tinfoil.Core.Data.Random
-                       Tinfoil.Core.Data.Token
-                       Tinfoil.Core.Data.Verify
-                       Tinfoil.Core.Encode
-                       Tinfoil.Core.Hash
-                       Tinfoil.Core.KDF
-                       Tinfoil.Core.KDF.Scrypt
-                       Tinfoil.Core.KDF.Scrypt.Internal
-                       Tinfoil.Core.Key
-                       Tinfoil.Core.MAC
-                       Tinfoil.Core.Random
-                       Tinfoil.Core.Random.Internal
-                       Tinfoil.Core.Token
+                       Tinfoil.Sign.Data
+                       Tinfoil.Sign.Ed25519
+                       Tinfoil.Sign.Ed25519.Internal
+
+  extra-libraries:     sodium
+
+  pkgconfig-depends:   libsodium >= 0.4.5
 
   c-sources:
-                       -- tinfoil's own c bits
-                       cbits/tinfoil/memory.c
-
-                       -- scrypt (https://github.com/Tarsnap/scrypt)
-                     , cbits/scrypt/insecure_memzero.c
-                     , cbits/scrypt/sha256.c
-                     , cbits/scrypt/warnp.c
-                     , cbits/scrypt/cpusupport_x86_aesni.c
-                     , cbits/scrypt/cpusupport_x86_sse2.c
-                     , cbits/scrypt/crypto_scrypt_smix.c
-                     , cbits/scrypt/crypto_scrypt_smix_sse2.c
-                     , cbits/scrypt/crypto_scrypt.c
+                       cbits/tinfoil/sodium/constants.c
 
   cc-options:          -msse2
-
-  include-dirs:        cbits/scrypt
-                     , cbits/tinfoil
-
-  includes:            crypto_scrypt.h
-                     , tinfoil.h
-
-  install-includes:    crypto_scrypt.h
-                     , tinfoil.h
+  include-dirs:        cbits/tinfoil
+  includes:            tinfoil.h
+  install-includes:    tinfoil.h
 
 test-suite test
   type:                exitcode-stdio-1.0
@@ -95,6 +59,8 @@ test-suite test
   build-depends:
                        base                            >= 3          && < 5
                      , ambiata-tinfoil-core
+                     , ambiata-tinfoil-core-test
+                     , ambiata-tinfoil-sign
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
@@ -118,6 +84,8 @@ test-suite test-io
   build-depends:
                        base                            >= 3          && < 5
                      , ambiata-tinfoil-core
+                     , ambiata-tinfoil-core-test
+                     , ambiata-tinfoil-sign
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
@@ -130,28 +98,6 @@ test-suite test-io
                      , temporary                       == 1.2.0.*
                      , text                            == 1.2.*
 
-test-suite test-random
-  type:                exitcode-stdio-1.0
-
-  main-is:             test-random.hs
-
-  ghc-options:         -Wall -threaded -O2
-
-  hs-source-dirs:
-                       test
-
-  build-depends:
-                       base                            >= 3          && < 5
-                     , ambiata-tinfoil-core
-                     , ambiata-p
-                     , bytestring                      >= 0.10.4     && < 0.11
-                     , QuickCheck                      >= 2.7 &&     < 2.9
-                     , quickcheck-instances            == 0.3.*
-                     , semigroups
-                     , statistics                      == 0.13.2.*
-                     , text
-                     , vector                          == 0.11.*
-
 benchmark bench
   type:                exitcode-stdio-1.0
 
@@ -160,7 +106,7 @@ benchmark bench
   ghc-options:         -Wall -threaded -O2
 
   hs-source-dirs:
-                       test
+                       bench
 
   build-depends:
                        base                            >= 3          && < 5
@@ -169,6 +115,8 @@ benchmark bench
                      , ambiata-disorder-corpus
                      , ambiata-p
                      , ambiata-tinfoil-core
+                     , ambiata-tinfoil-core-test
+                     , ambiata-tinfoil-sign
                      , bytestring                      >= 0.10.4     && < 0.11
                      , criterion                       == 1.1.*
                      , quickcheck-instances            == 0.3.*

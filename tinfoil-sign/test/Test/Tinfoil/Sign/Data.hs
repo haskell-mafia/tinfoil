@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Test.Tinfoil.Core.Data.Signing where
+module Test.Tinfoil.Sign.Data where
 
 import           Disorder.Core.Tripping (tripping)
 
@@ -11,9 +11,9 @@ import           P
 
 import           System.IO
 
-import           Tinfoil.Core.Data.Signing
+import           Tinfoil.Sign.Data
 
-import           Test.Tinfoil.Core.Arbitrary ()
+import           Test.Tinfoil.Sign.Arbitrary ()
 import           Test.QuickCheck
 
 prop_tripping_SignatureAlgorithm :: SignatureAlgorithm -> Property

@@ -77,9 +77,6 @@ instance Arbitrary SymmetricKey where
 instance Eq MAC where
   (MAC a) == (MAC b) = a == b
 
-instance Arbitrary SignatureAlgorithm where
-  arbitrary = elements [minBound..maxBound]
-
 instance Arbitrary HashFunction where
   arbitrary = elements [minBound..maxBound]
 

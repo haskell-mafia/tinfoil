@@ -8,6 +8,5 @@ import           Tinfoil.Core.Data.Key as X
 import           Tinfoil.Core.Data.KDF as X
 import           Tinfoil.Core.Data.MAC as X
 import           Tinfoil.Core.Data.Random as X
-import           Tinfoil.Core.Data.Signing as X
 import           Tinfoil.Core.Data.Token as X
 import           Tinfoil.Core.Data.Verify as X

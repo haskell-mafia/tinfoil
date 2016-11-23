@@ -27,3 +27,19 @@
 
 [build.branches-core-cabal-test]
   command = [["master", "build", "branches-cabal-test", "-C", "tinfoil-core"]]
+
+[build.dist-sign-7-10]
+  command = [["master", "build", "dist-7-10", "-C", "tinfoil-sign"]]
+
+[build.dist-sign-8-0]
+  command = [["master", "build", "dist-8-0", "-C", "tinfoil-sign"]]
+
+[build.dist-sign-cabal-test]
+  command = [["master", "build", "dist-cabal-test", "-C", "tinfoil-sign"]]
+
+[build.branches-sign-7-10]
+  command = [["master", "build", "branches-7-10", "-C", "tinfoil-sign"]]
+
+[build.branches-sign-8-0]
+  command = [["master", "build", "branches-8-0", "-C", "tinfoil-sign"]]
+

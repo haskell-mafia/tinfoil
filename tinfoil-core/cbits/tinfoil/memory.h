@@ -1,5 +1,5 @@
-#ifndef H_TINFOIL_MEMORY
-#define H_TINFOIL_MEMORY
+#ifndef H_TINFOIL_CORE_MEMORY
+#define H_TINFOIL_CORE_MEMORY
 
 #include <stdlib.h>
 #include <stdint.h>

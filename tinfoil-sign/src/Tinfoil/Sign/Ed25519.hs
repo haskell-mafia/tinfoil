@@ -3,7 +3,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE GADTs #-}
-module Tinfoil.Core.Signing.Ed25519 (
+module Tinfoil.Sign.Ed25519 (
     genKeyPair -- re-export from Internal
   , signMessage
   , verifyMessage
@@ -17,7 +17,8 @@ import           P
 import           Tinfoil.Core.Data.Key
 import           Tinfoil.Core.Data.Signing
 import           Tinfoil.Core.Data.Verify
-import           Tinfoil.Core.Signing.Ed25519.Internal
+import           Tinfoil.Sign.Data
+import           Tinfoil.Sign.Ed25519.Internal
 
 -- | Generate a detached Ed25519 signature of a message.
 signMessage :: SecretKey Ed25519 -> ByteString -> Maybe' (Signature Ed25519)
