@@ -15,7 +15,6 @@ import qualified Data.ByteString as BS
 import           P
 
 import           Tinfoil.Core.Data.Key
-import           Tinfoil.Core.Data.Signing
 import           Tinfoil.Core.Data.Verify
 import           Tinfoil.Sign.Data
 import           Tinfoil.Sign.Ed25519.Internal
