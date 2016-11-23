@@ -4,14 +4,20 @@
 [build.dist-validate]
   command = [["validate-respect"]]
 
-[build.dist-7-10]
+[build.dist-core-7-10]
+  command = [["master", "build", "dist-7-10", "-C", "tinfoil-core"]]
 
-[build.dist-8-0]
+[build.dist-core-8-0]
+  command = [["master", "build", "dist-8-0", "-C", "tinfoil-core"]]
 
-[build.dist-cabal-test]
+[build.dist-core-cabal-test]
+  command = [["master", "build", "dist-cabal-test", "-C", "tinfoil-core"]]
 
-[build.branches-7-10]
+[build.branches-core-7-10]
+  command = [["master", "build", "branches-7-10", "-C", "tinfoil-core"]]
 
-[build.branches-8-0]
+[build.branches-core-8-0]
+  command = [["master", "build", "branches-8-0", "-C", "tinfoil-core"]]
 
-[build.branches-cabal-test]
+[build.branches-core-cabal-test]
+  command = [["master", "build", "branches-cabal-test", "-C", "tinfoil-core"]]
