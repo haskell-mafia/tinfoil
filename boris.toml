@@ -4,6 +4,12 @@
 [build.dist-validate]
   command = [["validate-respect"]]
 
+[build.all-rebased]
+  command = [["rebased"]]
+
+[build.submodules-all]
+  command = [["dangling-refs"]]
+
 [build.dist-core-7-10]
   command = [["master", "build", "dist-7-10", "-C", "tinfoil-core"]]
 
