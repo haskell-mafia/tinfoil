@@ -56,18 +56,11 @@ library
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
-                       Tinfoil.Signing.Ed25519
-                       Tinfoil.Signing.Ed25519.Internal
                        Tinfoil.Token
-
-  extra-libraries:     sodium
-
-  pkgconfig-depends:   libsodium >= 0.4.5
 
   c-sources:
                        -- tinfoil's own c bits
                        cbits/tinfoil/memory.c
-                       cbits/tinfoil/sodium/constants.c
 
                        -- scrypt (https://github.com/Tarsnap/scrypt)
                      , cbits/scrypt/insecure_memzero.c
