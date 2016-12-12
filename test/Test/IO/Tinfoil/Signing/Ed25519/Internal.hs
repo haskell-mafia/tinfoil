@@ -2,7 +2,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE GADTs #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 module Test.IO.Tinfoil.Signing.Ed25519.Internal where
 
 import           Data.ByteString (ByteString)
