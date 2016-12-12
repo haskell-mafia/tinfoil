@@ -52,7 +52,6 @@ buildLibSodium = do
     sodiumDir = cwd </> "gen" </> "libsodium"
   createDirectoryIfMissing True sodiumDir
   setCurrentDirectory $ cwd </> "lib" </> "libsodium"
-  callProcess "autoreconf" ["-if"]
   callProcess "./configure" ["--prefix=" <> sodiumDir]
   callProcess "make" ["-j"]
   callProcess "make" ["install"]
