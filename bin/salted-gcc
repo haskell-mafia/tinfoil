@@ -1,0 +1,5 @@
+#! /bin/sh -eux
+
+echo "$@" | grep -q --version \
+    && gcc $@ \
+    || gcc $@ "$(pwd)/gen/libsodium/lib/libsodium.a"

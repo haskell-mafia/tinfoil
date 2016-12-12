@@ -7,7 +7,7 @@ copyright:             (c) 2015 Ambiata.
 synopsis:              Paranoid crypto primitives
 category:              System
 cabal-version:         >= 1.8
-build-type:            Simple
+build-type:            Custom
 description:           Primitives for cryptographic random number generation,
                        key deriviation, credential storage and verification,
                        et cetera.
@@ -56,11 +56,14 @@ library
                        Tinfoil.MAC
                        Tinfoil.Random
                        Tinfoil.Random.Internal
+                       Tinfoil.Signing.Ed25519
+                       Tinfoil.Signing.Ed25519.Internal
                        Tinfoil.Token
 
   c-sources:
                        -- tinfoil's own c bits
                        cbits/tinfoil/memory.c
+                       cbits/tinfoil/sodium/constants.c
 
                        -- scrypt (https://github.com/Tarsnap/scrypt)
                      , cbits/scrypt/insecure_memzero.c
@@ -71,11 +74,17 @@ library
                      , cbits/scrypt/crypto_scrypt_smix.c
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
                      , cbits/scrypt/crypto_scrypt.c
-  cc-options:          -msse2
+
+  cc-options:          -msse2 -Wall -Wextra
+
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
+                     , gen/libsodium/include
+
   includes:            crypto_scrypt.h
                      , tinfoil.h
+                     , sodium.h
+
   install-includes:    crypto_scrypt.h
                      , tinfoil.h
 
@@ -84,7 +93,7 @@ test-suite test
 
   main-is:             test.hs
 
-  ghc-options:         -Wall -threaded -O2
+  ghc-options:         -Wall -threaded -O2 -pgml ./bin/salted-gcc
 
   hs-source-dirs:
                        test
@@ -107,7 +116,7 @@ test-suite test-io
 
   main-is:             test-io.hs
 
-  ghc-options:         -Wall -threaded -O2
+  ghc-options:         -Wall -threaded -O2 -pgml ./bin/salted-gcc
 
   hs-source-dirs:
                        test
@@ -154,7 +163,7 @@ benchmark bench
 
   main-is:             bench.hs
 
-  ghc-options:         -Wall -threaded -O2
+  ghc-options:         -Wall -threaded -O2 -pgml ./bin/salted-gcc
 
   hs-source-dirs:
                        test

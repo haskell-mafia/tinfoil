@@ -11,6 +11,7 @@ import qualified Test.Tinfoil.Hash.TestVectors
 import qualified Test.Tinfoil.KDF.Scrypt
 import qualified Test.Tinfoil.MAC
 import qualified Test.Tinfoil.Random
+import qualified Test.Tinfoil.Signing.Ed25519.Internal
 
 main :: IO ()
 main =
@@ -26,4 +27,5 @@ main =
   , Test.Tinfoil.MAC.tests
   , Test.Tinfoil.KDF.Scrypt.tests
   , Test.Tinfoil.Random.tests
+  , Test.Tinfoil.Signing.Ed25519.Internal.tests
   ]
