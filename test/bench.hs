@@ -14,6 +14,8 @@ import           Disorder.Core.Gen (GenSeed(..), genDeterministic)
 
 import           P
 
+import qualified Prelude
+
 import           System.IO
 import qualified System.Random as R
 
@@ -22,10 +24,12 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 
 import           Tinfoil.Comparison
+import           Tinfoil.Data
 import           Tinfoil.Hash
 import qualified Tinfoil.KDF.Scrypt as Scrypt
 import           Tinfoil.MAC
 import           Tinfoil.Random
+import qualified Tinfoil.Signing.Ed25519 as Ed25519
 
 generate' :: Gen a -> IO a
 generate' = pure . genDeterministic (GenSeed 314159)
@@ -38,6 +42,16 @@ bsTriple small big = do
   let big1 = BS.pack $ short2 <> long
   let big2 = BS.copy big1
   pure (BS.pack $ short1 <> long, big1, big2)
+
+genEd25519 :: IO (SecretKey Ed25519, PublicKey Ed25519, Signature Ed25519, ByteString)
+genEd25519 = do
+  (pk, sk) <- Ed25519.genKeyPair
+  msg <- generate' arbitrary
+  let sig = fromJust' $ Ed25519.signMessage sk msg
+  pure (sk, pk, sig, msg)
+  where
+    fromJust' Nothing' = Prelude.error "impossible: signing valid message failed"
+    fromJust' (Just' x) = x
 
 -- non-CSPRNG, just a performance baseline.
 stdRandom :: Int -> IO ByteString
@@ -102,4 +116,10 @@ main = tinfoilBench [
   , env ((,) <$> generate' arbitrary <*> generate' arbitrary) $ \ ~(sk, bs) ->
       bgroup "mac/hmacSHA256" $ [ bench "hmacSHA256" $ nf (hmacSHA256 sk) bs
                                 ]
+  , env genEd25519 $ \ ~(sk, pk, sig, msg) ->
+      bgroup "signing/ed25519" $ [
+          bench "genKeyPair" $ nfIO Ed25519.genKeyPair
+        , bench "signMessage" $ nf (Ed25519.signMessage sk) msg
+        , bench "verifyMessage" $ nf (Ed25519.verifyMessage pk sig) msg
+        ]
   ]
