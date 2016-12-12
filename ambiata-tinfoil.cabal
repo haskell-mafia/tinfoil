@@ -75,7 +75,7 @@ library
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
                      , cbits/scrypt/crypto_scrypt.c
 
-  cc-options:          -msse2
+  cc-options:          -msse2 -Wall -Wextra
 
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
