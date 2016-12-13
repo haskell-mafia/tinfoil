@@ -16,14 +16,11 @@ module Tinfoil.Signing.Ed25519.Internal (
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 
-import           Foreign (Ptr, Word8, castPtr)
-import           Foreign.C (CSize(..), CULong(..), CInt(..))
+import           Foreign (Ptr, Word8, castPtr, nullPtr)
+import           Foreign.C (CSize(..), CULLong(..), CInt(..))
 import           Foreign.Marshal.Alloc (allocaBytes)
-import           Foreign.Storable (sizeOf)
 
 import           P
-
-import qualified Prelude
 
 import           System.IO (IO)
 import           System.IO.Unsafe (unsafePerformIO)
@@ -54,72 +51,53 @@ foreign import ccall safe "crypto_sign_ed25519_keypair" sodium_ed25519_keypair
   -> Ptr Word8 -- secret key
   -> IO CInt
 
--- sizeof(unsigned long *)
-ulong_ptr_size :: Int
-ulong_ptr_size =
-  sizeOf (Prelude.undefined :: CULong)
-
--- | Generate an Ed25519-signed message (signature prepended to message text).
+-- | Generate an Ed25519 signature of a message.
 signMessage' :: SecretKey Ed25519 -> ByteString -> Maybe' ByteString
 signMessage' (SKey_Ed25519 sk) msg = unsafePerformIO $
-  let smLen = maxSigLen + (BS.length msg) in do
-  allocaBytes smLen $ \smPtr ->
-    allocaBytes ulong_ptr_size $ \smlPtr ->
-      -- Key length bounded, so we don't need to pass it explicitly here.
-      BS.useAsCStringLen sk $ \(skPtr, _skLen) ->
-        BS.useAsCStringLen msg $ \(msgPtr, msgLen) -> do
-          r <- sodium_sign_ed25519 (castPtr smPtr)
-                                   -- We already know the length, but older
-                                   -- versions of libsodium don't allow a
-                                   -- null pointer to be passed here.
-                                   (castPtr smlPtr)
-                                   (castPtr msgPtr)
-                                   (fromIntegral msgLen)
-                                   (castPtr skPtr)
-          case r of
-            0 -> fmap Just' $ BS.packCStringLen (smPtr, smLen)
-            _ -> pure Nothing'
+  let sigLen = maxSigLen in do
+  allocaBytes sigLen $ \sigPtr ->
+    BS.useAsCStringLen sk $ \(skPtr, _skLen) ->
+      BS.useAsCStringLen msg $ \(msgPtr, msgLen) -> do
+        r <- sodium_sign_ed25519_detached
+               (castPtr sigPtr)
+               nullPtr -- We already know the length.
+               (castPtr msgPtr)
+               (fromIntegral msgLen)
+               (castPtr skPtr)
+        case r of
+          0 -> fmap Just' $ BS.packCStringLen (sigPtr, sigLen)
+          _ -> pure Nothing'
 
--- libsodium 0.4.5 (the latest we have available on CentOS 6) doesn't support
--- detached signatures.
-foreign import ccall safe "crypto_sign_ed25519" sodium_sign_ed25519
-  :: Ptr Word8 -- signed message buffer
-  -> Ptr CULong -- signed message length buffer or null
-  -> Ptr Word8 -- message
-  -> CSize -- message length
-  -> Ptr Word8 -- secret key
+foreign import ccall safe "crypto_sign_ed25519_detached" sodium_sign_ed25519_detached
+  :: Ptr Word8 -- signature buffer (unsigned char *sig)
+  -> Ptr CULLong -- signature length (unsigned long long *siglen_p)
+  -> Ptr Word8 -- message (const unsigned char *m)
+  -> CULLong -- message length (unsigned long long mlen)
+  -> Ptr Word8 -- secret key (unsigned char *sk)
   -> IO CInt
 
--- | Verify an Ed25519-signed message (signature prepended to message).
-verifyMessage' :: PublicKey Ed25519 -> ByteString -> Verified
-verifyMessage' (PKey_Ed25519 pk) sm = unsafePerformIO $ do
-  allocaBytes (BS.length sm) $ \msgPtr -> -- wasting a few bytes here but w/e
-    allocaBytes ulong_ptr_size $ \mlPtr ->
-      -- Key length bounded, so we don't need to pass it explicitly here.
-      BS.useAsCStringLen pk $ \(pkPtr, _pkLen) ->
-        BS.useAsCStringLen sm $ \(smPtr, smLen) -> do
-          r <- sodium_open_ed25519 (castPtr msgPtr)
-                                   -- libsodium needs somewhere to write the
-                                   -- message length.
-                                   (castPtr mlPtr)
-                                   (castPtr smPtr)
-                                   (fromIntegral smLen)
-                                   (castPtr pkPtr)
-          -- We ignore the values written to msgPtr and mlPtr, we know those
-          -- things already. We pass the length explicitly, so there's no risk
-          -- of verifying a smaller message than intended.
-          case r of
-            0 -> pure Verified
-            (-1) -> pure NotVerified
-            _ -> pure VerificationError -- impossible
+-- | Verify an Ed25519 detached signature of a message.
+verifyMessage' :: PublicKey Ed25519 -> ByteString -> ByteString -> Verified
+verifyMessage' (PKey_Ed25519 pk) sig msg = unsafePerformIO $
+  BS.useAsCStringLen sig $ \(sigPtr, _sigLen) ->
+    BS.useAsCStringLen msg $ \(msgPtr, msgLen) ->
+      BS.useAsCStringLen pk $ \(pkPtr, _pkLen) -> do
+        r <- sodium_verify_ed25519_detached
+          (castPtr sigPtr)
+          (castPtr msgPtr)
+          (fromIntegral msgLen)
+          (castPtr pkPtr)
+        case r of
+          0 -> pure Verified
+          (-1) -> pure NotVerified
+          _ -> pure VerificationError -- impossible
 
 
-foreign import ccall safe "crypto_sign_ed25519_open" sodium_open_ed25519
-  :: Ptr Word8 -- message buffer
-  -> Ptr CULong -- message length buffer or null pointer
-  -> Ptr Word8 -- signed message
-  -> CSize -- signed message length
-  -> Ptr Word8 -- public key
+foreign import ccall safe "crypto_sign_ed25519_verify_detached" sodium_verify_ed25519_detached
+  :: Ptr Word8 -- signature buffer (const unsigned char *sig)
+  -> Ptr Word8 -- message buffer (const unsigned char *m)
+  -> CULLong -- message length (unsigned long long mlen)
+  -> Ptr Word8 -- public key (const unsigned char *pk)
   -> IO CInt
 
 -- | 32 with versions of libsodium up to 1.0.10-1.
