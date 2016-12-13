@@ -75,7 +75,25 @@ library
                      , cbits/scrypt/crypto_scrypt_smix_sse2.c
                      , cbits/scrypt/crypto_scrypt.c
 
-  cc-options:          -msse2 -Wall -Wextra
+  cc-options:
+                       -- x86 extensions
+                       -msse2
+
+                       -- Warnings.
+                       -Waggregate-return
+                       -Wall
+                       -Wbad-function-cast
+                       -Wcast-align
+                       -Wcast-qual
+                       -Wextra
+                       -Winit-self
+                       -Wmissing-prototypes
+                       -Wpointer-arith
+                       -Wshadow
+                       -Wstrict-prototypes
+                       -Wundef
+                       -Wvla
+                       -Wwrite-strings
 
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
