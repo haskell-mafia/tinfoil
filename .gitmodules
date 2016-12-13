@@ -4,3 +4,6 @@
 [submodule "lib/disorder"]
 	path = lib/disorder
 	url = https://github.com/ambiata/disorder.hs
+[submodule "lib/libsodium"]
+	path = lib/libsodium
+	url = https://github.com/ambiata/libsodium
