@@ -78,7 +78,7 @@ library
 
   cc-options:
                        -- x86 extensions
-                       -msse2
+                       -msse3
 
                        -- Warnings.
                        -Waggregate-return
