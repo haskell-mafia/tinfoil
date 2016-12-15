@@ -19,6 +19,12 @@ prop_sodiumInit = once . testIO $ do
   r2 <- sodiumInit
   pure $ (r1, r2) === (SodiumInitialised, SodiumInitialised)
 
+prop_aesgcmSupported :: Property
+prop_aesgcmSupported = once . testIO $ do
+  void sodiumInit
+  r1 <- aesgcmSupported
+  pure $ r1 === AESGCMSupported
+
 return []
 tests :: IO Bool
 tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )
