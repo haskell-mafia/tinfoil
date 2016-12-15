@@ -32,16 +32,15 @@ prop_genKeyPair = testIO $ do
   (pk2, sk2) <- genKeyPair
   pure $ (pk1 == pk2, sk1 == sk2) === (False, False)
 
--- Check the signed-message construction works how we think it does.
+-- Roundtrip test on the raw bindings.
 prop_signMessage' :: ByteString -> Property
 prop_signMessage' msg = testIO $ do
-  (_pk, sk) <- genKeyPair
-  case signMessage' sk msg of
+  (pk, sk) <- genKeyPair
+  pure $ case signMessage' sk msg of
     Nothing' ->
-      pure . failWith $ "Unexpected failure signing: " <> T.pack (show msg)
-    Just' sm ->
-      let msg' = BS.drop maxSigLen sm in
-      pure $ msg === msg'
+      failWith $ "Unexpected failure signing: " <> T.pack (show msg)
+    Just' sig ->
+      (verifyMessage' pk sig msg) === Verified
 
 return []
 tests :: IO Bool
