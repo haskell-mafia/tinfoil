@@ -1,9 +1,6 @@
 [boris]
   version = 1
 
-[build.dist-validate]
-  command = [["validate-respect"]]
-
 [build.dist-7-10]
 
 [build.dist-8-0]
@@ -15,3 +12,12 @@
 [build.branches-8-0]
 
 [build.branches-cabal-test]
+
+[build.dist-validate]
+  command = [["validate-respect"]]
+
+[build.all-submodules]
+  command = [["dangling-refs"]]
+
+[build.all-rebased]
+  command = [["rebased"]]
