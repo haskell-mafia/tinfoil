@@ -50,6 +50,7 @@ library
                        Tinfoil.Data.Verify
                        Tinfoil.Encode
                        Tinfoil.Hash
+                       Tinfoil.Internal.Sodium
                        Tinfoil.Internal.Sodium.Data
                        Tinfoil.Internal.Sodium.Foreign
                        Tinfoil.KDF
