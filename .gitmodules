@@ -7,3 +7,6 @@
 [submodule "lib/libsodium"]
 	path = lib/libsodium
 	url = https://github.com/ambiata/libsodium
+[submodule "lib/x"]
+	path = lib/x
+	url = https://github.com/ambiata/x
