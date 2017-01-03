@@ -150,6 +150,7 @@ test-suite test-io
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
+                     , ambiata-x-eithert
                      , bytestring                      >= 0.10.4     && < 0.11
                      , QuickCheck                      >= 2.7 &&     < 2.9
                      , quickcheck-instances            == 0.3.*
