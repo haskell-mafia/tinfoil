@@ -1,5 +1,6 @@
 import           Disorder.Core.Main
 
+import qualified Test.Tinfoil.AEAD.AESGCM.Iv
 import qualified Test.Tinfoil.Data.Hash
 import qualified Test.Tinfoil.Data.KDF
 import qualified Test.Tinfoil.Data.Key
@@ -16,7 +17,8 @@ import qualified Test.Tinfoil.Signing.Ed25519.Internal
 main :: IO ()
 main =
   disorderMain [
-    Test.Tinfoil.Data.Hash.tests
+    Test.Tinfoil.AEAD.AESGCM.Iv.tests
+  , Test.Tinfoil.Data.Hash.tests
   , Test.Tinfoil.Data.KDF.tests
   , Test.Tinfoil.Data.Key.tests
   , Test.Tinfoil.Data.MAC.tests

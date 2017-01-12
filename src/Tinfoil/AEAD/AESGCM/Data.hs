@@ -28,7 +28,7 @@ newtype FixedField =
 newtype RandomField =
   RandomField {
     unRandomField :: Word32
-  } deriving (Eq, Show)
+  } deriving (Eq, Show, Num, Enum, Bounded)
 
 -- | Number of invocations of the encryption function with the same key since
 -- startup.

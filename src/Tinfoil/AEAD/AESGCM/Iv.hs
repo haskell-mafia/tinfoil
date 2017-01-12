@@ -17,6 +17,7 @@ import           Tinfoil.Random
 
 data IvError =
     InvocationCountOverflow
+  deriving (Eq, Show)
 
 newInvocationField :: IO InvocationField
 newInvocationField =
