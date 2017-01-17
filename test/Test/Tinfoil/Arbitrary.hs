@@ -14,6 +14,7 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           Test.Tinfoil.Gen
 
+import           Tinfoil.AEAD.AESGCM.Data
 import           Tinfoil.Data
 import           Tinfoil.KDF.Scrypt.Internal
 
@@ -85,3 +86,12 @@ instance Arbitrary HashFunction where
 
 instance Arbitrary MAC where
   arbitrary = genUBytes MAC 32
+
+instance Arbitrary RandomField where
+  arbitrary = RandomField <$> choose (0, 2^(32 :: Int) - 1)
+
+instance Arbitrary InvocationCount where
+  arbitrary = InvocationCount <$> choose (0, 2^(33 :: Integer))
+
+instance Arbitrary InvocationField where
+  arbitrary = InvocationField <$> arbitrary <*> arbitrary

@@ -6,13 +6,17 @@ module Tinfoil.Random(
   , credentialCharSet
   , drawOnce
   , entropy
+  , randomWord32
 ) where
 
+import           Data.Bits (shiftL, (.|.))
+import qualified Data.ByteString as BS
 import           Data.List ((\\))
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
+import           Data.Word (Word32)
 
 import           P
 
@@ -25,6 +29,16 @@ import           Tinfoil.Random.Internal
 -- | Reads the specified number of bytes from from /dev/urandom.
 entropy :: Int -> IO Entropy
 entropy = fmap Entropy . E.getEntropy
+
+-- | Generate a random 4-byte word. If treated as unsigned integers,
+-- values will be uniformly distributed over [0, 2^32-1].
+randomWord32 :: IO Word32
+randomWord32 =
+  let
+    pack byte acc = (acc `shiftL` 8) .|. (fromIntegral byte)
+  in
+  entropy 4 >>= \(Entropy x) ->
+    pure . foldr' pack 0 $ BS.unpack x
 
 -- | Generate a password of a given length using the printable ASCII 
 -- characters (excluding tabs and newlines). This implementation is pretty 
