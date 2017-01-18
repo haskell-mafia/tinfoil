@@ -36,7 +36,7 @@ newtype RandomField =
 -- startup.
 newtype InvocationCount =
   InvocationCount {
-    unInvocationCount :: Integer
+    unInvocationCount :: Word32
   } deriving (Eq, Show, Ord, Num)
 
 -- | This identifies the operation relative to the context. It consists of
@@ -48,7 +48,7 @@ data InvocationField =
 packInvocationField :: InvocationField -> Word64
 packInvocationField (InvocationField (RandomField rf) (InvocationCount ic)) =
   -- ic is guaranteed to be non-negative and less than 2^32.
-  ((fromIntegral rf :: Word64) `shiftL` 32) .|. (fromIntegral ic :: Word64)
+  ((fromIntegral rf :: Word64) `shiftL` 32) .|. (fromIntegral ic)
 
 -- | IV/nonce for GCM. 96 bits in total. Must never repeat with the same key.
 data GcmIv =
