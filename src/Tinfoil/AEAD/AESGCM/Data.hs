@@ -4,7 +4,11 @@
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 module Tinfoil.AEAD.AESGCM.Data (
-    GcmIv(..)
+    AuthenticatedCiphertext(..)
+  , Cleartext(..)
+  , AssociatedData(..)
+
+  , GcmIv(..)
   , packGcmIv
 
   , FixedField(..)
@@ -73,3 +77,20 @@ newtype EncryptionContext =
   EncryptionContext {
     unEncryptionContext :: ByteString
   } deriving (Eq, Show)
+
+newtype AuthenticatedCiphertext =
+  AuthenticatedCiphertext {
+    unAuthenticatedCiphertext :: ByteString
+  } deriving (Eq, Show)
+
+newtype Cleartext =
+  Cleartext {
+    unCleartext :: ByteString
+  } deriving (Eq, Show)
+
+newtype AssociatedData =
+  AssociatedData {
+    unAssociatedData :: ByteString
+  } deriving (Eq, Show)
+
+
