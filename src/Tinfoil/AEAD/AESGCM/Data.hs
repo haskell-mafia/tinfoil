@@ -15,14 +15,11 @@ module Tinfoil.AEAD.AESGCM.Data (
   , InvocationCount(..)
   ) where
 
-import            Data.Bits (shiftL, (.|.))
-import            Data.Word (Word32, Word64)
-import            Data.Word (Word32)
-import qualified Data.Binary.Put as B
 import           Data.Bits (shiftL, (.|.))
+import           Data.Word (Word32, Word64)
+import qualified Data.Binary.Put as B
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Lazy as BSL
-import           Data.Word (Word32, Word64)
 
 import           P
 

@@ -88,10 +88,16 @@ instance Arbitrary MAC where
   arbitrary = genUBytes MAC 32
 
 instance Arbitrary RandomField where
-  arbitrary = RandomField <$> choose (0, 2^(32 :: Int) - 1)
+  arbitrary = RandomField <$> arbitraryBoundedIntegral
 
 instance Arbitrary InvocationCount where
-  arbitrary = InvocationCount <$> choose (0, 2^(32 :: Int) - 1)
+  arbitrary = InvocationCount <$> arbitraryBoundedIntegral
 
 instance Arbitrary InvocationField where
   arbitrary = InvocationField <$> arbitrary <*> arbitrary
+
+instance Arbitrary FixedField where
+  arbitrary = FixedField <$> arbitraryBoundedIntegral
+
+instance Arbitrary GcmIv where
+  arbitrary = GcmIv <$> arbitrary <*> arbitrary
