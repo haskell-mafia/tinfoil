@@ -129,6 +129,7 @@ test-suite test
                      , ambiata-disorder-core
                      , ambiata-disorder-corpus
                      , ambiata-p
+                     , binary                          >= 0.5 &&     < 0.9
                      , bytestring                      >= 0.10.4     && < 0.11
                      , QuickCheck                      >= 2.7        && < 2.9
                      , quickcheck-instances            == 0.3.*

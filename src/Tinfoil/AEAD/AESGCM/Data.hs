@@ -5,6 +5,7 @@
 
 module Tinfoil.AEAD.AESGCM.Data (
     GcmIv(..)
+  , packGcmIv
 
   , FixedField(..)
 
@@ -14,10 +15,13 @@ module Tinfoil.AEAD.AESGCM.Data (
   , InvocationCount(..)
   ) where
 
-import            Data.Bits (shiftL, (.|.))
-import            Data.Word (Word32, Word64)
+import           Data.Bits (shiftL, (.|.))
+import           Data.Word (Word32, Word64)
+import qualified Data.Binary.Put as B
+import           Data.ByteString (ByteString)
+import qualified Data.ByteString.Lazy as BSL
 
-import            P
+import           P
 
 -- | This is a truncated hash identifying the context of encryption - machine
 -- and target file.
@@ -54,3 +58,9 @@ packInvocationField (InvocationField (RandomField rf) (InvocationCount ic)) =
 data GcmIv =
     GcmIv !FixedField !InvocationField
   deriving (Eq, Show)
+
+packGcmIv :: GcmIv -> ByteString
+packGcmIv (GcmIv fixed invoc) =
+  BSL.toStrict . B.runPut $ do
+    B.putWord32le $ unFixedField fixed
+    B.putWord64le $ packInvocationField invoc
