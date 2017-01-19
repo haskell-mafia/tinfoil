@@ -8,6 +8,7 @@ module Tinfoil.AEAD.AESGCM.Data (
   , packGcmIv
 
   , FixedField(..)
+  , EncryptionContext(..)
 
   , InvocationField(..)
   , packInvocationField
@@ -64,3 +65,11 @@ packGcmIv (GcmIv fixed invoc) =
   BSL.toStrict . B.runPut $ do
     B.putWord32le $ unFixedField fixed
     B.putWord64le $ packInvocationField invoc
+
+-- | Data unique to the context in which an AES-GCM key is used. This
+-- could be a machine identifier or a file identifier, for example. It
+-- is used to construct the "fixed field" for the GCM IV.
+newtype EncryptionContext =
+  EncryptionContext {
+    unEncryptionContext :: ByteString
+  } deriving (Eq, Show)
