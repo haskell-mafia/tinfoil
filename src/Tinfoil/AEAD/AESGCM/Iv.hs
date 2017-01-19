@@ -8,6 +8,8 @@ module Tinfoil.AEAD.AESGCM.Iv (
   , incrementInvocationField
   ) where
 
+import           Data.Word (Word32)
+
 import           P
 
 import           System.IO (IO)
@@ -28,6 +30,6 @@ incrementInvocationField (InvocationField r (InvocationCount n)) =
   let
     n' = n + 1
   in
-  case n' > ((2 :: Integer)^(32 :: Integer) - 1) of
+  case n == ((2 :: Word32)^(32 :: Word32) - 1) of
     True -> Left InvocationCountOverflow
     False -> Right . InvocationField r $ InvocationCount n'

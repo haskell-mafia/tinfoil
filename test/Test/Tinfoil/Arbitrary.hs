@@ -91,7 +91,7 @@ instance Arbitrary RandomField where
   arbitrary = RandomField <$> choose (0, 2^(32 :: Int) - 1)
 
 instance Arbitrary InvocationCount where
-  arbitrary = InvocationCount <$> choose (0, 2^(33 :: Integer))
+  arbitrary = InvocationCount <$> choose (0, 2^(32 :: Int) - 1)
 
 instance Arbitrary InvocationField where
   arbitrary = InvocationField <$> arbitrary <*> arbitrary
