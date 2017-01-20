@@ -26,19 +26,31 @@ main =
    in defaultMainWithHooks hooks {
      preConf = \args flags -> do
        createDirectoryIfMissingVerbose silent True "gen"
+
+       -- This is needed on configure to generate `version.h` so our includes
+       -- don't break.
+       cwd <- getCurrentDirectory
+       setCurrentDirectory $ cwd </> "lib" </> "libsodium"
+       callProcess "./configure" []
+       setCurrentDirectory cwd
+
        (preConf hooks) args flags
+
    , sDistHook  = \pd mlbi uh flags -> do
        genBuildInfo silent pd
        (sDistHook hooks) pd mlbi uh flags
+
    , buildHook = \pd lbi uh flags -> do
        genBuildInfo (fromFlag $ buildVerbosity flags) pd
        genDependencyInfo (fromFlag $ buildVerbosity flags) pd lbi
        buildLibSodium
        (buildHook hooks) pd lbi uh flags
+
    , replHook = \pd lbi uh flags args -> do
        genBuildInfo (fromFlag $ replVerbosity flags) pd
        genDependencyInfo (fromFlag $ replVerbosity flags) pd lbi
        (replHook hooks) pd lbi uh flags args
+
    , testHook = \args pd lbi uh flags -> do
        genBuildInfo (fromFlag $ testVerbosity flags) pd
        genDependencyInfo (fromFlag $ testVerbosity flags) pd lbi
