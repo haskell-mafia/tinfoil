@@ -104,7 +104,7 @@ library
 
   include-dirs:        cbits/scrypt
                      , cbits/tinfoil
-                     , gen/libsodium/include
+                     , lib/libsodium/src/libsodium/include
 
   includes:            crypto_scrypt.h
                      , tinfoil.h
