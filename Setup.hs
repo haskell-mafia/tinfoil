@@ -30,6 +30,7 @@ main =
        -- This is needed on configure to generate `version.h` so our includes
        -- don't break.
        cwd <- getCurrentDirectory
+       callProcess "git" ["submodule", "update", "--init", "lib/libsodium"]
        setCurrentDirectory $ cwd </> "lib" </> "libsodium"
        callProcess "./configure" []
        setCurrentDirectory cwd
