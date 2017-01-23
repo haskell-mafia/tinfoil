@@ -106,3 +106,9 @@ instance Arbitrary GcmIv where
 
 instance Arbitrary EncryptionContext where
   arbitrary = (EncryptionContext . unGlass) <$> arbitrary
+
+instance Arbitrary Cleartext where
+  arbitrary = Cleartext <$> arbitrary
+
+instance Arbitrary AssociatedData where
+  arbitrary = AssociatedData <$> arbitrary
