@@ -11,4 +11,6 @@ size_t tinfoil_sodium_seckey_len(void);
 
 size_t tinfoil_sodium_sig_len(void);
 
+size_t tinfoil_sodium_aead_tag_len(void);
+
 #endif

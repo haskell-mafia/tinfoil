@@ -40,6 +40,8 @@ library
                        Tinfoil
                        Tinfoil.AEAD.AESGCM.Constraints
                        Tinfoil.AEAD.AESGCM.Data
+                       Tinfoil.AEAD.AESGCM.Error
+                       Tinfoil.AEAD.AESGCM.Foreign
                        Tinfoil.AEAD.AESGCM.Iv
                        Tinfoil.Comparison
                        Tinfoil.Data
