@@ -8,8 +8,6 @@ import qualified Data.ByteString as BS
 import           Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NE
 
-import           Disorder.Corpus
-
 import           P
 
 import           Test.QuickCheck
@@ -103,9 +101,6 @@ instance Arbitrary FixedField where
 
 instance Arbitrary GcmIv where
   arbitrary = GcmIv <$> arbitrary <*> arbitrary
-
-instance Arbitrary EncryptionContext where
-  arbitrary = (EncryptionContext . unGlass) <$> arbitrary
 
 instance Arbitrary Cleartext where
   arbitrary = Cleartext <$> arbitrary
