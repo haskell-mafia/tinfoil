@@ -8,6 +8,7 @@ module Tinfoil.AEAD.AESGCM.Iv (
   , incrementInvocationField
   , newFixedField
   , newGcmIv
+  , incrementGcmIv
   ) where
 
 import           Data.Word (Word32)
@@ -44,3 +45,8 @@ newFixedField =
 newGcmIv :: IO GcmIv
 newGcmIv =
   GcmIv <$> newFixedField <*> newInvocationField
+
+incrementGcmIv :: GcmIv -> Either IvError GcmIv
+incrementGcmIv (GcmIv fixed invoc) =
+  incrementInvocationField invoc >>= \invoc' ->
+    pure $ GcmIv fixed invoc'
