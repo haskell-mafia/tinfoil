@@ -31,6 +31,11 @@ prop_incrementInvocationField_overflow f =
     Right (InvocationField _ (InvocationCount x)) ->
       x =/= 0
 
+
+prop_incrementGcmIv :: GcmIv -> Property
+prop_incrementGcmIv iv =
+  (incrementGcmIv iv) =/= (Right iv)
+
 return []
 tests :: IO Bool
 tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )
