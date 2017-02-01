@@ -26,6 +26,12 @@ prop_newFixedField = testIO $ do
   y <- newFixedField
   pure $ x =/= y
 
+prop_newGcmIv :: Property
+prop_newGcmIv = testIO $ do
+  x <- newGcmIv
+  y <- newGcmIv
+  pure $ x =/= y
+
 return []
 tests :: IO Bool
 tests = $forAllProperties $ quickCheckWithResult (stdArgs { maxSuccess = 1000 } )

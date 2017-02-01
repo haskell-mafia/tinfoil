@@ -7,6 +7,7 @@ module Tinfoil.AEAD.AESGCM.Iv (
   , newInvocationField
   , incrementInvocationField
   , newFixedField
+  , newGcmIv
   ) where
 
 import           Data.Word (Word32)
@@ -39,3 +40,7 @@ incrementInvocationField (InvocationField r (InvocationCount n)) =
 newFixedField :: IO FixedField
 newFixedField =
   FixedField <$> randomWord32
+
+newGcmIv :: IO GcmIv
+newGcmIv =
+  GcmIv <$> newFixedField <*> newInvocationField
