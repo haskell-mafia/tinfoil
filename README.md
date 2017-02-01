@@ -25,6 +25,7 @@ belongs in `tinfoil`. This includes:
  - Key and credential generation.
  - Nonce generation.
  - HMACs and signed requests.
+ - Ciphers and cipher modes.
  - Bindings and wrappers around low-level libraries (`scrypt`,
    `libsodium`, et cetera).
 
