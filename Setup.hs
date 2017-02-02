@@ -27,13 +27,7 @@ main =
      preConf = \args flags -> do
        createDirectoryIfMissingVerbose silent True "gen"
 
-       -- This is needed on configure to generate `version.h` so our includes
-       -- don't break.
-       cwd <- getCurrentDirectory
-       callProcess "git" ["submodule", "update", "--init", "lib/libsodium"]
-       setCurrentDirectory $ cwd </> "lib" </> "libsodium"
-       callProcess "./configure" []
-       setCurrentDirectory cwd
+       buildLibSodium
 
        (preConf hooks) args flags
 
@@ -42,9 +36,10 @@ main =
        (sDistHook hooks) pd mlbi uh flags
 
    , buildHook = \pd lbi uh flags -> do
+       buildLibSodium
+
        genBuildInfo (fromFlag $ buildVerbosity flags) pd
        genDependencyInfo (fromFlag $ buildVerbosity flags) pd lbi
-       buildLibSodium
        (buildHook hooks) pd lbi uh flags
 
    , replHook = \pd lbi uh flags args -> do
@@ -60,6 +55,7 @@ main =
 
 buildLibSodium :: IO ()
 buildLibSodium = do
+  callProcess "git" ["submodule", "update", "--init", "lib/libsodium"]
   cwd <- getCurrentDirectory
   let
     sodiumDir = cwd </> "gen" </> "libsodium"
