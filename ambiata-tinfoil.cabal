@@ -36,7 +36,6 @@ library
                        src
 
   exposed-modules:
-                       Paths_ambiata_tinfoil
                        Tinfoil
                        Tinfoil.AEAD.AESGCM.Constraints
                        Tinfoil.AEAD.AESGCM.Data
