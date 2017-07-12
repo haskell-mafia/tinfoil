@@ -12,7 +12,7 @@ reflect Ambiata best practices.
 Merging
 =======
 
-All changes must be signed off by Mark and Sharif before being merged.
+All changes must be signed off by Erik and Sharif before being merged.
 
 Scope
 =====
@@ -56,9 +56,3 @@ Thread safety
 
 All functions in `tinfoil` are thread-safe unless explicitly noted
 otherwise in the function's documentation.
-
-Conceptual warriors
-===================
-
- - Sharif
- - Mark
