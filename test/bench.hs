@@ -29,6 +29,7 @@ import           Tinfoil.Hash
 import qualified Tinfoil.KDF.Scrypt as Scrypt
 import           Tinfoil.MAC
 import           Tinfoil.Random
+import           Tinfoil.Random.Internal
 import qualified Tinfoil.Signing.Ed25519 as Ed25519
 
 generate' :: Gen a -> IO a
@@ -80,10 +81,13 @@ main = tinfoilBench [
       , bench "1000" $ nfIO (randomCredential [] 1000)
       , bench "100000" $ nfIO (randomCredential [] 100000)
       ]
-  , bgroup "entropy" $
-      [ bench "Tinfoil.Random.entropy/1" $ nfIO (entropy 1)
+  , bgroup "entropy" $ [
+        bench "Tinfoil.Random.entropy/1" $ nfIO (entropy 1)
       , bench "Tinfoil.Random.entropy/1000" $ nfIO (entropy 1000)
       , bench "Tinfoil.Random.entropy/100000" $ nfIO (entropy 100000)
+      , bench "Tinfoil.Random.Internal.urandom/1" $ nfIO (urandom 1)
+      , bench "Tinfoil.Random.Internal.urandom/1000" $ nfIO (urandom 1000)
+      , bench "Tinfoil.Random.Internal.urandom/100000" $ nfIO (urandom 100000)
       , bench "System.Random.StdRandom/1" $ nfIO (stdRandom 1)
       , bench "System.Random.StdRandom/1000" $ nfIO (stdRandom 1000)
       , bench "System.Random.StdRandom/100000" $ nfIO (stdRandom 100000)
