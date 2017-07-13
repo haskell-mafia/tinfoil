@@ -9,7 +9,10 @@ module Tinfoil.Random(
   , randomWord32
 ) where
 
+import           Control.Exception (bracket)
+
 import           Data.Bits (shiftL, (.|.))
+import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 import           Data.List ((\\))
 import           Data.List.NonEmpty (NonEmpty)
@@ -18,18 +21,53 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import           Data.Word (Word32)
 
+import           Foreign (allocaBytes)
+import           Foreign.Ptr (plusPtr, castPtr)
+
 import           P
 
-import qualified System.Entropy as E
+import qualified Prelude
+
+import qualified System.Posix as Posix
+
 import           System.IO
 
 import           Tinfoil.Data
 import           Tinfoil.Random.Internal
 
 -- | Reads the specified number of bytes from from /dev/urandom.
+--
+-- On OS X this calls a 160-bit Yarrow generator and will block until
+-- the entropy pool has been initialised (should never happen); on
+-- Linux it is a sha1-based generator and will not block regardless of
+-- pool state.
+--
+-- FIXME: is it worth checking uname and failing on non-linux/darwin here?
 entropy :: Int -> IO Entropy
-entropy = fmap Entropy . E.getEntropy
+entropy n =
+  fmap Entropy $ bracket
+    (Posix.openFd "/dev/urandom" Posix.ReadOnly Nothing Posix.defaultFileFlags)
+    (Posix.closeFd)
+    (entropy' n)
 
+entropy' :: Int -> Posix.Fd -> IO ByteString
+entropy' n fd =
+  allocaBytes n $ \buf ->
+    loop buf $ fromIntegral n
+  where
+    loop buf 0 =
+      BS.packCStringLen (castPtr buf, fromIntegral n)
+    loop buf toread =
+      let
+        buf' = plusPtr buf $ n - (fromIntegral toread)
+      in
+      -- fdReadBuf handles the ret < 0 case for us.
+      Posix.fdReadBuf fd buf' toread >>= \ret -> case ret of
+        0 ->
+          Prelude.error "/dev/urandom returned EOF; this should never happen."
+        nread ->
+          loop buf $ toread - nread
+  
 -- | Generate a random 4-byte word. If treated as unsigned integers,
 -- values will be uniformly distributed over [0, 2^32-1].
 randomWord32 :: IO Word32
@@ -60,7 +98,7 @@ credentialCharSet = NE.fromList [' '..'~']
 -- | Draw one element from the input list uniformly at random.
 drawOnce :: NonEmpty a -> IO a
 drawOnce as = do
-    r <- (readBitsLE . discard . explodeBS) <$> E.getEntropy entropyBytes
+    r <- (readBitsLE . discard . explodeBS . unEntropy) <$> entropy entropyBytes
     if r < n
       then pure (as NE.!! r)
       else drawOnce as
