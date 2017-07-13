@@ -83,10 +83,16 @@ main = tinfoilBench [
       ]
   , bgroup "entropy" $ [
         bench "Tinfoil.Random.entropy/1" $ nfIO (entropy 1)
+      , bench "Tinfoil.Random.entropy/10" $ nfIO (entropy 10)
+      , bench "Tinfoil.Random.entropy/100" $ nfIO (entropy 100)
       , bench "Tinfoil.Random.entropy/1000" $ nfIO (entropy 1000)
+      , bench "Tinfoil.Random.entropy/10000" $ nfIO (entropy 10000)
       , bench "Tinfoil.Random.entropy/100000" $ nfIO (entropy 100000)
       , bench "Tinfoil.Random.Internal.urandom/1" $ nfIO (urandom 1)
+      , bench "Tinfoil.Random.Internal.urandom/10" $ nfIO (urandom 10)
+      , bench "Tinfoil.Random.Internal.urandom/100" $ nfIO (urandom 100)
       , bench "Tinfoil.Random.Internal.urandom/1000" $ nfIO (urandom 1000)
+      , bench "Tinfoil.Random.Internal.urandom/10000" $ nfIO (urandom 10000)
       , bench "Tinfoil.Random.Internal.urandom/100000" $ nfIO (urandom 100000)
       , bench "System.Random.StdRandom/1" $ nfIO (stdRandom 1)
       , bench "System.Random.StdRandom/1000" $ nfIO (stdRandom 1000)
