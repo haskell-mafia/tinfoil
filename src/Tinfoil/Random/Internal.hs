@@ -9,14 +9,22 @@ module Tinfoil.Random.Internal(
   , urandom
 ) where
 
+import           Control.Exception (bracket)
+
 import           Data.Bits
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 
+import           Foreign (allocaBytes)
+import           Foreign.Ptr (plusPtr, castPtr)
+
 import           P
 
-import           System.IO (IOMode(..), IO)
-import           System.IO (withFile)
+import qualified Prelude
+
+import qualified System.Posix as Posix
+
+import           System.IO (IO)
 
 segmentsOf :: Int -> [a] -> [[a]]
 segmentsOf _ [] = []
@@ -46,11 +54,29 @@ explodeBS = concatMap (\w -> testBit w <$> [0..7]) . BS.unpack
 -- Linux it is a sha1-based generator and will not block regardless of
 -- pool state.
 --
--- This function incurs some overhead due to GHC.IO buffering; if this
--- becomes significant (e.g., key generation), using read(3) directly
--- would make small reads significantly faster.
---
 -- FIXME: is it worth checking uname and failing on non-linux/darwin here?
 urandom :: Int -> IO ByteString
 urandom n =
-  withFile "/dev/urandom" ReadMode (\h -> BS.hGet h n)
+  bracket
+    (Posix.openFd "/dev/urandom" Posix.ReadOnly Nothing Posix.defaultFileFlags)
+    (Posix.closeFd)
+    (urandom' n)
+
+urandom' :: Int -> Posix.Fd -> IO ByteString
+urandom' n fd =
+  allocaBytes n $ \buf ->
+    loop buf $ fromIntegral n
+  where
+    loop buf 0 =
+      BS.packCStringLen (castPtr buf, fromIntegral n)
+    loop buf toread =
+      let
+        buf' = plusPtr buf $ n - (fromIntegral toread)
+      in
+      -- fdReadBuf handles the ret < 0 case for us.
+      Posix.fdReadBuf fd buf' toread >>= \ret -> case ret of
+        0 ->
+          Prelude.error "/dev/urandom returned EOF; this should never happen."
+        nread ->
+          loop buf $ toread - nread
+  

@@ -28,6 +28,7 @@ library
                      , semigroups                      >= 0.16       && < 0.19
                      , text                            == 1.2.*
                      , transformers                    >= 0.3        && < 0.6
+                     , unix                            == 2.7.*
 
   ghc-options:
                        -Wall
