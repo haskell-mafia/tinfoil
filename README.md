@@ -56,3 +56,10 @@ Thread safety
 
 All functions in `tinfoil` are thread-safe unless explicitly noted
 otherwise in the function's documentation.
+
+Platform support
+----------------
+
+`tinfoil` explicitly supports Linux and OS X. It may run on other
+unixlike systems, but may also break or violate the behavioural
+invariants described above.
