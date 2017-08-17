@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Tinfoil.KDF(
     defaultScrypt
+  , newScrypt
   , hash
   , kdfFor
   , needsRehash
@@ -18,12 +19,16 @@ import qualified Tinfoil.KDF.Scrypt as Scrypt
 
 defaultScrypt :: KDF
 defaultScrypt =
+  newScrypt Scrypt.defaultParams
+
+newScrypt :: Scrypt.ScryptParams -> KDF
+newScrypt params =
   KDF
-    (Scrypt.hashCredential Scrypt.defaultParams)
+    (Scrypt.hashCredential params)
     Scrypt.verifyCredential
-    (Scrypt.verifyNoCredential Scrypt.defaultParams)
+    (Scrypt.verifyNoCredential params)
     Scrypt0
-    (Scrypt.paramsUpToDate Scrypt.defaultParams)
+    (Scrypt.paramsUpToDate params)
 
 kdfFor :: MCFPrefix -> KDF
 kdfFor Scrypt0 = defaultScrypt
